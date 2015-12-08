@@ -1,24 +1,24 @@
-
 class GameObject
 {
+   
    PVector pos;
    PVector forward;
-   float theta;
    float w, halfW;
-   float speed;
+   float speed = 2;
+   float theta = 0.0f;
+   color colour;
    
    GameObject()
    {
-      this(width*0.5f, height*0.5f, width*0.1f, 2);
+      this(width*0.5f, height*0.5f, width*0.1f);
    }
    
-   GameObject(float x, float y, float w, int s)
+   GameObject(float startX, float startY, float w)
    {
-      pos = new PVector(x, y);
+      pos = new PVector(startX, startY);
       forward = new PVector(0, -1);
       this.w = w;
       halfW = w * 0.5f;
-      speed = s;
    }
    
    
