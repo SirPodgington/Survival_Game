@@ -4,9 +4,10 @@ class GameObject
    PVector pos;
    PVector forward;
    float w, halfW;
-   float speed = 2;
+   float speed = 4;
    float theta = 0.0f;
    color colour;
+   color outline;
    
    GameObject()
    {

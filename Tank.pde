@@ -6,9 +6,11 @@ class Tank extends GameObject
    Tank()
    {
       super(width*0.5f, height*0.8f, width*0.1f);
+      colour = color(255);
+      outline = color(255);
    }
    
-   Tank(float startX, float startY, char move, char left, char right, char reverse, char fire, color colour)
+   Tank(float startX, float startY, char move, char reverse, char left, char right, char fire, color colour)
    {
       super(startX, startY, width*0.1f);
       this.move = move;
@@ -22,18 +24,37 @@ class Tank extends GameObject
    
    void update()
    {
+      forward.x = sin(theta);
+      forward.y = - cos(theta);
+      forward.mult(speed);
       
+      if (keys[move])
+      {
+        pos.add(forward);
+      }
+      if (keys[reverse])
+      {
+         pos.sub(forward);
+      }
+      if (keys[left])
+      {
+        theta -= 0.1f;
+      }
+      if (keys[right])
+      {
+        theta += 0.1f;
+      }
    }
    
    void render()
    {
        pushMatrix();
        translate(pos.x, pos.y);
-       stroke(colour);
-       fill(colour);
        rotate(theta);
        
-       // Draw tank here
+       stroke(outline);
+       fill(colour);
+       ellipse(0, 0, 50, 50); // temp circle
        
        popMatrix();
    }
