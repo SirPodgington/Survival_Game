@@ -3,7 +3,8 @@
 void setup()
 {
    size (1000, 700);
-   Tank player = new Tank(width/2, height*0.9f, 'W', 'S', 'A', 'D', ' ', color(255,0,0));
+   
+   Tank player = new Tank(width/2, height*0.9f, 'W', 'S', 'A', 'D', ' ');
    gameObjects.add(player);
 }
 

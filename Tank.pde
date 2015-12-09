@@ -1,24 +1,35 @@
 class Tank extends GameObject
 {
-   
+
    char move, reverse, left, right, fire;
    
    Tank()
    {
-      super(width*0.5f, height*0.8f, width*0.1f);
-      colour = color(255);
-      outline = color(255);
+      super(width*0.5f, height*0.8f);
+      sprite = loadImage("tank.png");
+      w = sprite.width;
+      h = sprite.height;
+      halfW = w / 2;
+      halfH = h / 2;
+      speed = 2;
    }
    
-   Tank(float startX, float startY, char move, char reverse, char left, char right, char fire, color colour)
+   Tank(float startX, float startY, char move, char reverse, char left, char right, char fire)
    {
-      super(startX, startY, width*0.1f);
+      super(startX, startY);
+      
+      sprite = loadImage("tank.png");
+      w = sprite.width;
+      h = sprite.height;
+      halfW = w / 2;
+      halfH = h / 2;
+      speed = 2;
+      
       this.move = move;
       this.reverse = reverse;
       this.left = left;
       this.right = right;
       this.fire = fire;
-      this.colour = colour;
    }
    
    
@@ -34,7 +45,7 @@ class Tank extends GameObject
       }
       if (keys[reverse])
       {
-         pos.sub(forward);
+         pos.sub(forward.div(2));
       }
       if (keys[left])
       {
@@ -54,7 +65,8 @@ class Tank extends GameObject
        
        stroke(outline);
        fill(colour);
-       ellipse(0, 0, 50, 50); // temp circle
+       image(sprite, -halfW, -halfH);
+       //ellipse(0, 0, 50, 50); // temp circle
        
        popMatrix();
    }
