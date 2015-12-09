@@ -7,9 +7,11 @@ class GameObject
    float h, halfH;
    float speed = 4;
    float theta = 0.0f;
-   PImage sprite;
    color colour;
    color outline;
+   
+   PImage sprite;
+   AudioPlayer sound;
    
    GameObject()
    {

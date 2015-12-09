@@ -1,7 +1,11 @@
 // OOP Assignment 2 draft ... testing tank game idean out
 
+import ddf.minim.*;
+Minim minim;
+
 void setup()
 {
+   minim = new Minim(this);
    size (1000, 700);
    
    Tank player = new Tank(width/2, height*0.9f, 'W', 'S', 'A', 'D', ' ');
@@ -19,6 +23,7 @@ void keyPressed()
 void keyReleased()
 {
   keys[keyCode] = false;
+  
 }
 
 
