@@ -5,7 +5,6 @@ class Tank extends GameObject
 {
    boolean alive;
    PImage tankTurret;
-   float turretDir;
    float turretTheta = 0.0f;
    float turretW, turretH, turretHalfW, turretHalfH;
    char move, reverse, left, right, fire;
@@ -77,6 +76,8 @@ class Tank extends GameObject
    //     UPDATE     \ -----------------------------------------------------------------------------------
    /*****************/
    
+   int elapsed = 40;
+   
    void update()
    {
       forward.x = sin(theta);
@@ -90,7 +91,7 @@ class Tank extends GameObject
          tankTurret = loadImage("tank_turret_upgraded.png");
       
       // Turret direction
-      turretTheta = (atan2(mouseY - pos.y, mouseX - pos.x)) + HALF_PI;
+      turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
       // Tank direction + speed
       if (keys[move])
@@ -112,9 +113,18 @@ class Tank extends GameObject
          theta += 0.02f;
       }
       
-      if (keys[fire])
+      if (keys[fire] && elapsed > 40)
       {
+         elapsed = 0;
          cannonSound();
+         
+         Bullet bullet = new Bullet();
+         bullet.pos.x = pos.x;
+         bullet.pos.y = pos.y;
+         bullet.pos.add(PVector.mult(forward, 6));
+         bullet.colour = color(200,0,0);
+         bullet.theta = turretTheta;
+         gameObjects.add(bullet);
       }
       
       // Keep tank within screen boundary
@@ -126,6 +136,8 @@ class Tank extends GameObject
             pos.y = halfH;
       if (pos.y > height - halfW)
             pos.y = height - halfW;
+            
+      elapsed++;
    }
    
    void render()
