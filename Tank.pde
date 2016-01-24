@@ -5,40 +5,48 @@ class Tank extends GameObject
 {
    boolean alive;
    PImage tankTurret;
-   float turretTheta;
+   float turretTheta = 0.0f;
+   float turretW, turretH, turretHalfW, turretHalfH;
    char move, reverse, left, right, fire;
-   AudioPlayer moving, engine, cannon;
+   AudioPlayer cannon;
    
    Tank()
    {
       super(width*0.5f, height*0.8f);
-      sprite = loadImage("tank.png");
-      tankTurret = loadImage("tank_turret.png");
+      sprite = loadImage("tank_body_green.png");
+      tankTurret = loadImage("tank_turret_default.png");
+      
       w = sprite.width;
       h = sprite.height;
       halfW = w / 2;
       halfH = h / 2;
+      turretW = tankTurret.width;
+      turretH = tankTurret.height;
+      turretHalfW = turretW / 2;
+      turretHalfH = turretH / 2;
       speed = 0.8;
       alive = true;
-      engine = minim.loadFile("tank_engine.mp3");
-      moving = minim.loadFile("tank_moving.mp3");
+
       cannon = minim.loadFile("tank_cannon.mp3");
    }
    
    Tank(float startX, float startY, char move, char reverse, char left, char right, char fire)
    {
       super(startX, startY);
+      sprite = loadImage("tank_body_green.png");
+      tankTurret = loadImage("tank_turret_default.png");
       
-      sprite = loadImage("tank_body.png");
-      tankTurret = loadImage("tank_turret.png");
       w = sprite.width;
       h = sprite.height;
       halfW = w / 2;
       halfH = h / 2;
+      turretW = tankTurret.width;
+      turretH = tankTurret.height;
+      turretHalfW = turretW / 2;
+      turretHalfH = turretH / 2;
       speed = 0.8;
       alive = true;
-      engine = minim.loadFile("tank_engine.mp3");
-      moving = minim.loadFile("tank_moving.mp3");
+
       cannon = minim.loadFile("tank_cannon.mp3");
       
       this.move = move;
@@ -53,24 +61,7 @@ class Tank extends GameObject
    //  TANK SOUNDS   \ -----------------------------------------------------------------------------------
    /*****************/
    
-   void engineSound()
-   {
-      if (engine.position() > engine.length() - 1)
-      {
-         engine.rewind();
-      }
-      engine.play();
-   }
-   
-   void movingSound()
-   {
-      if (moving.position() > moving.length() - 2)
-      {
-         moving.rewind();
-      }
-      moving.play();
-   }
-   
+
    void cannonSound()
    {
       if (cannon.position() != 0)
@@ -121,7 +112,6 @@ class Tank extends GameObject
          cannonSound();
       }
       
-      
       if (pos.x < halfW)
             pos.x = halfW;
       if (pos.x > width - halfW)
@@ -140,8 +130,13 @@ class Tank extends GameObject
        rotate(theta);
        image(sprite, -halfW, -halfH);
 
+       popMatrix();
+       
+       pushMatrix();
+       translate(pos.x, pos.y);
        rotate(turretTheta);
-       image(tankTurret, -(halfW*0.5), -halfW);
+       image(tankTurret, -turretHalfW, -turretHalfH);
+       
        popMatrix();
    }
    
