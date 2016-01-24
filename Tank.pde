@@ -5,6 +5,7 @@ class Tank extends GameObject
 {
    boolean alive;
    PImage tankTurret;
+   float turretDir;
    float turretTheta = 0.0f;
    float turretW, turretH, turretHalfW, turretHalfH;
    char move, reverse, left, right, fire;
@@ -82,11 +83,16 @@ class Tank extends GameObject
       forward.y = - cos(theta);
       forward.mult(speed);
       
+      // Switch between weapons
       if (keyPressed && key == '1')
          tankTurret = loadImage("tank_turret_default.png");
       if (keyPressed && key == '2')
          tankTurret = loadImage("tank_turret_upgraded.png");
       
+      // Turret direction
+      turretTheta = (atan2(mouseY - pos.y, mouseX - pos.x)) + HALF_PI;
+      
+      // Tank direction + speed
       if (keys[move])
       {
          pos.add(forward);
@@ -111,6 +117,7 @@ class Tank extends GameObject
          cannonSound();
       }
       
+      // Keep tank within screen boundary
       if (pos.x < halfW)
             pos.x = halfW;
       if (pos.x > width - halfW)
