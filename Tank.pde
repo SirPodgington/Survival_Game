@@ -13,7 +13,7 @@ class Tank extends GameObject
    Tank()
    {
       super(width*0.5f, height*0.8f);
-      sprite = loadImage("tank_body_green.png");
+      sprite = loadImage("tank_body_grey2.png");
       tankTurret = loadImage("tank_turret_default.png");
       
       w = sprite.width;
@@ -33,7 +33,7 @@ class Tank extends GameObject
    Tank(float startX, float startY, char move, char reverse, char left, char right, char fire)
    {
       super(startX, startY);
-      sprite = loadImage("tank_body_green.png");
+      sprite = loadImage("tank_body_grey2.png");
       tankTurret = loadImage("tank_turret_default.png");
       
       w = sprite.width;
@@ -82,19 +82,18 @@ class Tank extends GameObject
       forward.y = - cos(theta);
       forward.mult(speed);
       
-      if (alive)
-            engineSound();
+      if (keyPressed && key == '1')
+         tankTurret = loadImage("tank_turret_default.png");
+      if (keyPressed && key == '2')
+         tankTurret = loadImage("tank_turret_upgraded.png");
       
       if (keys[move])
       {
-         movingSound();
          pos.add(forward);
       }
-      else moving.pause();
       
       if (keys[reverse])
       {
-         movingSound();
          pos.sub(forward.div(2));
       }
       
