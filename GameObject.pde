@@ -9,8 +9,8 @@ class GameObject
    float theta = 0.0f;
    color colour;
    color outline;
-   
    PImage sprite;
+
    AudioPlayer sound;
    
    GameObject()
