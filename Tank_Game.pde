@@ -59,14 +59,25 @@ void draw()
   }
   
   // User Interface
+  float cdBarHeight = 50;
+  float cdBarWidth = 20;
+  float cdBarTop = bBoundry + 15;
+  float cdBarBottom = cdBarTop + cdBarHeight;
+  
   fill(255);
   stroke(255);
   strokeWeight(2);
-  rect(lBoundry, bBoundry, (rBoundry - lBoundry), height-bBoundry);
+  rect(lBoundry, bBoundry, rBoundry-lBoundry, height-bBoundry);
   
-  // Cannon cooldown display
-  fill(255);
+  // Cannon cooldown bar
+
+  
+  int cannonVal ;//????
+  float cannonProgress = map(cannonVal, 0, 300, cdBarBottom, cdBarTop);
+  fill(127);
+  rect(20, cdBarTop, cdBarWidth, cannonProgress);
+  
   stroke(0);
   strokeWeight(1);
-  rect(20, bBoundry+15, 20, 50);
+  rect(20, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template
 }

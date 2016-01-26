@@ -1,7 +1,6 @@
 
 class Tank extends GameObject
 {
-   boolean alive;
    PImage tankTurret;
    float turretTheta = 0.0f;
    float turretW, turretH, turretHalfW, turretHalfH;
@@ -9,9 +8,10 @@ class Tank extends GameObject
    color bulletCol = color(250);
    color cannonCol = color(0,0,200);
    color crosshairCol = color(255,0,0);
-   float bulletFrate = 10;
-   float cannonFrate = 300;
+   int bulletFrate, bulletElapsed;
+   int cannonFrate, cannonElapsed;
    AudioPlayer cannonSfx, bulletSfx;
+   
    
    Tank()
    {
@@ -29,8 +29,13 @@ class Tank extends GameObject
       turretH = tankTurret.height;
       turretHalfW = turretW / 2;
       turretHalfH = turretH / 2;
+      
       speed = 0.8;
-      alive = true;
+      bulletFrate = 10;
+      bulletElapsed = bulletFrate;
+      cannonFrate = 300;
+      cannonElapsed = cannonFrate;
+   
    }
    
    Tank(float startX, float startY, char move, char reverse, char left, char right)
@@ -49,8 +54,12 @@ class Tank extends GameObject
       turretH = tankTurret.height;
       turretHalfW = turretW / 2;
       turretHalfH = turretH / 2;
+      
       speed = 0.8;
-      alive = true;
+      bulletFrate = 10;
+      bulletElapsed = bulletFrate;
+      cannonFrate = 300;
+      cannonElapsed = cannonFrate;
       
       this.move = move;
       this.reverse = reverse;
@@ -84,9 +93,6 @@ class Tank extends GameObject
    /*****************/
    //     UPDATE     \ -----------------------------------------------------------------------------------
    /*****************/
-   
-   int bulletElapsed = 11;
-   int cannonElapsed = 301;
    
    void update()
    {
@@ -123,7 +129,7 @@ class Tank extends GameObject
       }
       
       // Fire bullets
-      if (mousePressed && mouseButton == LEFT && bulletElapsed > bulletFrate)
+      if (mousePressed && mouseButton == LEFT && bulletElapsed >= bulletFrate)
       {
          bulletElapsed = 0;
          bulletSound();
@@ -138,7 +144,7 @@ class Tank extends GameObject
       }
       
       // Fire cannon shells
-      if (mousePressed && mouseButton == RIGHT && cannonElapsed > cannonFrate)
+      if (mousePressed && mouseButton == RIGHT && cannonElapsed >= cannonFrate)
       {
          cannonElapsed = 0;
          cannonSound();
@@ -164,6 +170,11 @@ class Tank extends GameObject
             
       bulletElapsed++;
       cannonElapsed++;
+   }
+   
+   int cannonCooldown(int elapsed)
+   {
+      return(elapsed);
    }
    
    void render()
