@@ -186,6 +186,9 @@ class Tank extends GameObject
        translate(pos.x, pos.y);
        rotate(theta);
        image(sprite, -halfW, -halfH);
+       stroke(70);
+       line(-8, -25, 0, -30);
+       line(0, -30, 8, -25);
        popMatrix();
        
        // Tank turret

@@ -11,7 +11,6 @@ Minim minim;
 
 // Screen boundry variables
 float lBoundry, rBoundry, tBoundry, bBoundry;
-float uiHeight = height - bBoundry;
 
 void setup()
 {
@@ -59,6 +58,8 @@ void draw()
   }
   
   // User Interface
+  float uiHeight = height - bBoundry;
+  float offset = 20;
   float cdBarHeight = 50;
   float cdBarWidth = 20;
   float cdBarTop = bBoundry + 15;
@@ -70,13 +71,15 @@ void draw()
   rect(lBoundry, bBoundry, rBoundry-lBoundry, height-bBoundry);
   
   // Cannon cooldown bar
+  PImage cannonIcon = loadImage("CannonIcon.png");
   int cannonVal = gameObjects.get(0).cooldown2;   // Store cannon cd timer value from the player object (first entry)
   float cannonProgress = map(cannonVal, 0, 300, 0, cdBarHeight);
   
   stroke(0);
   strokeWeight(2);
   fill(255);
-  rect(20, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template  
+  rect(offset, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template  
   fill(255,0,0);
-  rect(20, cdBarBottom, cdBarWidth, -cannonProgress);   // Bar progress
+  rect(offset, cdBarBottom, cdBarWidth, -cannonProgress);   // Bar progress
+  image(cannonIcon, offset+1, cdBarBottom + 10);
 }
