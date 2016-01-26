@@ -3,12 +3,20 @@
 import ddf.minim.*;
 Minim minim;
 
+// Screen boundry variables
+float lBoundry, rBoundry, tBoundry, bBoundry;
+
 void setup()
 {
    minim = new Minim(this);
-   size (1000, 700);
+   size(1000, 700);
    
-   Tank player = new Tank(width/2, height*0.9f, 'W', 'S', 'A', 'D', ' ');
+   lBoundry = 0;
+   rBoundry = width;
+   tBoundry = 0;
+   bBoundry = 600;
+   
+   Tank player = new Tank(width/2, bBoundry*0.9f, 'W', 'S', 'A', 'D');
    gameObjects.add(player);
 }
 
@@ -27,7 +35,6 @@ void keyReleased()
 }
 
 
-
 void draw()
 {
    background(0);
@@ -38,4 +45,8 @@ void draw()
      object.update();
      object.render();
   }
+  
+  stroke(255);
+  strokeWeight(2);
+  line(0, bBoundry, width, bBoundry);
 }

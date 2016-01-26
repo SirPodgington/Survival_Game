@@ -1,6 +1,7 @@
 class Bullet extends GameObject
 {
   int ammoType;
+  int time = millis();
   float bulletSize;
    
   Bullet()
@@ -10,14 +11,22 @@ class Bullet extends GameObject
   
   void render()
   {
-    stroke(colour);
-    strokeWeight(bulletSize);
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(theta);
     
-    // Determining the ammo type
-    if (ammoType == 1)
+    colour = color(255,0,0);
+    int passedMillis = millis() - time;
+    if (passedMillis >= 100 && ammoType == 2)    // Cannon flashes every 100 milliseconds
+    {
+       time = millis();
+       colour = color(255);
+    }
+    
+    fill(colour);
+    stroke(colour);
+    strokeWeight(bulletSize);
+    if (ammoType == 1)      // Determines what bullet to shoot based on current ammo type
        line(0, -5, 0, 5);
     if (ammoType == 2)
        ellipse(0,0,3,3);

@@ -1,5 +1,3 @@
-// Sounds cutting out after duration ..  need to fix
-
 
 class Tank extends GameObject
 {
@@ -7,11 +5,12 @@ class Tank extends GameObject
    PImage tankTurret;
    float turretTheta = 0.0f;
    float turretW, turretH, turretHalfW, turretHalfH;
-   char move, reverse, left, right, fire;
+   char move, reverse, left, right;
    color bulletCol = color(250);
    color cannonCol = color(0,0,200);
+   color crosshairCol = color(255,0,0);
    float bulletFrate = 10;
-   float cannonFrate = 60;
+   float cannonFrate = 300;
    AudioPlayer cannonSfx, bulletSfx;
    
    Tank()
@@ -34,7 +33,7 @@ class Tank extends GameObject
       alive = true;
    }
    
-   Tank(float startX, float startY, char move, char reverse, char left, char right, char fire)
+   Tank(float startX, float startY, char move, char reverse, char left, char right)
    {
       super(startX, startY);
       sprite = loadImage("tank_body_black2.png");
@@ -57,7 +56,6 @@ class Tank extends GameObject
       this.reverse = reverse;
       this.left = left;
       this.right = right;
-      this.fire = fire;
    }
    
    
@@ -124,6 +122,7 @@ class Tank extends GameObject
          theta += 0.02f;
       }
       
+      // Fire bullets
       if (mousePressed && mouseButton == LEFT && elapsed > bulletFrate)
       {
          elapsed = 0;
@@ -134,10 +133,11 @@ class Tank extends GameObject
          bullet.pos.y = pos.y;
          bullet.ammoType = 1;
          bullet.pos.add(PVector.mult(forward, 6));
-         bullet.colour = color(200,0,0);
          bullet.theta = turretTheta;
          gameObjects.add(bullet);
       }
+      
+      // Fire cannon shells
       if (mousePressed && mouseButton == RIGHT && elapsed > cannonFrate)
       {
          elapsed = 0;
@@ -148,60 +148,47 @@ class Tank extends GameObject
          shell.pos.y = pos.y;
          shell.ammoType = 2;
          shell.pos.add(PVector.mult(forward, 6));
-         shell.colour = color(200,0,0);
          shell.theta = turretTheta;
          gameObjects.add(shell);
       }
       
       
       // Keep tank within screen boundary
-      if (pos.x < halfW)
-            pos.x = halfW;
-      if (pos.x > width - halfW)
-            pos.x = width - halfW;
-      if (pos.y < halfH)
-            pos.y = halfH;
-      if (pos.y > height - halfW)
-            pos.y = height - halfW;
+      if (pos.x < lBoundry + halfW)
+            pos.x = lBoundry + halfW;
+      if (pos.x > rBoundry - halfW)
+            pos.x = rBoundry - halfW;
+      if (pos.y < tBoundry + halfH)
+            pos.y = tBoundry + halfH;
+      if (pos.y > bBoundry - halfW)
+            pos.y = bBoundry - halfW;
             
       elapsed++;
    }
    
    void render()
    {
+       // Tank body
        pushMatrix();
        translate(pos.x, pos.y);
-       
        rotate(theta);
        image(sprite, -halfW, -halfH);
-
        popMatrix();
        
+       // Tank turret
        pushMatrix();
        translate(pos.x, pos.y);
        rotate(turretTheta);
        image(tankTurret, -turretHalfW, -turretHalfH);
-       
        popMatrix();
+       
+       // Crosshair
+       noCursor();
+       stroke(crosshairCol);
+       strokeWeight(1);
+       line(mouseX-10, mouseY, mouseX-4, mouseY);    // Left line
+       line(mouseX+10, mouseY, mouseX+4, mouseY);    // Right line
+       line(mouseX, mouseY-10, mouseX, mouseY-4);    // Top line
+       line(mouseX, mouseY+10, mouseX, mouseY+4);    // Bottom line
    }
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
 }
