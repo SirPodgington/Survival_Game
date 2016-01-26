@@ -85,7 +85,8 @@ class Tank extends GameObject
    //     UPDATE     \ -----------------------------------------------------------------------------------
    /*****************/
    
-   int elapsed = 40;
+   int bulletElapsed = 11;
+   int cannonElapsed = 301;
    
    void update()
    {
@@ -97,22 +98,21 @@ class Tank extends GameObject
       if (keyPressed && key == '1')
          tankTurret = loadImage("tank_turret_default.png");
       if (keyPressed && key == '2')
-         tankTurret = loadImage("tank_turret_upgraded.png");
+         ;// ....
       
-      // Turret direction
-      turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
+      // Turret points towards mouse position if mouse is within boundry
+      if (mouseY < bBoundry)
+         turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
-      // Tank direction + speed
+      // Tank movement
       if (keys[move])
       {
          pos.add(forward);
       }
-      
       if (keys[reverse])
       {
          pos.sub(forward.div(2));
       }
-      
       if (keys[left])
       {
          theta -= 0.02f;
@@ -123,9 +123,9 @@ class Tank extends GameObject
       }
       
       // Fire bullets
-      if (mousePressed && mouseButton == LEFT && elapsed > bulletFrate)
+      if (mousePressed && mouseButton == LEFT && bulletElapsed > bulletFrate)
       {
-         elapsed = 0;
+         bulletElapsed = 0;
          bulletSound();
          
          Bullet bullet = new Bullet();
@@ -138,9 +138,9 @@ class Tank extends GameObject
       }
       
       // Fire cannon shells
-      if (mousePressed && mouseButton == RIGHT && elapsed > cannonFrate)
+      if (mousePressed && mouseButton == RIGHT && cannonElapsed > cannonFrate)
       {
-         elapsed = 0;
+         cannonElapsed = 0;
          cannonSound();
          
          Bullet shell = new Bullet();
@@ -152,7 +152,6 @@ class Tank extends GameObject
          gameObjects.add(shell);
       }
       
-      
       // Keep tank within screen boundary
       if (pos.x < lBoundry + halfW)
             pos.x = lBoundry + halfW;
@@ -163,7 +162,8 @@ class Tank extends GameObject
       if (pos.y > bBoundry - halfW)
             pos.y = bBoundry - halfW;
             
-      elapsed++;
+      bulletElapsed++;
+      cannonElapsed++;
    }
    
    void render()

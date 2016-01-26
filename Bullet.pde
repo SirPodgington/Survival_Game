@@ -36,7 +36,7 @@ class Bullet extends GameObject
   
   void update()
   {
-    // Determining bulet size/speed based on ammo type
+    // Determining bullet size/speed based on ammo type
     if (ammoType == 1)
     {
        bulletSize = 1;
@@ -45,7 +45,7 @@ class Bullet extends GameObject
     else if (ammoType == 2)
     {
        bulletSize = 4;
-       speed = 7.0f;
+       speed = 5.0f;
     }
     
     forward.x = sin(theta);
