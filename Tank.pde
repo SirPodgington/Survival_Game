@@ -8,13 +8,19 @@ class Tank extends GameObject
    float turretTheta = 0.0f;
    float turretW, turretH, turretHalfW, turretHalfH;
    char move, reverse, left, right, fire;
-   AudioPlayer cannon;
+   color bulletCol = color(250);
+   color cannonCol = color(0,0,200);
+   float bulletFrate = 10;
+   float cannonFrate = 60;
+   AudioPlayer cannonSfx, bulletSfx;
    
    Tank()
    {
       super(width*0.5f, height*0.8f);
-      sprite = loadImage("tank_body_grey2.png");
+      sprite = loadImage("tank_body_grey1.png");
       tankTurret = loadImage("tank_turret_default.png");
+      cannonSfx = minim.loadFile("tank_cannon.mp3");
+      bulletSfx = minim.loadFile("tank_bullet.wav");
       
       w = sprite.width;
       h = sprite.height;
@@ -26,15 +32,15 @@ class Tank extends GameObject
       turretHalfH = turretH / 2;
       speed = 0.8;
       alive = true;
-
-      cannon = minim.loadFile("tank_cannon.mp3");
    }
    
    Tank(float startX, float startY, char move, char reverse, char left, char right, char fire)
    {
       super(startX, startY);
-      sprite = loadImage("tank_body_grey2.png");
+      sprite = loadImage("tank_body_black2.png");
       tankTurret = loadImage("tank_turret_default.png");
+      cannonSfx = minim.loadFile("tank_cannon.mp3");
+      bulletSfx = minim.loadFile("tank_bullet.wav");
       
       w = sprite.width;
       h = sprite.height;
@@ -46,8 +52,6 @@ class Tank extends GameObject
       turretHalfH = turretH / 2;
       speed = 0.8;
       alive = true;
-
-      cannon = minim.loadFile("tank_cannon.mp3");
       
       this.move = move;
       this.reverse = reverse;
@@ -64,11 +68,18 @@ class Tank extends GameObject
 
    void cannonSound()
    {
-      if (cannon.position() != 0)
-      {
-         cannon.rewind();
-      }
-      cannon.play();
+      if (cannonSfx.position() != 0)
+         cannonSfx.rewind();
+
+      cannonSfx.play();
+   }
+   
+   void bulletSound()
+   {
+      if (bulletSfx.position() != 0)
+         bulletSfx.rewind();
+         
+      bulletSfx.play();
    }
    
    
@@ -113,19 +124,35 @@ class Tank extends GameObject
          theta += 0.02f;
       }
       
-      if (keys[fire] && elapsed > 40)
+      if (mousePressed && mouseButton == LEFT && elapsed > bulletFrate)
       {
          elapsed = 0;
-         cannonSound();
+         bulletSound();
          
          Bullet bullet = new Bullet();
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
+         bullet.ammoType = 1;
          bullet.pos.add(PVector.mult(forward, 6));
          bullet.colour = color(200,0,0);
          bullet.theta = turretTheta;
          gameObjects.add(bullet);
       }
+      if (mousePressed && mouseButton == RIGHT && elapsed > cannonFrate)
+      {
+         elapsed = 0;
+         cannonSound();
+         
+         Bullet shell = new Bullet();
+         shell.pos.x = pos.x;
+         shell.pos.y = pos.y;
+         shell.ammoType = 2;
+         shell.pos.add(PVector.mult(forward, 6));
+         shell.colour = color(200,0,0);
+         shell.theta = turretTheta;
+         gameObjects.add(shell);
+      }
+      
       
       // Keep tank within screen boundary
       if (pos.x < halfW)

@@ -1,6 +1,8 @@
 class Bullet extends GameObject
 {
-  
+  int ammoType;
+  float bulletSize;
+   
   Bullet()
   {
     speed = 10.0f;
@@ -8,17 +10,35 @@ class Bullet extends GameObject
   
   void render()
   {
-    stroke(200,0,0);
-    strokeWeight(4);
+    stroke(colour);
+    strokeWeight(bulletSize);
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(theta);
-    line(0, -5, 0, 5);
+    
+    // Determining the ammo type
+    if (ammoType == 1)
+       line(0, -5, 0, 5);
+    if (ammoType == 2)
+       ellipse(0,0,3,3);
+    
     popMatrix();    
   }
   
   void update()
   {
+    // Determining bulet size/speed based on ammo type
+    if (ammoType == 1)
+    {
+       bulletSize = 1;
+       speed = 10.0f;
+    }
+    else if (ammoType == 2)
+    {
+       bulletSize = 4;
+       speed = 7.0f;
+    }
+    
     forward.x = sin(theta);
     forward.y = - cos(theta);
     forward.mult(speed);
