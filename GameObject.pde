@@ -10,6 +10,7 @@ class GameObject
    color colour;
    color outline;
    PImage sprite;
+   int cooldown1, cooldown2;
 
    AudioPlayer sound;
    

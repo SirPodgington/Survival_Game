@@ -8,8 +8,8 @@ class Tank extends GameObject
    color bulletCol = color(250);
    color cannonCol = color(0,0,200);
    color crosshairCol = color(255,0,0);
-   int bulletFrate, bulletElapsed;
-   int cannonFrate, cannonElapsed;
+   int bulletFrate;
+   int cannonFrate;
    AudioPlayer cannonSfx, bulletSfx;
    
    
@@ -32,9 +32,9 @@ class Tank extends GameObject
       
       speed = 0.8;
       bulletFrate = 10;
-      bulletElapsed = bulletFrate;
+      cooldown1 = bulletFrate;
       cannonFrate = 300;
-      cannonElapsed = cannonFrate;
+      cooldown2 = cannonFrate;
    
    }
    
@@ -57,9 +57,9 @@ class Tank extends GameObject
       
       speed = 0.8;
       bulletFrate = 10;
-      bulletElapsed = bulletFrate;
+      cooldown1 = bulletFrate;
       cannonFrate = 300;
-      cannonElapsed = cannonFrate;
+      cooldown2 = cannonFrate;
       
       this.move = move;
       this.reverse = reverse;
@@ -129,9 +129,9 @@ class Tank extends GameObject
       }
       
       // Fire bullets
-      if (mousePressed && mouseButton == LEFT && bulletElapsed >= bulletFrate)
+      if (mousePressed && mouseButton == LEFT && cooldown1 >= bulletFrate)
       {
-         bulletElapsed = 0;
+         cooldown1 = 0;
          bulletSound();
          
          Bullet bullet = new Bullet();
@@ -144,9 +144,9 @@ class Tank extends GameObject
       }
       
       // Fire cannon shells
-      if (mousePressed && mouseButton == RIGHT && cannonElapsed >= cannonFrate)
+      if (mousePressed && mouseButton == RIGHT && cooldown2 >= cannonFrate)
       {
-         cannonElapsed = 0;
+         cooldown2 = 0;
          cannonSound();
          
          Bullet shell = new Bullet();
@@ -167,9 +167,11 @@ class Tank extends GameObject
             pos.y = tBoundry + halfH;
       if (pos.y > bBoundry - halfW)
             pos.y = bBoundry - halfW;
-            
-      bulletElapsed++;
-      cannonElapsed++;
+      
+      if (cooldown1 < 10)
+         cooldown1++;
+      if (cooldown2 < 300)
+         cooldown2++;
    }
    
    int cannonCooldown(int elapsed)

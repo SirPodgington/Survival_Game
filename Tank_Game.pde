@@ -70,14 +70,13 @@ void draw()
   rect(lBoundry, bBoundry, rBoundry-lBoundry, height-bBoundry);
   
   // Cannon cooldown bar
-
-  
-  int cannonVal ;//????
-  float cannonProgress = map(cannonVal, 0, 300, cdBarBottom, cdBarTop);
-  fill(127);
-  rect(20, cdBarTop, cdBarWidth, cannonProgress);
+  int cannonVal = gameObjects.get(0).cooldown2;   // Store cannon cd timer value from the player object (first entry)
+  float cannonProgress = map(cannonVal, 0, 300, 0, cdBarHeight);
   
   stroke(0);
-  strokeWeight(1);
-  rect(20, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template
+  strokeWeight(2);
+  fill(255);
+  rect(20, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template  
+  fill(255,0,0);
+  rect(20, cdBarBottom, cdBarWidth, -cannonProgress);   // Bar progress
 }
