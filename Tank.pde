@@ -183,7 +183,6 @@ class Tank extends GameObject
        popMatrix();
        
        // Crosshair
-       noCursor();
        stroke(crosshairCol);
        strokeWeight(1);
        line(mouseX-10, mouseY, mouseX-4, mouseY);    // Left line

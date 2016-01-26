@@ -39,6 +39,11 @@ void draw()
 {
    background(0);
    
+   if (mouseY < bBoundry)
+      noCursor();
+   else
+      cursor(HAND);
+   
   for(int i = gameObjects.size() - 1;  i >= 0;  i --)
   {
      GameObject object = gameObjects.get(i);
@@ -46,7 +51,9 @@ void draw()
      object.render();
   }
   
+  // User Interface
+  fill(255);
   stroke(255);
   strokeWeight(2);
-  line(0, bBoundry, width, bBoundry);
+  rect(lBoundry, bBoundry, (rBoundry - lBoundry), height-bBoundry);
 }
