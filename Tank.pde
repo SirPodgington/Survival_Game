@@ -1,3 +1,4 @@
+// This is the player's character
 
 class Tank extends GameObject
 {
@@ -72,7 +73,6 @@ class Tank extends GameObject
    //  TANK SOUNDS   \ -----------------------------------------------------------------------------------
    /*****************/
    
-
    void cannonSound()
    {
       if (cannonSfx.position() != 0)
@@ -108,7 +108,7 @@ class Tank extends GameObject
          ;// ....
       
       // Turret points towards mouse position if mouse is within boundry
-      if (mouseY < bBoundry)
+      if (mouseY < viewPort_Bottom_Boundry)
          turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
       // Tank movement
@@ -160,25 +160,20 @@ class Tank extends GameObject
       }
       
       // Keep tank within screen boundary
-      if (pos.x < lBoundry + halfW)
-            pos.x = lBoundry + halfW;
-      if (pos.x > rBoundry - halfW)
-            pos.x = rBoundry - halfW;
-      if (pos.y < tBoundry + halfH)
-            pos.y = tBoundry + halfH;
-      if (pos.y > bBoundry - halfW)
-            pos.y = bBoundry - halfW;
+      if (pos.x < viewPort_Left_Boundry + halfW)
+            pos.x = viewPort_Left_Boundry + halfW;
+      if (pos.x > viewPort_Right_Boundry - halfW)
+            pos.x = viewPort_Right_Boundry - halfW;
+      if (pos.y < viewPort_Top_Boundry + halfH)
+            pos.y = viewPort_Top_Boundry + halfH;
+      if (pos.y > viewPort_Bottom_Boundry - halfW)
+            pos.y = viewPort_Bottom_Boundry - halfW;
       
       // Keep cooldown timers within range
       if (cooldown1 < 10)
          cooldown1++;
       if (cooldown2 < 300)
          cooldown2++;
-   }
-   
-   int cannonCooldown(int elapsed)
-   {
-      return(elapsed);
    }
    
    void render()
