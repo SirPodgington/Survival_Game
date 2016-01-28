@@ -2,11 +2,13 @@ class Bullet extends GameObject
 {
   int ammoType;
   int time = millis();
-  float bulletSize;
+  float bulletWidth, bulletLength, cannonWidth;
    
   Bullet()
   {
-    speed = 10.0f;
+     bulletWidth = 2;
+     bulletLength = 4;
+     cannonWidth = 5;
   }
   
   void render()
@@ -25,11 +27,11 @@ class Bullet extends GameObject
     
     fill(colour);
     stroke(colour);
-    strokeWeight(bulletSize);
+    strokeWeight(bulletWidth);
     if (ammoType == 1)      // Determines what bullet to shoot based on current ammo type
-       line(0, -5, 0, 5);
+       line(0, -bulletLength, 0, bulletLength);
     if (ammoType == 2)
-       ellipse(0,0,3,3);
+       ellipse(0, 0, cannonWidth, cannonWidth);
     
     popMatrix();    
   }
@@ -39,12 +41,10 @@ class Bullet extends GameObject
     // Determining bullet size/speed based on ammo type
     if (ammoType == 1)
     {
-       bulletSize = 1;
        speed = 10.0f;
     }
     else if (ammoType == 2)
     {
-       bulletSize = 4;
        speed = 5.0f;
     }
     

@@ -3,7 +3,7 @@
 /*
 TO BE FIXED:
 
-Bullets are off a bit on Y-AXIS
+-
 */
 
 import ddf.minim.*;
@@ -57,29 +57,34 @@ void draw()
      object.render();
   }
   
-  // User Interface
+  // User Interface - To include things like Cooldown timers, player health, (score?)
+  float uiStartX = lBoundry;
+  float uiStartY = bBoundry;
   float uiHeight = height - bBoundry;
-  float offset = 20;
-  float cdBarHeight = 50;
-  float cdBarWidth = 20;
-  float cdBarTop = bBoundry + 15;
-  float cdBarBottom = cdBarTop + cdBarHeight;
+  float uiWidth = rBoundry - lBoundry;
   
   fill(255);
   stroke(255);
   strokeWeight(2);
-  rect(lBoundry, bBoundry, rBoundry-lBoundry, height-bBoundry);
+  rect(uiStartX, uiStartY, uiWidth, uiHeight);
+  
+  float cdBarHeight = 50;
+  float cdBarWidth = 20;
+  float cdBarTop = bBoundry + 10;
+  float cdBarBottom = cdBarTop + cdBarHeight;
   
   // Cannon cooldown bar
   PImage cannonIcon = loadImage("CannonIcon.png");
   int cannonVal = gameObjects.get(0).cooldown2;   // Store cannon cd timer value from the player object (first entry)
   float cannonProgress = map(cannonVal, 0, 300, 0, cdBarHeight);
+  float cannonBarX = 20;
+  float cannonIconY = cdBarBottom + 10;
   
   stroke(0);
   strokeWeight(2);
   fill(255);
-  rect(offset, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template  
+  rect(cannonBarX, cdBarTop, cdBarWidth, cdBarHeight);   // Bar template  
   fill(255,0,0);
-  rect(offset, cdBarBottom, cdBarWidth, -cannonProgress);   // Bar progress
-  image(cannonIcon, offset+1, cdBarBottom + 10);
+  rect(cannonBarX, cdBarBottom, cdBarWidth, -cannonProgress);   // Bar progress
+  image(cannonIcon, cannonBarX, cannonIconY);
 }

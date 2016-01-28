@@ -96,6 +96,7 @@ class Tank extends GameObject
    
    void update()
    {
+      // Calculate tank position & apply speed factor
       forward.x = sin(theta);
       forward.y = - cos(theta);
       forward.mult(speed);
@@ -138,7 +139,7 @@ class Tank extends GameObject
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
          bullet.ammoType = 1;
-         bullet.pos.add(PVector.mult(forward, 6));
+         bullet.pos.add(PVector.mult(forward, 0));
          bullet.theta = turretTheta;
          gameObjects.add(bullet);
       }
@@ -153,7 +154,7 @@ class Tank extends GameObject
          shell.pos.x = pos.x;
          shell.pos.y = pos.y;
          shell.ammoType = 2;
-         shell.pos.add(PVector.mult(forward, 6));
+         shell.pos.add(PVector.mult(forward, 0));
          shell.theta = turretTheta;
          gameObjects.add(shell);
       }
@@ -168,6 +169,7 @@ class Tank extends GameObject
       if (pos.y > bBoundry - halfW)
             pos.y = bBoundry - halfW;
       
+      // Keep cooldown timers within range
       if (cooldown1 < 10)
          cooldown1++;
       if (cooldown2 < 300)
@@ -187,6 +189,7 @@ class Tank extends GameObject
        rotate(theta);
        image(sprite, -halfW, -halfH);
        stroke(70);
+       strokeWeight(1);
        line(-8, -25, 0, -30);
        line(0, -30, 8, -25);
        popMatrix();
