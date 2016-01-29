@@ -96,7 +96,7 @@ class Tank extends GameObject
    
    void update()
    {
-      // Calculate tank position & apply speed factor
+      // Calculate tank direction & apply speed factor
       forward.x = sin(theta);
       forward.y = - cos(theta);
       forward.mult(speed);

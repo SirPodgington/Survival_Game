@@ -1,6 +1,8 @@
 
 public class BasicAI extends GameObject
 {
+   float bullet_Range;
+   
    BasicAI()
    {
       super(50, 50);
@@ -8,11 +10,24 @@ public class BasicAI extends GameObject
       halfW = w/2;
       speed = 0.6;
       colour = color(random(50,250), 0, 0);
+      bullet_Range = 200;
    }
    
    void update()
    {
+      
+      forward.x = sin(theta);
+      forward.y = - cos(theta);
+      forward.mult(speed);
+      
+      // Set the AI to always face the player
       theta = atan2(game_Objects.get(0).pos.y - pos.y, game_Objects.get(0).pos.x - pos.x) + HALF_PI;
+      
+      // Make the AI follow the player, staying within range
+      if (pos.dist(game_Objects.get(0).pos) < bullet_Range)
+      {
+         pos.add(forward);
+      }
    }
    
    void render()
@@ -23,7 +38,7 @@ public class BasicAI extends GameObject
       
       fill(0);
       stroke(colour);
-      strokeWeight(1);
+      strokeWeight(3);
       
       ellipse(0, 0, w, w);
       line(0, -10, 0, 0);
