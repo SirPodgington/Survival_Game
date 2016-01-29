@@ -1,7 +1,6 @@
 
 void user_Interface()
 {
-   // User Interface - To include things like Cooldown timers, player health, (score?)
    fill(255);
    stroke(255);
    strokeWeight(2);

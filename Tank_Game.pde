@@ -9,6 +9,8 @@ TO BE FIXED:
 TO BE ADDED (IDEAS):
 
 - Heat cooldown on machine gun
+- Speedboost cooldown
+- 2 more ai units & maybe a boss?
 */
 
 import ddf.minim.*;
@@ -75,7 +77,8 @@ void draw()
 {
    background(0);
    
-   // Mouse becomes crosshair when over the playing screen, arrow when over User Interface
+   // Hide mouse cursor when over the active view
+   // Display cursor when over UI
    if (mouseY < view_Bottom_Boundry)
       noCursor();
    else
