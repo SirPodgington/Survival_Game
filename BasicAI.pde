@@ -1,8 +1,7 @@
 
-class BasicAI extends GameObject
+class BasicAI extends AI
 {
-   float target_Distance_From_Player;
-   float distance_To_Player;
+   
    
    BasicAI()
    {
