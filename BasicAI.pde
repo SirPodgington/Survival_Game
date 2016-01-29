@@ -1,16 +1,17 @@
 
-public class BasicAI extends GameObject
+class BasicAI extends GameObject
 {
-   float bullet_Range;
+   float target_Distance_From_Player;
+   float distance_To_Player;
    
    BasicAI()
    {
       super(50, 50);
       w = 20;
       halfW = w * 0.5f;
-      speed = 0.6;
+      speed = 0.5;
       colour = color(random(50,250), 0, 0);
-      bullet_Range = 120;
+      target_Distance_From_Player = 120;
    }
    
    void update()
@@ -18,13 +19,15 @@ public class BasicAI extends GameObject
       // Set the AI to always face the player
       theta = atan2(game_Objects.get(0).pos.y - pos.y, game_Objects.get(0).pos.x - pos.x) + HALF_PI;
       
+      // Calculate co-ordinates for moving forward, applying the speed multiplier also
       forward.x = sin(theta);
       forward.y = - cos(theta);
       forward.normalize();
       forward.mult(speed);
 
       // Make the AI follow the player, staying within range
-      if (pos.dist(game_Objects.get(0).pos) > bullet_Range)
+      distance_To_Player = pos.dist(game_Objects.get(0).pos);
+      if (distance_To_Player > target_Distance_From_Player)
       {
          pos.add(forward);
       }
