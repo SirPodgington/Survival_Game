@@ -8,7 +8,6 @@ class GameObject
    float speed;
    float theta = 0.0f;
    color colour;
-   color outline;
    PImage sprite;
    int cooldown1, cooldown2;
 

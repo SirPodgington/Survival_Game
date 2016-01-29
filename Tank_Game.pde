@@ -3,7 +3,7 @@
 /*
 TO BE FIXED:
 
--
+- Boundry variables don't take screen width/height into account  ->  Move them to setup later
 */
 
 import ddf.minim.*;
@@ -15,9 +15,9 @@ boolean[] keys = new boolean[512];   // Array to store true/false values for all
 // Background, View (the game screen, exempt from the UI), World, User Interface variables
 float ui_Height = 100;
 float view_Left_Boundry = 0;
-float view_Right_Boundry = width;
+float view_Right_Boundry = 1000;
 float view_Top_Boundry = 0;
-float view_Bottom_Boundry = height - ui_Height;
+float view_Bottom_Boundry = 600;
 float view_Width = view_Right_Boundry - view_Left_Boundry;
 float view_Height = view_Bottom_Boundry - view_Top_Boundry;
 float ui_Start_X = view_Left_Boundry;
@@ -27,7 +27,7 @@ float cdBarHeight = 50;
 float cdBarWidth = 20;
 float cdBarTop = view_Bottom_Boundry + 10;
 float cdBarBottom = cdBarTop + cdBarHeight;
-PImage cannonIcon = loadImage("CannonIcon.png");
+PImage cannonIcon;
 float cannonBarX = 20;
 float cannonIconY = cdBarBottom + 10;
 
@@ -36,8 +36,12 @@ void setup()
    minim = new Minim(this);
    size(1000, 700);
    
+   cannonIcon = loadImage("CannonIcon.png");   // UI Icon for cannon cooldown
+   
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
+   BasicAI enemy1 = new BasicAI();
+   game_Objects.add(enemy1);
 }
 
 

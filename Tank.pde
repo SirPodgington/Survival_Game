@@ -101,12 +101,6 @@ class Tank extends GameObject
       forward.y = - cos(theta);
       forward.mult(speed);
       
-      // Switch between weapons
-      if (keyPressed && key == '1')
-         tankTurret = loadImage("tank_turret_default.png");
-      if (keyPressed && key == '2')
-         ;// ....
-      
       // Turret points towards mouse position if mouse is within boundry
       if (mouseY < view_Bottom_Boundry)
          turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
@@ -139,7 +133,7 @@ class Tank extends GameObject
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
          bullet.ammoType = 1;
-         bullet.pos.add(PVector.mult(forward, 0));
+         //bullet.pos.add(PVector.mult(forward, 0));
          bullet.theta = turretTheta;
          game_Objects.add(bullet);
       }
@@ -154,7 +148,7 @@ class Tank extends GameObject
          shell.pos.x = pos.x;
          shell.pos.y = pos.y;
          shell.ammoType = 2;
-         shell.pos.add(PVector.mult(forward, 0));
+         //shell.pos.add(PVector.mult(forward, 0));
          shell.theta = turretTheta;
          game_Objects.add(shell);
       }
