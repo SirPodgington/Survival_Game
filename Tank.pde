@@ -108,7 +108,7 @@ class Tank extends GameObject
          ;// ....
       
       // Turret points towards mouse position if mouse is within boundry
-      if (mouseY < viewPort_Bottom_Boundry)
+      if (mouseY < view_Bottom_Boundry)
          turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
       // Tank movement
@@ -141,7 +141,7 @@ class Tank extends GameObject
          bullet.ammoType = 1;
          bullet.pos.add(PVector.mult(forward, 0));
          bullet.theta = turretTheta;
-         gameObjects.add(bullet);
+         game_Objects.add(bullet);
       }
       
       // Fire cannon shells
@@ -156,18 +156,18 @@ class Tank extends GameObject
          shell.ammoType = 2;
          shell.pos.add(PVector.mult(forward, 0));
          shell.theta = turretTheta;
-         gameObjects.add(shell);
+         game_Objects.add(shell);
       }
       
       // Keep tank within screen boundary
-      if (pos.x < viewPort_Left_Boundry + halfW)
-            pos.x = viewPort_Left_Boundry + halfW;
-      if (pos.x > viewPort_Right_Boundry - halfW)
-            pos.x = viewPort_Right_Boundry - halfW;
-      if (pos.y < viewPort_Top_Boundry + halfH)
-            pos.y = viewPort_Top_Boundry + halfH;
-      if (pos.y > viewPort_Bottom_Boundry - halfW)
-            pos.y = viewPort_Bottom_Boundry - halfW;
+      if (pos.x < view_Left_Boundry + halfW)
+            pos.x = view_Left_Boundry + halfW;
+      if (pos.x > view_Right_Boundry - halfW)
+            pos.x = view_Right_Boundry - halfW;
+      if (pos.y < view_Top_Boundry + halfH)
+            pos.y = view_Top_Boundry + halfH;
+      if (pos.y > view_Bottom_Boundry - halfW)
+            pos.y = view_Bottom_Boundry - halfW;
       
       // Keep cooldown timers within range
       if (cooldown1 < 10)

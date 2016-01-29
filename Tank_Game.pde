@@ -9,40 +9,45 @@ TO BE FIXED:
 import ddf.minim.*;
 Minim minim;
 
-// Background, Viewport, User Interface variables
-float viewPort_Left_Boundry, viewPort_Right_Boundry, viewPort_Top_Boundry, viewPort_Bottom_Boundry;
-float viewPort_Width = ;
-float viewPort_Height = ;
-float world_Width = ;
-float world_Height = ;;
+ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
+boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
 
-float uiStartX = viewPort_Left_Boundry;
-float uiStartY = viewPort_Bottom_Boundry;
-float uiHeight = height - viewPort_Bottom_Boundry;
-float uiWidth = viewPort_Right_Boundry - viewPort_Left_Boundry;
+// Background, View (the game screen, exempt from the UI), World, User Interface variables
+float ui_Height = 100;
+float view_Left_Boundry = 0;
+float view_Right_Boundry = width;
+float view_Top_Boundry = 0;
+float view_Bottom_Boundry = height - ui_Height;
+float view_Width = view_Right_Boundry - view_Left_Boundry;
+float view_Height = view_Bottom_Boundry - view_Top_Boundry;
+float ui_Start_X = view_Left_Boundry;
+float ui_Start_Y = view_Bottom_Boundry;
+float ui_Width = view_Right_Boundry - view_Left_Boundry;
+float cdBarHeight = 50;
+float cdBarWidth = 20;
+float cdBarTop = view_Bottom_Boundry + 10;
+float cdBarBottom = cdBarTop + cdBarHeight;
+PImage cannonIcon = loadImage("CannonIcon.png");
+float cannonBarX = 20;
+float cannonIconY = cdBarBottom + 10;
 
 void setup()
 {
    minim = new Minim(this);
    size(1000, 700);
    
-   viewPort_Left_Boundry = 0;
-   viewPort_Right_Boundry = width;
-   viewPort_Top_Boundry = 0;
-   viewPort_Bottom_Boundry = 600;
-   
-   Tank player = new Tank(width/2, viewPort_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
-   gameObjects.add(player);
+   Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
+   game_Objects.add(player);
 }
 
-ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
-boolean[] keys = new boolean[512];
 
+// Key is true when pressed
 void keyPressed()
 {
   keys[keyCode] = true;
 }
 
+// Key is false when released
 void keyReleased()
 {
   keys[keyCode] = false;
@@ -54,36 +59,29 @@ void draw()
 {
    background(0);
    
-   if (mouseY < viewPort_Bottom_Boundry)
+   // Mouse becomes crosshair when over the playing screen, arrow when over User Interface
+   if (mouseY < view_Bottom_Boundry)
       noCursor();
    else
       cursor(ARROW);
-   
-  for(int i = gameObjects.size() - 1;  i >= 0;  i --)
+  
+  // Render & update all game objects
+  for(int i = game_Objects.size() - 1;  i >= 0;  i --)
   {
-     GameObject object = gameObjects.get(i);
+     GameObject object = game_Objects.get(i);
      object.update();
      object.render();
   }
   
   // User Interface - To include things like Cooldown timers, player health, (score?)
-  
   fill(255);
   stroke(255);
   strokeWeight(2);
-  rect(uiStartX, uiStartY, uiWidth, uiHeight);
-  
-  float cdBarHeight = 50;
-  float cdBarWidth = 20;
-  float cdBarTop = viewPort_Bottom_Boundry + 10;
-  float cdBarBottom = cdBarTop + cdBarHeight;
+  rect(ui_Start_X, ui_Start_Y, ui_Width, ui_Height); // UI BackgroundS
   
   // Cannon cooldown bar
-  PImage cannonIcon = loadImage("CannonIcon.png");
-  int cannonVal = gameObjects.get(0).cooldown2;   // Store cannon cd timer value from the player object (first entry)
+  int cannonVal = game_Objects.get(0).cooldown2;   // Store cannon cd timer value from the player object (first entry)
   float cannonProgress = map(cannonVal, 0, 300, 0, cdBarHeight);
-  float cannonBarX = 20;
-  float cannonIconY = cdBarBottom + 10;
   
   stroke(0);
   strokeWeight(2);

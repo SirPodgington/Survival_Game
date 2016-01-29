@@ -56,7 +56,7 @@ class Bullet extends GameObject
     // Remove bullet if goes out of bounds
     if (pos.x < 0 || pos.y < 0 || pos.x > width || pos.y > height)
     {
-      gameObjects.remove(this);
+      game_Objects.remove(this);
     }
   }
 }
