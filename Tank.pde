@@ -2,15 +2,12 @@
 
 class Tank extends GameObject
 {
-   PImage tankTurret;
-   float turretTheta = 0.0f;
-   float turretW, turretH, turretHalfW, turretHalfH;
+   PImage turret_Sprite;
+   float turret_Theta = 0.0f;
+   float turret_Width, turret_Height, turret_HalfWidth, turret_HalfHeight;
    char move, reverse, left, right;
-   color bulletCol = color(250);
-   color cannonCol = color(0,0,200);
-   color crosshairCol = color(255,0,0);
-   int bulletFrate;
-   int cannonFrate;
+   int lmg_FireRate, cannon_FireRate;
+   color crosshairCol;
    AudioPlayer cannonSfx, bulletSfx;
    
    
@@ -18,7 +15,7 @@ class Tank extends GameObject
    {
       super(width*0.5f, height*0.8f);
       sprite = loadImage("tank_body_grey1.png");
-      tankTurret = loadImage("tank_turret_default.png");
+      turret_Sprite = loadImage("tank_turret_default.png");
       cannonSfx = minim.loadFile("tank_cannon.mp3");
       bulletSfx = minim.loadFile("tank_bullet.wav");
       
@@ -26,16 +23,18 @@ class Tank extends GameObject
       h = sprite.height;
       halfW = w / 2;
       halfH = h / 2;
-      turretW = tankTurret.width;
-      turretH = tankTurret.height;
-      turretHalfW = turretW / 2;
-      turretHalfH = turretH / 2;
+      turret_Width = turret_Sprite.width;
+      turret_Height = turret_Sprite.height;
+      turret_HalfWidth = turret_Width / 2;
+      turret_HalfHeight = turret_Height / 2;
       
       speed = 0.8;
-      bulletFrate = 10;
-      cooldown1 = bulletFrate;
-      cannonFrate = 300;
-      cooldown2 = cannonFrate;
+      crosshairCol = color(255,0,0);
+      
+      lmg_FireRate = 10;
+      cooldown1 = lmg_FireRate;
+      cannon_FireRate = 300;
+      cooldown2 = cannon_FireRate;
    
    }
    
@@ -43,7 +42,7 @@ class Tank extends GameObject
    {
       super(startX, startY);
       sprite = loadImage("tank_body_black2.png");
-      tankTurret = loadImage("tank_turret_default.png");
+      turret_Sprite = loadImage("tank_turret_default.png");
       cannonSfx = minim.loadFile("tank_cannon.mp3");
       bulletSfx = minim.loadFile("tank_bullet.wav");
       
@@ -51,16 +50,18 @@ class Tank extends GameObject
       h = sprite.height;
       halfW = w / 2;
       halfH = h / 2;
-      turretW = tankTurret.width;
-      turretH = tankTurret.height;
-      turretHalfW = turretW / 2;
-      turretHalfH = turretH / 2;
+      turret_Width = turret_Sprite.width;
+      turret_Height = turret_Sprite.height;
+      turret_HalfWidth = turret_Width / 2;
+      turret_HalfHeight = turret_Height / 2;
       
       speed = 0.8;
-      bulletFrate = 10;
-      cooldown1 = bulletFrate;
-      cannonFrate = 300;
-      cooldown2 = cannonFrate;
+      crosshairCol = color(255,0,0);
+      
+      lmg_FireRate = 10;
+      cooldown1 = lmg_FireRate;
+      cannon_FireRate = 300;
+      cooldown2 = cannon_FireRate;
       
       this.move = move;
       this.reverse = reverse;
@@ -103,7 +104,7 @@ class Tank extends GameObject
       
       // Turret points towards mouse position if mouse is within boundry
       if (mouseY < view_Bottom_Boundry)
-         turretTheta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
+         turret_Theta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
       // Tank movement
       if (keys[move])
@@ -124,7 +125,7 @@ class Tank extends GameObject
       }
       
       // Fire bullets
-      if (mousePressed && mouseButton == LEFT && cooldown1 >= bulletFrate)
+      if (mousePressed && mouseButton == LEFT && cooldown1 >= lmg_FireRate)
       {
          cooldown1 = 0;
          bulletSound();
@@ -134,12 +135,12 @@ class Tank extends GameObject
          bullet.pos.y = pos.y;
          bullet.ammoType = 1;
          //bullet.pos.add(PVector.mult(forward, 0));
-         bullet.theta = turretTheta;
+         bullet.theta = turret_Theta;
          game_Objects.add(bullet);
       }
       
       // Fire cannon shells
-      if (mousePressed && mouseButton == RIGHT && cooldown2 >= cannonFrate)
+      if (mousePressed && mouseButton == RIGHT && cooldown2 >= cannon_FireRate)
       {
          cooldown2 = 0;
          cannonSound();
@@ -149,7 +150,7 @@ class Tank extends GameObject
          shell.pos.y = pos.y;
          shell.ammoType = 2;
          //shell.pos.add(PVector.mult(forward, 0));
-         shell.theta = turretTheta;
+         shell.theta = turret_Theta;
          game_Objects.add(shell);
       }
       
@@ -186,8 +187,8 @@ class Tank extends GameObject
        // Tank turret
        pushMatrix();
        translate(pos.x, pos.y);
-       rotate(turretTheta);
-       image(tankTurret, -turretHalfW, -turretHalfH);
+       rotate(turret_Theta);
+       image(turret_Sprite, -turret_HalfWidth, -turret_HalfHeight);
        popMatrix();
        
        // Crosshair

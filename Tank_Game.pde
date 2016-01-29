@@ -4,38 +4,50 @@
 TO BE FIXED:
 
 - Boundry variables don't take screen width/height into account  ->  Move them to setup later
+
+
+TO BE ADDED (IDEAS):
+
+- Heat cooldown on machine gun
 */
 
 import ddf.minim.*;
 Minim minim;
 
+// Background, View (the game screen, exempt from the UI), World, User Interface variables
+float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
+float view_Width, view_Height;
+float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
+float cdBarHeight, cdBarWidth, cdBarTop, cdBarBottom;
+float cannonBarX, cannonIconY;
+PImage cannonIcon;
+
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
 
-// Background, View (the game screen, exempt from the UI), World, User Interface variables
-float ui_Height = 100;
-float view_Left_Boundry = 0;
-float view_Right_Boundry = 1000;
-float view_Top_Boundry = 0;
-float view_Bottom_Boundry = 600;
-float view_Width = view_Right_Boundry - view_Left_Boundry;
-float view_Height = view_Bottom_Boundry - view_Top_Boundry;
-float ui_Start_X = view_Left_Boundry;
-float ui_Start_Y = view_Bottom_Boundry;
-float ui_Width = view_Right_Boundry - view_Left_Boundry;
-float cdBarHeight = 50;
-float cdBarWidth = 20;
-float cdBarTop = view_Bottom_Boundry + 10;
-float cdBarBottom = cdBarTop + cdBarHeight;
-PImage cannonIcon;
-float cannonBarX = 20;
-float cannonIconY = cdBarBottom + 10;
 
 void setup()
 {
    minim = new Minim(this);
    size(1000, 700);
    
+   // Background, View (the game screen, exempt from the UI), World, User Interface variables
+   view_Left_Boundry = 0;
+   view_Right_Boundry = width;
+   view_Top_Boundry = 0;
+   view_Bottom_Boundry = height - 100;
+   view_Width = view_Right_Boundry - view_Left_Boundry;
+   view_Height = view_Bottom_Boundry - view_Top_Boundry;
+   ui_Start_X = view_Left_Boundry;
+   ui_Start_Y = view_Bottom_Boundry;
+   ui_Height = height - view_Bottom_Boundry;
+   ui_Width = view_Right_Boundry - view_Left_Boundry;
+   cdBarHeight = 50;
+   cdBarWidth = 20;
+   cdBarTop = view_Bottom_Boundry + 10;
+   cdBarBottom = cdBarTop + cdBarHeight;
+   cannonBarX = 20;
+   cannonIconY = cdBarBottom + 10;
    cannonIcon = loadImage("CannonIcon.png");   // UI Icon for cannon cooldown
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
