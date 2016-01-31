@@ -12,6 +12,7 @@ class GameObject
    int cooldown1, cooldown2;
    int fire_Rate;    // How many bullets per second
    int passed_Milliseconds;
+   AudioPlayer gun_Sound;
 
    AudioPlayer sound;
    

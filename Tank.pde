@@ -7,17 +7,16 @@ class Tank extends GameObject
    float turret_Width, turret_Height, turret_half_Width, turret_half_Height;
    char move, reverse, left, right;
    int cannon_Cooldown;
-   color crosshair_Colour;
-   AudioPlayer cannon_Sound, lmg_Sound;
+   AudioPlayer cannon_Sound;
    
    
    Tank()
    {
       super(width*0.5f, height*0.8f);
       sprite = loadImage("tank_body_grey1.png");
-      turret_Sprite = loadImage("tank_turret_default.png");
-      cannon_Sound = minim.loadFile("tank_cannon.mp3");
-      lmg_Sound = minim.loadFile("tank_bullet.wav");
+      turret_Sprite = loadImage("tank_turret.png");
+      cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
+      gun_Sound = minim.loadFile("tank_lmg_sound.wav");
       
       w = sprite.width;
       h = sprite.height;
@@ -29,7 +28,7 @@ class Tank extends GameObject
       turret_half_Height = turret_Height / 2;
       
       speed = 0.8;
-      crosshair_Colour = color(255,0,0);
+      colour = color(255,0,0);
       
       fire_Rate = 10;
       cannon_Cooldown = 300;
@@ -42,9 +41,9 @@ class Tank extends GameObject
    {
       super(startX, startY);
       sprite = loadImage("tank_body_black2.png");
-      turret_Sprite = loadImage("tank_turret_default.png");
-      cannon_Sound = minim.loadFile("tank_cannon.mp3");
-      lmg_Sound = minim.loadFile("tank_bullet.wav");
+      turret_Sprite = loadImage("tank_turret_sprite.png");
+      cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
+      gun_Sound = minim.loadFile("tank_lmg_sound.wav");
       
       w = sprite.width;
       h = sprite.height;
@@ -56,7 +55,7 @@ class Tank extends GameObject
       turret_half_Height = turret_Height / 2;
       
       speed = 0.8;
-      crosshair_Colour = color(255,0,0);
+      colour = color(255,0,0);
       
       fire_Rate = 10;
       cooldown1 = fire_Rate;
@@ -84,10 +83,10 @@ class Tank extends GameObject
    
    void lmgSound()
    {
-      if (lmg_Sound.position() != 0)
-         lmg_Sound.rewind();
+      if (gun_Sound.position() != 0)
+         gun_Sound.rewind();
          
-      lmg_Sound.play();
+      gun_Sound.play();
    }
    
    
@@ -134,7 +133,7 @@ class Tank extends GameObject
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
          bullet.ammo_Type = 1;
-         //bullet.pos.add(PVector.mult(forward, 0));
+         bullet.colour = colour;
          bullet.theta = turret_Theta;
          game_Objects.add(bullet);
       }
@@ -149,7 +148,7 @@ class Tank extends GameObject
          shell.pos.x = pos.x;
          shell.pos.y = pos.y;
          shell.ammo_Type = 2;
-         //shell.pos.add(PVector.mult(forward, 0));
+         shell.colour = colour;
          shell.theta = turret_Theta;
          game_Objects.add(shell);
       }
@@ -173,12 +172,15 @@ class Tank extends GameObject
    
    void render()
    {
-       // Tank body
        pushMatrix();
+       
+       // Tank body
        translate(pos.x, pos.y);
        rotate(theta);
        image(sprite, -half_W, -half_H);
-       stroke(70);
+       
+       // Tank direction indicator
+       stroke(colour);
        strokeWeight(1);
        line(-8, -25, 0, -30);
        line(0, -30, 8, -25);
@@ -192,7 +194,7 @@ class Tank extends GameObject
        popMatrix();
        
        // Crosshair
-       stroke(crosshair_Colour);
+       stroke(colour);
        strokeWeight(1);
        line(mouseX-10, mouseY, mouseX-4, mouseY);    // Left line
        line(mouseX+10, mouseY, mouseX+4, mouseY);    // Right line

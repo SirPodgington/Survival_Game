@@ -52,7 +52,7 @@ void setup()
    cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
    cannon_Bar_X = 20;
    cannon_Icon_Y = cd_Bar_Bottom + 10;
-   cannon_Icon = loadImage("cannon_Icon.png");   // UI Icon for cannon cooldown
+   cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);

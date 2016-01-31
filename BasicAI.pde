@@ -9,10 +9,19 @@ class BasicAI extends AI
       w = 20;
       half_W = w * 0.5f;
       speed = 0.5;
-      colour = color(random(50,250), 0, 0);
+      colour = color(255, random(50,250), 0);
       target_Distance_From_Player = 120;
-      range = 150;
+      range = 200;
       fire_Rate = 180;
+      gun_Sound = minim.loadFile("basic_ai_gunsound.mp3");
+   }
+   
+   void gunSound()
+   {
+      if (gun_Sound.position() != 0)
+         gun_Sound.rewind();
+
+      gun_Sound.play();
    }
    
    void update()
@@ -37,7 +46,15 @@ class BasicAI extends AI
       if (distance_To_Player <= range && cooldown1 >= fire_Rate)
       {
          cooldown1 = 0;
+         gunSound();
          
+         Bullet bullet = new Bullet();
+         bullet.pos.x = pos.x;
+         bullet.pos.y = pos.y;
+         bullet.ammo_Type = 3;
+         bullet.colour = colour;
+         bullet.theta = theta;
+         game_Objects.add(bullet);
       }
 
       if (cooldown1 < fire_Rate)

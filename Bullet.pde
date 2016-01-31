@@ -2,7 +2,7 @@ class Bullet extends GameObject
 {
   int ammo_Type;
   int time = millis();
-  float bullet_Width, bullet_Length;
+  color active_Colour;
   
   void render()
   {
@@ -10,44 +10,50 @@ class Bullet extends GameObject
     translate(pos.x, pos.y);
     rotate(theta);
     
-    colour = color(255,0,0);
+    active_Colour = colour;
     
-    if (ammo_Type == 1)      // Determines what bullet to shoot based on current ammo type
+    // Draws bullet according to ammo type
+    if (ammo_Type == 1 || ammo_Type == 3)
     {
-       bullet_Width = 2;
-       bullet_Length = 4;
-       
        stroke(colour);
-       strokeWeight(bullet_Width);
-       line(0, -bullet_Length, 0, bullet_Length);
+       strokeWeight(w);
+       line(0, -h, 0, h);
     }
-    if (ammo_Type == 2)
-    {
-       bullet_Width = 7;
+    else if (ammo_Type == 2)
+    {     
+       // Cannon flashes white every 100 ms
        passed_Milliseconds = millis() - time;
        if (passed_Milliseconds >= 100)
        {
           time = millis();
-          colour = color(255);
+          active_Colour = color(255);
        }
        
-       fill(colour);
-       ellipse(0, 0, bullet_Width, bullet_Width);
+       fill(active_Colour);
+       ellipse(0, 0, 7, 7);
     }
     
     popMatrix();    
   }
+  
+  
   
   void update()
   {
     // Determining bullet size/speed based on ammo type
     if (ammo_Type == 1)
     {
-       speed = 10.0f;
+       speed = 10;
+       w = 2;
+       h = 4;
     }
     else if (ammo_Type == 2)
+       speed = 5;
+    else if (ammo_Type == 3)
     {
-       speed = 5.0f;
+       speed = 4;
+       w = 1;
+       h = 2;
     }
     
     forward.x = sin(theta);
