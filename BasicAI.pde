@@ -43,9 +43,9 @@ class BasicAI extends AI
       }
       
       // Shoot the player when within range
-      if (distance_To_Player <= range && cooldown1 >= fire_Rate)
+      if (distance_To_Player <= range && fire_Rate_Elapsed >= fire_Rate)
       {
-         cooldown1 = 0;
+         fire_Rate_Elapsed = 0;
          gunSound();
          
          Bullet bullet = new Bullet();
@@ -57,8 +57,8 @@ class BasicAI extends AI
          game_Objects.add(bullet);
       }
 
-      if (cooldown1 < fire_Rate)
-         cooldown1++;
+      if (fire_Rate_Elapsed < fire_Rate)
+         fire_Rate_Elapsed++;
    }
    
    void render()

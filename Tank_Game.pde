@@ -23,8 +23,9 @@ float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Bound
 float view_Width, view_Height;
 float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
 float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
-float cannon_Bar_X, cannon_Icon_Y;
-PImage cannon_Icon;
+float cannon_Bar_X, cannon_Icon_Y, speed_Bar_X, speed_Icon_Y;
+color cd_Bar_Background, cannon_Bar_Colour, speed_Bar_Colour;
+PImage cannon_Icon, speed_Icon;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
@@ -50,9 +51,15 @@ void setup()
    cd_Bar_Width = 20;
    cd_Bar_Top = view_Bottom_Boundry + 10;
    cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
+   cd_Bar_Background = color(255);
    cannon_Bar_X = 20;
+   cannon_Bar_Colour = color(250,0,0);
    cannon_Icon_Y = cd_Bar_Bottom + 10;
    cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
+   speed_Bar_X = cannon_Bar_X + 30;
+   speed_Bar_Colour = color(255,255,0);
+   speed_Icon_Y = cannon_Icon_Y;
+   speed_Icon = loadImage("cannon_cd_icon.png");
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);

@@ -6,8 +6,7 @@ class Tank extends GameObject
    float turret_Theta = 0.0f;
    float turret_Width, turret_Height, turret_half_Width, turret_half_Height;
    char move, reverse, left, right;
-   int cannon_Cooldown;
-   AudioPlayer cannon_Sound;
+   AudioPlayer cannon_Sound, speed_Sound;
    
    
    Tank()
@@ -17,6 +16,7 @@ class Tank extends GameObject
       turret_Sprite = loadImage("tank_turret.png");
       cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
       gun_Sound = minim.loadFile("tank_lmg_sound.wav");
+      speed_Sound = minim.loadFile("tank_speed_sound.mp3");
       
       w = sprite.width;
       h = sprite.height;
@@ -27,13 +27,15 @@ class Tank extends GameObject
       turret_half_Width = turret_Width / 2;
       turret_half_Height = turret_Height / 2;
       
-      speed = 0.8;
+      default_Speed = 0.8;
       colour = color(255,0,0);
       
-      fire_Rate = 10;
-      cannon_Cooldown = 300;
-      cooldown1 = fire_Rate;
-      cooldown2 = cannon_Cooldown;
+      fire_Rate = 10;   // lmg fire-rate
+      fire_Rate_Elapsed = fire_Rate;
+      cd1_Length = 300;   // cannon cooldown (milliseconds)
+      cd1_Elapsed = cd1_Length;
+      cd2_Length = 1800;   // Speedboost cooldown (ms)
+      cd2_Elapsed = cd2_Length;
    
    }
    
@@ -54,13 +56,15 @@ class Tank extends GameObject
       turret_half_Width = turret_Width / 2;
       turret_half_Height = turret_Height / 2;
       
-      speed = 0.8;
+      default_Speed = 0.8;
       colour = color(255,0,0);
       
-      fire_Rate = 10;
-      cooldown1 = fire_Rate;
-      cannon_Cooldown = 300;
-      cooldown2 = cannon_Cooldown;
+      fire_Rate = 10;   // lmg fire-rate
+      fire_Rate_Elapsed = fire_Rate;
+      cd1_Length = 300;   // cannon cooldown (milliseconds)
+      cd1_Elapsed = cd1_Length;
+      cd2_Length = 1800;   // Speedboost cooldown (ms)
+      cd2_Elapsed = cd2_Length;
       
       this.move = move;
       this.reverse = reverse;
@@ -87,6 +91,14 @@ class Tank extends GameObject
          gun_Sound.rewind();
          
       gun_Sound.play();
+   }
+   
+   void speedSound()
+   {
+      if (speed_Sound.position() != 0)
+         speed_Sound.rewind();
+         
+      speed_Sound.play();
    }
    
    
@@ -124,9 +136,9 @@ class Tank extends GameObject
       }
       
       // Fire bullets
-      if (mousePressed && mouseButton == LEFT && cooldown1 >= fire_Rate)
+      if (mousePressed && mouseButton == LEFT && fire_Rate_Elapsed >= fire_Rate)
       {
-         cooldown1 = 0;
+         fire_Rate_Elapsed = 0;
          lmgSound();
          
          Bullet bullet = new Bullet();
@@ -139,9 +151,9 @@ class Tank extends GameObject
       }
       
       // Fire cannon shells
-      if (mousePressed && mouseButton == RIGHT && cooldown2 >= cannon_Cooldown)
+      if (mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Length)
       {
-         cooldown2 = 0;
+         cd1_Elapsed = 0;
          cannonSound();
          
          Bullet shell = new Bullet();
@@ -152,6 +164,17 @@ class Tank extends GameObject
          shell.theta = turret_Theta;
          game_Objects.add(shell);
       }
+      
+      // Speed Boost CD
+      if (keyPressed && key == ' ' && cd2_Elapsed >= cd2_Length)
+      {
+         cd2_Length = 0;
+         speedSound();
+         
+         
+      }
+      
+      if 
       
       // Keep tank within screen boundary
       if (pos.x < view_Left_Boundry + half_W)
@@ -164,10 +187,10 @@ class Tank extends GameObject
             pos.y = view_Bottom_Boundry - half_W;
       
       // Increment the cooldowns each frame
-      if (cooldown1 < fire_Rate)
-         cooldown1++;
-      if (cooldown2 < cannon_Cooldown)
-         cooldown2++;
+      if (fire_Rate_Elapsed < fire_Rate)
+         fire_Rate_Elapsed++;
+      if (cd1_Elapsed < cd1_Length)
+         cd1_Elapsed++;
    }
    
    void render()

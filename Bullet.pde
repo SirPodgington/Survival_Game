@@ -1,7 +1,6 @@
 class Bullet extends GameObject
 {
   int ammo_Type;
-  int time = millis();
   color active_Colour;
   
   void render()

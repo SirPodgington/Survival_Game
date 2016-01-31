@@ -5,12 +5,14 @@ class GameObject
    PVector forward;
    float w, half_W;
    float h, half_H;
-   float speed;
+   float default_Speed, speed;
    float theta = 0.0f;
    color colour;
    PImage sprite;
-   int cooldown1, cooldown2;
-   int fire_Rate;    // How many bullets per second
+   int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
+   int cd1_Length, cd2_Length, cd3_Length;
+   int fire_Rate, fire_Rate_Elapsed;
+   int time = millis();
    int passed_Milliseconds;
    AudioPlayer gun_Sound;
 
