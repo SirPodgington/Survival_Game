@@ -18,7 +18,7 @@ class Tank extends GameObject
       w = 50;
       half_W = w / 2;
       turret_Width = w * 0.2f;
-      turret_Length = half_W * 0.8;
+      turret_Length = half_W;
       turret_Half_Width = turret_Width / 2;
       turret_Half_Length = turret_Length / 2;
       colour = color(255,0,0);
@@ -44,7 +44,7 @@ class Tank extends GameObject
       w = 50;
       half_W = w / 2;
       turret_Width = 10;
-      turret_Length = half_W * 0.8f;
+      turret_Length = half_W;
       turret_Half_Width = turret_Width / 2;
       turret_Half_Length = turret_Length / 2;
       colour = color(255,155,0);
@@ -180,8 +180,8 @@ class Tank extends GameObject
             pos.x = view_Left_Boundry + half_W;
       if (pos.x > view_Right_Boundry - half_W)
             pos.x = view_Right_Boundry - half_W;
-      if (pos.y < view_Top_Boundry + half_H)
-            pos.y = view_Top_Boundry + half_H;
+      if (pos.y < view_Top_Boundry + half_W)
+            pos.y = view_Top_Boundry + half_W;
       if (pos.y > view_Bottom_Boundry - half_W)
             pos.y = view_Bottom_Boundry - half_W;
       
