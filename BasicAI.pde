@@ -7,10 +7,12 @@ class BasicAI extends AI
    {
       super(50, 50);
       w = 20;
-      halfW = w * 0.5f;
+      half_W = w * 0.5f;
       speed = 0.5;
       colour = color(random(50,250), 0, 0);
       target_Distance_From_Player = 120;
+      range = 150;
+      fire_Rate = 180;
    }
    
    void update()
@@ -30,6 +32,16 @@ class BasicAI extends AI
       {
          pos.add(forward);
       }
+      
+      // Shoot the player when within range
+      if (distance_To_Player <= range && cooldown1 >= fire_Rate)
+      {
+         cooldown1 = 0;
+         
+      }
+
+      if (cooldown1 < fire_Rate)
+         cooldown1++;
    }
    
    void render()

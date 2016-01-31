@@ -11,6 +11,8 @@ TO BE ADDED (IDEAS):
 - Heat cooldown on machine gun
 - Speedboost cooldown
 - 2 more ai units & maybe a boss?
+- Airstrike cooldown (one for enemy & player?)
+- 
 */
 
 import ddf.minim.*;
@@ -20,9 +22,9 @@ Minim minim;
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
 float view_Width, view_Height;
 float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
-float cdBarHeight, cdBarWidth, cdBarTop, cdBarBottom;
-float cannonBarX, cannonIconY;
-PImage cannonIcon;
+float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
+float cannon_Bar_X, cannon_Icon_Y;
+PImage cannon_Icon;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
@@ -44,13 +46,13 @@ void setup()
    ui_Start_Y = view_Bottom_Boundry;
    ui_Height = height - view_Bottom_Boundry;
    ui_Width = view_Right_Boundry - view_Left_Boundry;
-   cdBarHeight = 50;
-   cdBarWidth = 20;
-   cdBarTop = view_Bottom_Boundry + 10;
-   cdBarBottom = cdBarTop + cdBarHeight;
-   cannonBarX = 20;
-   cannonIconY = cdBarBottom + 10;
-   cannonIcon = loadImage("CannonIcon.png");   // UI Icon for cannon cooldown
+   cd_Bar_Height = 50;
+   cd_Bar_Width = 20;
+   cd_Bar_Top = view_Bottom_Boundry + 10;
+   cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
+   cannon_Bar_X = 20;
+   cannon_Icon_Y = cd_Bar_Bottom + 10;
+   cannon_Icon = loadImage("cannon_Icon.png");   // UI Icon for cannon cooldown
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);

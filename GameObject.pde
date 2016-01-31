@@ -3,13 +3,15 @@ class GameObject
    
    PVector pos;
    PVector forward;
-   float w, halfW;
-   float h, halfH;
+   float w, half_W;
+   float h, half_H;
    float speed;
    float theta = 0.0f;
    color colour;
    PImage sprite;
    int cooldown1, cooldown2;
+   int fire_Rate;    // How many bullets per second
+   int passed_Milliseconds;
 
    AudioPlayer sound;
    

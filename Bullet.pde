@@ -1,15 +1,8 @@
 class Bullet extends GameObject
 {
-  int ammoType;
+  int ammo_Type;
   int time = millis();
-  float bulletWidth, bulletLength, cannonWidth;
-   
-  Bullet()
-  {
-     bulletWidth = 2;
-     bulletLength = 4;
-     cannonWidth = 5;
-  }
+  float bullet_Width, bullet_Length;
   
   void render()
   {
@@ -18,20 +11,29 @@ class Bullet extends GameObject
     rotate(theta);
     
     colour = color(255,0,0);
-    int passedMillis = millis() - time;
-    if (passedMillis >= 100 && ammoType == 2)    // Cannon flashes every 100 milliseconds
-    {
-       time = millis();
-       colour = color(255);
-    }
     
-    fill(colour);
-    stroke(colour);
-    strokeWeight(bulletWidth);
-    if (ammoType == 1)      // Determines what bullet to shoot based on current ammo type
-       line(0, -bulletLength, 0, bulletLength);
-    if (ammoType == 2)
-       ellipse(0, 0, cannonWidth, cannonWidth);
+    if (ammo_Type == 1)      // Determines what bullet to shoot based on current ammo type
+    {
+       bullet_Width = 2;
+       bullet_Length = 4;
+       
+       stroke(colour);
+       strokeWeight(bullet_Width);
+       line(0, -bullet_Length, 0, bullet_Length);
+    }
+    if (ammo_Type == 2)
+    {
+       bullet_Width = 7;
+       passed_Milliseconds = millis() - time;
+       if (passed_Milliseconds >= 100)
+       {
+          time = millis();
+          colour = color(255);
+       }
+       
+       fill(colour);
+       ellipse(0, 0, bullet_Width, bullet_Width);
+    }
     
     popMatrix();    
   }
@@ -39,11 +41,11 @@ class Bullet extends GameObject
   void update()
   {
     // Determining bullet size/speed based on ammo type
-    if (ammoType == 1)
+    if (ammo_Type == 1)
     {
        speed = 10.0f;
     }
-    else if (ammoType == 2)
+    else if (ammo_Type == 2)
     {
        speed = 5.0f;
     }
@@ -54,7 +56,7 @@ class Bullet extends GameObject
     pos.add(forward);
     
     // Remove bullet if goes out of bounds
-    if (pos.x < 0 || pos.y < 0 || pos.x > width || pos.y > height)
+    if (pos.x < 0 || pos.y < 0 || pos.x > width || pos.y > view_Bottom_Boundry)
     {
       game_Objects.remove(this);
     }
