@@ -28,6 +28,7 @@ class Bullet extends GameObject
           active_Colour = color(255);
        }
        
+       stroke(active_Colour);
        fill(active_Colour);
        ellipse(0, 0, w, w);
     }

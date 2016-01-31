@@ -88,17 +88,29 @@ void checkCollisions()
    for(int i = game_Objects.size() - 1; i >= 0; i --)
    {
       GameObject object = game_Objects.get(i);
-      if (object instanceof Bullet)    // Check for bullets
+      
+      if (object instanceof Bullet)    // Check for bullet collisions
       {
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
             GameObject other = game_Objects.get(j);
             
-            if (other instanceof Tank && object.enemy_Bullet)
+            if (other instanceof Tank && object.enemy_Bullet)   // Enemy bullets Vs. Tank
             {
-               // Bounding circle collisions
+               // Check for collision
                if (object.pos.dist(other.pos) < (object.h * 0.5f) + other.half_W)
                {
+                  // Remove bullet if collides
+                  game_Objects.remove(object);
+               }
+            }
+            
+            if (other instanceof AI && !object.enemy_Bullet)   // Friendly bullets Vs. AI
+            {
+               // Check for collision
+               if (object.pos.dist(other.pos) < (object.h * 0.5f) + other.half_W)
+               {
+                  // Remove bullet if collides
                   game_Objects.remove(object);
                }
             }

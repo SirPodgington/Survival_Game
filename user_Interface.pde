@@ -1,17 +1,20 @@
 
-void cooldownBar(float bar_Position)
+void cooldownBar(float cd_Position)
 {
+   float x = cd_Position - (cd_Bar_Width / 2);
    stroke(0);
    strokeWeight(2);
    fill(cd_Bar_Background);
-   rect(bar_Position, cd_Bar_Top, cd_Bar_Width, cd_Bar_Height);
+   rect(x, cd_Bar_Top, cd_Bar_Width, cd_Bar_Height);
 }
 
-void cooldownTimer(float bar_Position, float time, PImage icon, float icon_Position, color colour)
+void cooldownTimer(float cd_Position, float time, PImage icon, float icon_Position, color colour)
 {
+   float bar_X = cd_Position - (cd_Bar_Width / 2);
+   float icon_X = cd_Position - (icon.width / 2);
    fill(colour);
-   rect(bar_Position, cd_Bar_Bottom, cd_Bar_Width, -time);   // Bar remaining_Time
-   image(icon, bar_Position, icon_Position);
+   rect(bar_X, cd_Bar_Bottom, cd_Bar_Width, -time);   // Bar remaining_Time
+   image(icon, icon_X, icon_Position);
 }
 
 void user_Interface()
