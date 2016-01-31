@@ -18,7 +18,7 @@ void user_Interface()
 {
    int remaining_Time, duration;
    
-   fill(255);
+   fill(ui_Background);
    stroke(255);
    strokeWeight(2);
    rect(ui_Start_X, ui_Start_Y, ui_Width, ui_Height); // UI BackgroundS
@@ -29,7 +29,7 @@ void user_Interface()
    float cannon_Remaining_Time = map(remaining_Time, 0, duration, 0, cd_Bar_Height);
    
    cooldownBar(cannon_Bar_X);  // Cannon CD Bar
-   cooldownTimer(cannon_Bar_X, cannon_Remaining_Time, cannon_Icon, cannon_Icon_Y, cannon_Bar_Colour);   // Cannon CD timer
+   cooldownTimer(cannon_Bar_X, cannon_Remaining_Time, cannon_Icon, cannon_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
    
    // Speedboost cooldown bar
    remaining_Time = game_Objects.get(0).cd2_Elapsed;
@@ -37,5 +37,5 @@ void user_Interface()
    float speed_Remaining_Time = map(remaining_Time, 0, duration, 0, cd_Bar_Height);
    
    cooldownBar(speed_Bar_X);  // Cannon CD Bar
-   cooldownTimer(speed_Bar_X, speed_Remaining_Time, speed_Icon, speed_Icon_Y, speed_Bar_Colour);   // Cannon CD timer
+   cooldownTimer(speed_Bar_X, speed_Remaining_Time, speed_Icon, speed_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
 }

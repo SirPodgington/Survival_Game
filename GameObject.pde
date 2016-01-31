@@ -5,18 +5,17 @@ class GameObject
    PVector forward;
    float w, half_W;
    float h, half_H;
-   float default_Speed, speed;
+   float speed, default_Speed, upgraded_Speed;
    float theta = 0.0f;
    color colour;
-   PImage sprite;
+   int cd_Start_Time;
    int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
    int cd1_Length, cd2_Length, cd3_Length;
    int fire_Rate, fire_Rate_Elapsed;
-   int time = millis();
    int passed_Milliseconds;
+   int time;
+   boolean enemy_Bullet;
    AudioPlayer gun_Sound;
-
-   AudioPlayer sound;
    
    GameObject()
    {

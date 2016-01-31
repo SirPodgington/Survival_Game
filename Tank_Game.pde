@@ -22,9 +22,10 @@ Minim minim;
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
 float view_Width, view_Height;
 float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
+color ui_Background;
 float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
 float cannon_Bar_X, cannon_Icon_Y, speed_Bar_X, speed_Icon_Y;
-color cd_Bar_Background, cannon_Bar_Colour, speed_Bar_Colour;
+color cd_Bar_Background, cd_Bar_Colour;
 PImage cannon_Icon, speed_Icon;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
@@ -47,19 +48,19 @@ void setup()
    ui_Start_Y = view_Bottom_Boundry;
    ui_Height = height - view_Bottom_Boundry;
    ui_Width = view_Right_Boundry - view_Left_Boundry;
+   ui_Background = color(255,207,37);
    cd_Bar_Height = 50;
    cd_Bar_Width = 20;
    cd_Bar_Top = view_Bottom_Boundry + 10;
    cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
-   cd_Bar_Background = color(255);
+   cd_Bar_Background = color(200,0,0);
+   cd_Bar_Colour = color(127,255,0);
    cannon_Bar_X = 20;
-   cannon_Bar_Colour = color(250,0,0);
    cannon_Icon_Y = cd_Bar_Bottom + 10;
    cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
    speed_Bar_X = cannon_Bar_X + 30;
-   speed_Bar_Colour = color(255,255,0);
    speed_Icon_Y = cannon_Icon_Y;
-   speed_Icon = loadImage("cannon_cd_icon.png");
+   speed_Icon = loadImage("speed_cd_icon.png");
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
@@ -81,6 +82,30 @@ void keyReleased()
   
 }
 
+// Check Collisions
+void checkCollisions()
+{
+   for(int i = game_Objects.size() - 1; i >= 0; i --)
+   {
+      GameObject object = game_Objects.get(i);
+      if (object instanceof Bullet)    // Check for bullets
+      {
+         for(int j = game_Objects.size() - 1; j >= 0 ; j --)
+         {
+            GameObject other = game_Objects.get(j);
+            
+            if (other instanceof Tank && object.enemy_Bullet)
+            {
+               // Bounding circle collisions
+               if (object.pos.dist(other.pos) < (object.h * 0.5f) + other.half_W)
+               {
+                  game_Objects.remove(object);
+               }
+            }
+         }
+      }
+   }
+}
 
 void draw()
 {
@@ -103,4 +128,6 @@ void draw()
   
   // Draw the user interface
   user_Interface();
+  
+  checkCollisions();
 }

@@ -9,7 +9,7 @@ class BasicAI extends AI
       w = 20;
       half_W = w * 0.5f;
       speed = 0.5;
-      colour = color(255, random(50,250), 0);
+      colour = color(255,0,50);
       target_Distance_From_Player = 120;
       range = 200;
       fire_Rate = 180;
@@ -54,6 +54,7 @@ class BasicAI extends AI
          bullet.ammo_Type = 3;
          bullet.colour = colour;
          bullet.theta = theta;
+         bullet.enemy_Bullet = true;
          game_Objects.add(bullet);
       }
 
@@ -69,7 +70,7 @@ class BasicAI extends AI
       
       fill(0);
       stroke(colour);
-      strokeWeight(3);
+      strokeWeight(2);
       
       ellipse(0, 0, w, w);
       line(0, -10, 0, 0);

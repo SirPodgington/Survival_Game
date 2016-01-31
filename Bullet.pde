@@ -1,7 +1,7 @@
 class Bullet extends GameObject
 {
-  int ammo_Type;
   color active_Colour;
+  int ammo_Type;
   
   void render()
   {
@@ -29,7 +29,7 @@ class Bullet extends GameObject
        }
        
        fill(active_Colour);
-       ellipse(0, 0, 7, 7);
+       ellipse(0, 0, w, w);
     }
     
     popMatrix();    
@@ -47,7 +47,10 @@ class Bullet extends GameObject
        h = 4;
     }
     else if (ammo_Type == 2)
+    {
+       w = 10;
        speed = 5;
+    }
     else if (ammo_Type == 3)
     {
        speed = 4;

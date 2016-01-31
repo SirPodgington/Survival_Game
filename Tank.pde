@@ -2,9 +2,8 @@
 
 class Tank extends GameObject
 {
-   PImage turret_Sprite;
    float turret_Theta = 0.0f;
-   float turret_Width, turret_Height, turret_half_Width, turret_half_Height;
+   float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
    char move, reverse, left, right;
    AudioPlayer cannon_Sound, speed_Sound;
    
@@ -12,24 +11,20 @@ class Tank extends GameObject
    Tank()
    {
       super(width*0.5f, height*0.8f);
-      sprite = loadImage("tank_body_grey1.png");
-      turret_Sprite = loadImage("tank_turret.png");
       cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
       gun_Sound = minim.loadFile("tank_lmg_sound.wav");
       speed_Sound = minim.loadFile("tank_speed_sound.mp3");
       
-      w = sprite.width;
-      h = sprite.height;
+      w = 50;
       half_W = w / 2;
-      half_H = h / 2;
-      turret_Width = turret_Sprite.width;
-      turret_Height = turret_Sprite.height;
-      turret_half_Width = turret_Width / 2;
-      turret_half_Height = turret_Height / 2;
-      
-      default_Speed = 0.8;
+      turret_Width = w * 0.2f;
+      turret_Length = half_W * 0.8;
+      turret_Half_Width = turret_Width / 2;
+      turret_Half_Length = turret_Length / 2;
       colour = color(255,0,0);
       
+      default_Speed = 0.8;
+      upgraded_Speed = default_Speed * 1.75f;
       fire_Rate = 10;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
       cd1_Length = 300;   // cannon cooldown (milliseconds)
@@ -42,23 +37,20 @@ class Tank extends GameObject
    Tank(float startX, float startY, char move, char reverse, char left, char right)
    {
       super(startX, startY);
-      sprite = loadImage("tank_body_black2.png");
-      turret_Sprite = loadImage("tank_turret_sprite.png");
       cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
       gun_Sound = minim.loadFile("tank_lmg_sound.wav");
+      speed_Sound = minim.loadFile("tank_speed_sound.mp3");
       
-      w = sprite.width;
-      h = sprite.height;
+      w = 50;
       half_W = w / 2;
-      half_H = h / 2;
-      turret_Width = turret_Sprite.width;
-      turret_Height = turret_Sprite.height;
-      turret_half_Width = turret_Width / 2;
-      turret_half_Height = turret_Height / 2;
+      turret_Width = 10;
+      turret_Length = half_W * 0.8f;
+      turret_Half_Width = turret_Width / 2;
+      turret_Half_Length = turret_Length / 2;
+      colour = color(255,155,0);
       
       default_Speed = 0.8;
-      colour = color(255,0,0);
-      
+      upgraded_Speed = default_Speed * 4;
       fire_Rate = 10;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
       cd1_Length = 300;   // cannon cooldown (milliseconds)
@@ -108,6 +100,21 @@ class Tank extends GameObject
    
    void update()
    {
+      if (millis() < cd_Start_Time + cd2_Length && millis() > cd2_Length)
+      {
+         speed = upgraded_Speed;
+      }
+      else
+         speed = default_Speed;
+      
+      // Speed Boost CD
+      if (keyPressed && key == ' ' && cd2_Elapsed >= cd2_Length)
+      {
+         cd2_Elapsed = 0;
+         speedSound();
+         cd_Start_Time = millis();
+      }
+      
       // Calculate tank direction & apply speed factor
       forward.x = sin(theta);
       forward.y = - cos(theta);
@@ -165,16 +172,8 @@ class Tank extends GameObject
          game_Objects.add(shell);
       }
       
-      // Speed Boost CD
-      if (keyPressed && key == ' ' && cd2_Elapsed >= cd2_Length)
-      {
-         cd2_Length = 0;
-         speedSound();
-         
-         
-      }
       
-      if 
+      
       
       // Keep tank within screen boundary
       if (pos.x < view_Left_Boundry + half_W)
@@ -191,29 +190,42 @@ class Tank extends GameObject
          fire_Rate_Elapsed++;
       if (cd1_Elapsed < cd1_Length)
          cd1_Elapsed++;
+      if (cd2_Elapsed < cd2_Length)
+         cd2_Elapsed++;
    }
    
    void render()
    {
+       // Player body & direction indicator
        pushMatrix();
-       
-       // Tank body
        translate(pos.x, pos.y);
-       rotate(theta);
-       image(sprite, -half_W, -half_H);
-       
-       // Tank direction indicator
+       rotate(theta); 
+       fill(0);
        stroke(colour);
-       strokeWeight(1);
-       line(-8, -25, 0, -30);
-       line(0, -30, 8, -25);
+       strokeWeight(3);
+       
+       // Direction Indicator
+       line(-8, -half_W, 0, -half_W - 7);
+       line(0, -half_W - 7, 8, -half_W);
+       // Body
+       ellipse(0,0,w,w);
+       
        popMatrix();
        
-       // Tank turret
+       
+       // Turret Base & Barrel
        pushMatrix();
        translate(pos.x, pos.y);
        rotate(turret_Theta);
-       image(turret_Sprite, -turret_half_Width, -turret_half_Height);
+       strokeWeight(1);
+       stroke(colour);
+       fill(colour);
+       
+       // Base
+       ellipse(0, 0, turret_Width, turret_Width);
+       // Barrel
+       rect(-turret_Half_Width, 0, turret_Width, -turret_Length);
+       
        popMatrix();
        
        // Crosshair
