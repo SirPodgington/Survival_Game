@@ -50,6 +50,7 @@ class Bullet extends GameObject
     else if (ammo_Type == 2)
     {
        w = 10;
+       h = w;
        speed = 5;
     }
     else if (ammo_Type == 3)

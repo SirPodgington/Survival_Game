@@ -10,7 +10,7 @@ class Tank extends GameObject
    
    Tank()
    {
-      super(width*0.5f, height*0.8f);
+      super(view_Width*0.5f, view_Height*0.5f);
       cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
       gun_Sound = minim.loadFile("tank_lmg_sound.wav");
       speed_Sound = minim.loadFile("tank_speed_sound.mp3");
@@ -24,8 +24,8 @@ class Tank extends GameObject
       colour = color(255,0,0);
       
       default_Speed = 0.8;
-      upgraded_Speed = default_Speed * 1.75f;
-      fire_Rate = 10;   // lmg fire-rate
+      upgraded_Speed = default_Speed * 4;
+      fire_Rate = 15;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
       cd1_Length = 300;   // cannon cooldown (milliseconds)
       cd1_Elapsed = cd1_Length;
@@ -51,7 +51,7 @@ class Tank extends GameObject
       
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
-      fire_Rate = 10;   // lmg fire-rate
+      fire_Rate = 15;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
       cd1_Length = 300;   // cannon cooldown (milliseconds)
       cd1_Elapsed = cd1_Length;

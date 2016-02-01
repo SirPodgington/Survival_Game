@@ -3,18 +3,24 @@
 /*
 TO BE FIXED:
 
-- Redesign the bullet class so that ammo type is assigned in constructor (pass ammo type value in)
+- Redesign the bullet class so that properties are assigned in constructor (pass ammo type value in)
+- Change player turret to basic model (until cannon CD is unlocked)
 
 
 TO BE ADDED (IDEAS):
 
-- WIP*  Player loses health when touches AI (health to be added still, adding framework in collision function
-- Heat cooldown on machine gun
+- Add Health to units
+- Add damage to bullet types
+- Player loses health when touches AI (3 sec internal cd)
 - More AI (Flying, Medium, Boss)
+- RoF passive perk on player LMG
+- Score system
+- Heat cooldown on player LMG
 - Airstrike cooldown (one for enemy & player?)
+- Defense Shield cooldown
+- Change CDs to unlockable (unlock after score stages?)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
-- Change CDs to unlockable (unlock after score stages)
-- Have basic turret for standard player then replace with upgraded turret (current) when the CD is unlocked
+- Slower turning AI (rotates until aligned with player)
 */
 
 import ddf.minim.*;
@@ -37,7 +43,8 @@ boolean[] keys = new boolean[512];   // Array to store true/false values for all
 void setup()
 {
    minim = new Minim(this);
-   size(1000, 700);
+   fullScreen();
+   //size(1000, 700);
    
    // Background, View (the game screen, exempt from the UI), World, User Interface variables
    view_Left_Boundry = 0;
@@ -133,7 +140,7 @@ void checkCollisions()
             {
                if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)   // Check for collision
                {
-                  object1.pos.dist(object2.pos) = object1.half_W + object2.half_W;
+                  // Damage player (play sound) 2 second internal cooldown
                }
             }
          }
