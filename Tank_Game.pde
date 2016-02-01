@@ -3,16 +3,18 @@
 /*
 TO BE FIXED:
 
-- Boundry variables don't take screen width/height into account  ->  Move them to setup later
+- Redesign the bullet class so that ammo type is assigned in constructor (pass ammo type value in)
 
 
 TO BE ADDED (IDEAS):
 
+- WIP*  Player loses health when touches AI (health to be added still, adding framework in collision function
 - Heat cooldown on machine gun
-- Speedboost cooldown
-- 2 more ai units & maybe a boss?
+- More AI (Flying, Medium, Boss)
 - Airstrike cooldown (one for enemy & player?)
-- 
+- Statistics (temp or permanent? perm requires write to notepad to save info)
+- Change CDs to unlockable (unlock after score stages)
+- Have basic turret for standard player then replace with upgraded turret (current) when the CD is unlocked
 */
 
 import ddf.minim.*;
@@ -24,7 +26,7 @@ float view_Width, view_Height;
 float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
 color ui_Background;
 float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
-float cannon_Bar_X, cannon_Icon_Y, speed_Bar_X, speed_Icon_Y;
+float cd_Bar_Gap, cd_Bar_X_Cannon, cd_Bar_X_Speed, cd_Icon_Y;
 color cd_Bar_Background, cd_Bar_Colour;
 PImage cannon_Icon, speed_Icon;
 
@@ -55,11 +57,12 @@ void setup()
    cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
    cd_Bar_Background = color(200,0,0);
    cd_Bar_Colour = color(127,255,0);
-   cannon_Bar_X = 20;
-   cannon_Icon_Y = cd_Bar_Bottom + 10;
+   cd_Bar_Gap = 30;
+   cd_Bar_X_Cannon = 20;
+   cd_Bar_X_Speed = cd_Bar_X_Cannon + 30;
+   cd_Icon_Y = height - ((height - cd_Bar_Bottom) / 2);
+   
    cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
-   speed_Bar_X = cannon_Bar_X + 30;
-   speed_Icon_Y = cannon_Icon_Y;
    speed_Icon = loadImage("speed_cd_icon.png");
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
@@ -82,42 +85,63 @@ void keyReleased()
   
 }
 
+
 // Check Collisions
 void checkCollisions()
 {
    for(int i = game_Objects.size() - 1; i >= 0; i --)
    {
-      GameObject object = game_Objects.get(i);
+      GameObject object1 = game_Objects.get(i);
       
-      if (object instanceof Bullet)    // Check for bullet collisions
+      // Check for Bullet collisions ****************************
+      if (object1 instanceof Bullet)
       {
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
-            GameObject other = game_Objects.get(j);
+            GameObject object2 = game_Objects.get(j);
             
-            if (other instanceof Tank && object.enemy_Bullet)   // Enemy bullets Vs. Tank
+            // Enemy Bullet & Tank
+            if (object2 instanceof Tank && object1.enemy_Bullet)
             {
-               // Check for collision
-               if (object.pos.dist(other.pos) < (object.h * 0.5f) + other.half_W)
+               if (object1.pos.dist(object2.pos) < (object1.h * 0.5f) + object2.half_W)   // Check for collision
                {
-                  // Remove bullet if collides
-                  game_Objects.remove(object);
+                  game_Objects.remove(object1);
                }
             }
             
-            if (other instanceof AI && !object.enemy_Bullet)   // Friendly bullets Vs. AI
+            // Friendly Bullet & AI
+            if (object2 instanceof AI && !object1.enemy_Bullet)
             {
-               // Check for collision
-               if (object.pos.dist(other.pos) < (object.h * 0.5f) + other.half_W)
+               if (object1.pos.dist(object2.pos) < (object1.h * 0.5f) + object2.half_W)   // Check for collision
                {
-                  // Remove bullet if collides
-                  game_Objects.remove(object);
+                  game_Objects.remove(object1);
                }
             }
          }
       }
+      // *********************************************************
+      
+      // Check for Player collisions *****************************
+      if (object1 instanceof Tank)
+      {
+         for(int j = game_Objects.size() - 1; j >= 0 ; j --)
+         {
+            GameObject object2 = game_Objects.get(j);
+            
+            // Player & AI
+            if (object2 instanceof AI)
+            {
+               if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)   // Check for collision
+               {
+                  object1.pos.dist(object2.pos) = object1.half_W + object2.half_W;
+               }
+            }
+         }
+      }
+      // *********************************************************
    }
 }
+
 
 void draw()
 {

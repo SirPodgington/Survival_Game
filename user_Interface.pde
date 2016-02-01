@@ -12,9 +12,10 @@ void cooldownTimer(float cd_Position, float time, PImage icon, float icon_Positi
 {
    float bar_X = cd_Position - (cd_Bar_Width / 2);
    float icon_X = cd_Position - (icon.width / 2);
+   float icon_Y = icon_Position - (icon.height / 2);
    fill(colour);
    rect(bar_X, cd_Bar_Bottom, cd_Bar_Width, -time);   // Bar remaining_Time
-   image(icon, icon_X, icon_Position);
+   image(icon, icon_X, icon_Y);
 }
 
 void user_Interface()
@@ -31,14 +32,14 @@ void user_Interface()
    duration = game_Objects.get(0).cd1_Length;
    float cannon_Remaining_Time = map(remaining_Time, 0, duration, 0, cd_Bar_Height);
    
-   cooldownBar(cannon_Bar_X);  // Cannon CD Bar
-   cooldownTimer(cannon_Bar_X, cannon_Remaining_Time, cannon_Icon, cannon_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
+   cooldownBar(cd_Bar_X_Cannon);  // Cannon CD Bar
+   cooldownTimer(cd_Bar_X_Cannon, cannon_Remaining_Time, cannon_Icon, cd_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
    
    // Speedboost cooldown bar
    remaining_Time = game_Objects.get(0).cd2_Elapsed;
    duration = game_Objects.get(0).cd2_Length;
    float speed_Remaining_Time = map(remaining_Time, 0, duration, 0, cd_Bar_Height);
    
-   cooldownBar(speed_Bar_X);  // Cannon CD Bar
-   cooldownTimer(speed_Bar_X, speed_Remaining_Time, speed_Icon, speed_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
+   cooldownBar(cd_Bar_X_Speed);  // Cannon CD Bar
+   cooldownTimer(cd_Bar_X_Speed, speed_Remaining_Time, speed_Icon, cd_Icon_Y, cd_Bar_Colour);   // Cannon CD timer
 }
