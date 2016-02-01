@@ -3,6 +3,36 @@ class Bullet extends GameObject
   color active_Colour;
   int ammo_Type;
   
+  Bullet(int ammo_Type)
+  {
+     this.ammo_Type = ammo_Type;
+     
+     if (ammo_Type == 1)
+     {
+        w = 2;
+        h = 4;
+        bullet_Damage = 10;
+        speed = 10;
+     }
+     else if (ammo_Type == 2)
+     {
+        w = 10;
+        h = w;
+        bullet_Damage = 50;
+        speed = 5;
+     }
+     else if (ammo_Type == 3)
+     {
+        w = 1;
+        h = 2;
+        bullet_Damage = 2;
+        speed = 4;
+     }
+     
+     half_W = w / 2;
+     half_H = h / 2; 
+  }
+  
   void render()
   {
     pushMatrix();
@@ -39,34 +69,14 @@ class Bullet extends GameObject
   
   
   void update()
-  {
-    // Determining bullet size/speed based on ammo type
-    if (ammo_Type == 1)
-    {
-       speed = 10;
-       w = 2;
-       h = 4;
-    }
-    else if (ammo_Type == 2)
-    {
-       w = 10;
-       h = w;
-       speed = 5;
-    }
-    else if (ammo_Type == 3)
-    {
-       speed = 4;
-       w = 1;
-       h = 2;
-    }
-    
+  {    
     forward.x = sin(theta);
     forward.y = - cos(theta);
     forward.mult(speed);
     pos.add(forward);
     
     // Remove bullet if goes out of bounds
-    if (pos.x < 0 || pos.y < 0 || pos.x > width || pos.y > view_Bottom_Boundry)
+    if (pos.x < view_Left_Boundry || pos.y < view_Top_Boundry || pos.x > view_Right_Boundry || pos.y > view_Bottom_Boundry)
     {
       game_Objects.remove(this);
     }

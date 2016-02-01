@@ -8,12 +8,15 @@ class BasicAI extends AI
       super(50, 50);
       w = 20;
       half_W = w * 0.5f;
-      speed = 0.5;
       colour = color(255,0,50);
+      gun_Sound = minim.loadFile("basic_ai_gunsound.mp3");
+      
+      max_Health = 50;
+      health = max_Health;
+      speed = 0.5;
       target_Distance_From_Player = 120;
       range = 200;
       fire_Rate = 180;
-      gun_Sound = minim.loadFile("basic_ai_gunsound.mp3");
    }
    
    void gunSound()
@@ -25,13 +28,13 @@ class BasicAI extends AI
    }
    
    void update()
-   {
+   {      
       // Set the AI to always face the player
       theta = atan2(game_Objects.get(0).pos.y - pos.y, game_Objects.get(0).pos.x - pos.x) + HALF_PI;
       
       // Calculate co-ordinates for moving forward, applying the speed multiplier also
       forward.x = sin(theta);
-      forward.y = - cos(theta);
+      forward.y = -cos(theta);
       forward.normalize();
       forward.mult(speed);
 
@@ -48,10 +51,9 @@ class BasicAI extends AI
          fire_Rate_Elapsed = 0;
          gunSound();
          
-         Bullet bullet = new Bullet();
+         Bullet bullet = new Bullet(3);
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
-         bullet.ammo_Type = 3;
          bullet.colour = colour;
          bullet.theta = theta;
          bullet.enemy_Bullet = true;
@@ -66,12 +68,21 @@ class BasicAI extends AI
    {
       pushMatrix();
       translate(pos.x, pos.y);
-      rotate(theta);
+      
+      // Health bar
+      fill(255,0,0);
+      noStroke();
+      rect(-half_W, -25, w, 5); // background
+      float hp_Mapped = map(health, 0, max_Health, 0, w);
+      fill(0,255,0);
+      rect(-half_W, -25, hp_Mapped, 5);
+
       
       fill(0);
       stroke(colour);
       strokeWeight(2);
       
+      rotate(theta);
       ellipse(0, 0, w, w);
       line(0, -10, 0, 0);
       popMatrix();

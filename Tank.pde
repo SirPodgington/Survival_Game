@@ -23,6 +23,8 @@ class Tank extends GameObject
       turret_Half_Length = turret_Length / 2;
       colour = color(255,0,0);
       
+      max_Health = 100;
+      health = max_Health;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
       fire_Rate = 15;   // lmg fire-rate
@@ -49,6 +51,8 @@ class Tank extends GameObject
       turret_Half_Length = turret_Length / 2;
       colour = color(255,155,0);
       
+      max_Health = 100;
+      health = max_Health;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
       fire_Rate = 15;   // lmg fire-rate
@@ -148,10 +152,9 @@ class Tank extends GameObject
          fire_Rate_Elapsed = 0;
          lmgSound();
          
-         Bullet bullet = new Bullet();
+         Bullet bullet = new Bullet(1);
          bullet.pos.x = pos.x;
          bullet.pos.y = pos.y;
-         bullet.ammo_Type = 1;
          bullet.colour = colour;
          bullet.theta = turret_Theta;
          game_Objects.add(bullet);
@@ -163,10 +166,9 @@ class Tank extends GameObject
          cd1_Elapsed = 0;
          cannonSound();
          
-         Bullet shell = new Bullet();
+         Bullet shell = new Bullet(2);
          shell.pos.x = pos.x;
          shell.pos.y = pos.y;
-         shell.ammo_Type = 2;
          shell.colour = colour;
          shell.theta = turret_Theta;
          game_Objects.add(shell);

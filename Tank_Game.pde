@@ -5,14 +5,15 @@ TO BE FIXED:
 
 - Redesign the bullet class so that properties are assigned in constructor (pass ammo type value in)
 - Change player turret to basic model (until cannon CD is unlocked)
+- Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
+- Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)
 
 
 TO BE ADDED (IDEAS):
 
-- Add Health to units
-- Add damage to bullet types
 - Player loses health when touches AI (3 sec internal cd)
 - More AI (Flying, Medium, Boss)
+- Add AI spawning system (waves or continuous?)
 - RoF passive perk on player LMG
 - Score system
 - Heat cooldown on player LMG
@@ -29,11 +30,12 @@ Minim minim;
 // Background, View (the game screen, exempt from the UI), World, User Interface variables
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
 float view_Width, view_Height;
-float ui_Start_X, ui_Start_Y, ui_Width, ui_Height;
+float ui_Left_Boundry, ui_Top_Boundry, ui_Width, ui_Height;
 color ui_Background;
 float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
 float cd_Bar_Gap, cd_Bar_X_Cannon, cd_Bar_X_Speed, cd_Icon_Y;
 color cd_Bar_Background, cd_Bar_Colour;
+float player_HealthBar_Height, player_HealthBar_Width, player_HealthBar_Bottom, player_HealthBar_Left;
 PImage cannon_Icon, speed_Icon;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
@@ -53,8 +55,8 @@ void setup()
    view_Bottom_Boundry = height - 100;
    view_Width = view_Right_Boundry - view_Left_Boundry;
    view_Height = view_Bottom_Boundry - view_Top_Boundry;
-   ui_Start_X = view_Left_Boundry;
-   ui_Start_Y = view_Bottom_Boundry;
+   ui_Left_Boundry = view_Left_Boundry;
+   ui_Top_Boundry = view_Bottom_Boundry;
    ui_Height = height - view_Bottom_Boundry;
    ui_Width = view_Right_Boundry - view_Left_Boundry;
    ui_Background = color(255,207,37);
@@ -68,6 +70,10 @@ void setup()
    cd_Bar_X_Cannon = 20;
    cd_Bar_X_Speed = cd_Bar_X_Cannon + 30;
    cd_Icon_Y = height - ((height - cd_Bar_Bottom) / 2);
+   player_HealthBar_Height = ui_Height / 2;
+   player_HealthBar_Width = ui_Width / 3;
+   player_HealthBar_Bottom = height - 10;
+   player_HealthBar_Left = ui_Left_Boundry + player_HealthBar_Width;
    
    cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
    speed_Icon = loadImage("speed_cd_icon.png");
@@ -112,15 +118,17 @@ void checkCollisions()
             {
                if (object1.pos.dist(object2.pos) < (object1.h * 0.5f) + object2.half_W)   // Check for collision
                {
-                  game_Objects.remove(object1);
+                  object2.health -= object1.bullet_Damage;      // apply damage
+                  game_Objects.remove(object1);   // remove bullet
                }
             }
             
             // Friendly Bullet & AI
             if (object2 instanceof AI && !object1.enemy_Bullet)
             {
-               if (object1.pos.dist(object2.pos) < (object1.h * 0.5f) + object2.half_W)   // Check for collision
+               if (object1.pos.dist(object2.pos) < object1.half_H + object2.half_W)   // Check for collision
                {
+                  object2.health -= object1.bullet_Damage;
                   game_Objects.remove(object1);
                }
             }
@@ -128,19 +136,26 @@ void checkCollisions()
       }
       // *********************************************************
       
-      // Check for Player collisions *****************************
-      if (object1 instanceof Tank)
+      if (object1 instanceof Tank || object1 instanceof AI)
       {
+         // Remove if dies
+         if (object1.health <= 0)
+            game_Objects.remove(object1);
+         
+         // Check for collisions
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
             GameObject object2 = game_Objects.get(j);
             
-            // Player & AI
-            if (object2 instanceof AI)
+            // If Tank collides with AI ...
+            if (object1 instanceof Tank)
             {
-               if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)   // Check for collision
+               if (object2 instanceof AI)
                {
-                  // Damage player (play sound) 2 second internal cooldown
+                  if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)
+                  {
+                     // Damage player (play sound) 2 second internal cooldown
+                  }
                }
             }
          }

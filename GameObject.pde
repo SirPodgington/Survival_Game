@@ -14,6 +14,8 @@ class GameObject
    int fire_Rate, fire_Rate_Elapsed;
    int passed_Milliseconds;
    int time;
+   int health, max_Health;
+   int bullet_Damage;
    boolean enemy_Bullet;
    AudioPlayer gun_Sound;
    
