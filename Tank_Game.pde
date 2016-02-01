@@ -41,6 +41,7 @@ PImage cannon_Icon, speed_Icon;
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
 
+int kill_Counter, score;
 
 void setup()
 {
@@ -80,8 +81,8 @@ void setup()
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
-   BasicAI enemy1 = new BasicAI();
-   game_Objects.add(enemy1);
+   BasicAI basicAI = new BasicAI();
+   game_Objects.add(basicAI);
 }
 
 
@@ -140,7 +141,13 @@ void checkCollisions()
       {
          // Remove if dies
          if (object1.health <= 0)
+         {
+            if (object1 instanceof AI)
+               score += 10;
+               kill_Counter++;
+               
             game_Objects.remove(object1);
+         }
          
          // Check for collisions
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
@@ -186,6 +193,10 @@ void draw()
   
   // Draw the user interface
   user_Interface();
-  
   checkCollisions();
+  
+  // Draw kill counter & score
+  stroke(255);
+  textAlign(CENTER,CENTER);
+  text("Kills: " + kill_Counter + "  |  Score: " + score, 500,350);
 }
