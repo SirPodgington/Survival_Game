@@ -3,7 +3,6 @@
 /*
 TO BE FIXED:
 
-- Redesign the bullet class so that properties are assigned in constructor (pass ammo type value in)
 - Change player turret to basic model (until cannon CD is unlocked)
 - Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
 - Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)

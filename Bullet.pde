@@ -3,6 +3,7 @@ class Bullet extends GameObject
   color active_Colour;
   int ammo_Type;
   
+  Bullet(){}
   Bullet(int ammo_Type)
   {
      this.ammo_Type = ammo_Type;
@@ -23,18 +24,75 @@ class Bullet extends GameObject
      }
      else if (ammo_Type == 3)
      {
-        w = 1;
-        h = 2;
-        bullet_Damage = 2;
-        speed = 4;
+        
      }
      
      half_W = w / 2;
      half_H = h / 2; 
   }
   
-  void render()
-  {
+  // UPDATE BULLET
+  void update()
+  {    
+    forward.x = sin(theta);
+    forward.y = - cos(theta);
+    forward.mult(speed);
+    pos.add(forward);
+    
+    // Remove bullet if goes out of bounds
+    if (pos.x < view_Left_Boundry || pos.y < view_Top_Boundry || pos.x > view_Right_Boundry || pos.y > view_Bottom_Boundry)
+    {
+      game_Objects.remove(this);
+    }
+  }
+}
+
+
+// ***************************
+
+// LMG -------------
+// Light LMG bullets
+class LMG extends Bullet
+{
+   LightLMG()
+   {
+      w = 1;
+      h = 2;
+      bullet_Damage = 2;
+      speed = 4;
+   }
+   
+   void render()
+   {
+      pushMatrix();
+      translate(pos.x, pos.y);
+      rotate(theta);
+      
+      active_Colour = colour;
+      stroke(colour);
+      strokeWeight(w);
+      line(0, -h, 0, h);
+      
+      popMatrix();
+   }
+}
+
+// Heavy LMG Bullets
+class HeavyLMG extends LMG
+{
+   HeavyLMG()
+   {
+      w = 2;
+      h = 4;
+      bullet_Damage = 10;
+      speed = 10;
+   }
+}
+
+
+
+
+
     pushMatrix();
     translate(pos.x, pos.y);
     rotate(theta);
@@ -64,21 +122,3 @@ class Bullet extends GameObject
     }
     
     popMatrix();    
-  }
-  
-  
-  
-  void update()
-  {    
-    forward.x = sin(theta);
-    forward.y = - cos(theta);
-    forward.mult(speed);
-    pos.add(forward);
-    
-    // Remove bullet if goes out of bounds
-    if (pos.x < view_Left_Boundry || pos.y < view_Top_Boundry || pos.x > view_Right_Boundry || pos.y > view_Bottom_Boundry)
-    {
-      game_Objects.remove(this);
-    }
-  }
-}
