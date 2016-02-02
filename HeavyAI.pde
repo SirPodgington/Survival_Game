@@ -10,12 +10,13 @@ class HeavyAI extends AI
       colour = color(255,0,50);
       attack_Sound = minim.loadFile("cannon_sound.mp3");
       
-      max_Health = 100;
+      max_Health = 50;
       health = max_Health;
       speed = 0.5;
       target_Distance_From_Player = 200;
       range = 300;
-      fire_Rate = 180;
+      fire_Rate = 300;
+      score_Value = 50;
    }
    
    void attackSound()
@@ -45,18 +46,18 @@ class HeavyAI extends AI
       }
       
       // Shoot the player when within range
-      if (distance_To_Player <= range && fire_Rate_Elapsed >= fire_Rate)
+      if (distance_To_Player <= range  &&  fire_Rate_Elapsed >= fire_Rate)
       {
          fire_Rate_Elapsed = 0;
          attackSound();
          
-         Bullet lmg = new LMGBullet(1);
-         lmg.pos.x = pos.x;
-         lmg.pos.y = pos.y;
-         lmg.colour = colour;
-         lmg.theta = theta;
-         lmg.enemy_Bullet = true;
-         game_Objects.add(lmg);
+         Bullet cannon = new CannonBall(1, false);
+         cannon.pos.x = pos.x;
+         cannon.pos.y = pos.y;
+         cannon.colour = colour;
+         cannon.theta = theta;
+         cannon.enemy_Bullet = true;
+         game_Objects.add(cannon);
       }
 
       if (fire_Rate_Elapsed < fire_Rate)

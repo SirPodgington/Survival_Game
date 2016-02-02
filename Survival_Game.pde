@@ -21,7 +21,7 @@ LOW PRIORITY
 - Duration UPGR (speedboost)
 - Defense Shield CD + Duration UPGR
 - RateOfFire UPGR (lmg speed)
-- Passive Speed Upgrade CD (tank)
+- Passive Speed Upgrade CD (Player)
 - Protector AI CD, 
 - Airstrike CD, Radius UPGR
 - Overheating System for LMG (player)
@@ -94,7 +94,7 @@ void setup()
    cdBar_Icon_Y = ui_Bottom - (cdBar_Offset_Y / 2);
    cdBar_Icon_Cannon = loadImage("cannon_cd_icon.png");
    
-   Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
+   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
    
    // Basic AI for testing
@@ -121,7 +121,7 @@ void keyReleased()
 
 
 // Check Collisions
-void checkCollisions()
+void bulletCollision()
 {
    for(int i = game_Objects.size() - 1; i >= 0; i --)
    {
@@ -130,67 +130,60 @@ void checkCollisions()
       // Check for Bullet collisions ****************************
       if (object1 instanceof Bullet)
       {
+         Bullet bullet = (Bullet) object1;
+         
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
             GameObject object2 = game_Objects.get(j);
             
-            // Enemy Bullet & Tank
-            if (object2 instanceof Tank && object1.enemy_Bullet)
+            // Enemy Bullet & Player
+            if (object2 instanceof Player && object1.enemy_Bullet)
             {
-               if (object1.pos.dist(object2.pos) < (object1.h * 0.5f) + object2.half_W)   // Check for collision
+               Player user = (Player) object2;
+               if (bullet.pos.dist(user.pos) < bullet.half_H + user.half_W)   // Check for collision
                {
-                  object2.health -= object1.bullet_Damage;      // apply damage
-                  game_Objects.remove(object1);   // remove bullet
+                  user.health -= bullet.damage;      // apply damage
+                  game_Objects.remove(bullet);   // remove bullet
                }
             }
             
             // Friendly Bullet & AI
             if (object2 instanceof AI && !object1.enemy_Bullet)
             {
-               if (object1.pos.dist(object2.pos) < object1.half_H + object2.half_W)   // Check for collision
+               AI ai = (AI) object2;
+               if (bullet.pos.dist(ai.pos) < bullet.half_H + ai.half_W)   // Check for collision
                {
-                  object2.health -= object1.bullet_Damage;
-                  game_Objects.remove(object1);
+                  ai.health -= bullet.damage;
+                  game_Objects.remove(bullet);
                }
             }
          }
       }
-      // *********************************************************
-      
-      if (object1 instanceof Tank || object1 instanceof AI)
-      {
-         // Remove if dies
-         if (object1.health <= 0)
-         {
-            if (object1 instanceof AI)
-               score += 10;
-               kill_Counter++;
-               
-            game_Objects.remove(object1);
-         }
-         
-         // Check for collisions
-         for(int j = game_Objects.size() - 1; j >= 0 ; j --)
-         {
-            GameObject object2 = game_Objects.get(j);
-            
-            // If Tank collides with AI ...
-            if (object1 instanceof Tank)
-            {
-               if (object2 instanceof AI)
-               {
-                  if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)
-                  {
-                     
-                  }
-               }
-            }
-         }
-      }
-      // *********************************************************
    }
 }
 
+void removeDead()
+{
+   for(int i = game_Objects.size() - 1; i >= 0; i --)
+   {
+      GameObject unit = game_Objects.get(i);
+      
+      if (unit instanceof Player || unit instanceof AI)
+      {
+         // Remove if dies
+         if (unit.health <= 0)
+         {
+            if (unit instanceof AI)
+            {
+               AI ai = (AI) unit;
+               score += ai.score_Value;
+               kill_Counter++;
+            }
+            game_Objects.remove(unit);
+         }
+      }
+   }
+}
 
 void draw()
 {
@@ -212,9 +205,9 @@ void draw()
      object.render();
   }
   
-  // Draw the user interface
-  user_Interface();
-  checkCollisions();
+  user_Interface();   // Draw the user interface
+  bulletCollision();   // Check for bullet collision with player & ai
+  removeDead();   // Remove dead units, add score if necessary
   
   // Draw kill counter & score
   fill(ui_Background);

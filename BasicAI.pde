@@ -9,12 +9,13 @@ class BasicAI extends AI
       colour = color(255,0,50);
       attack_Sound = minim.loadFile("basic_ai_attack.mp3");
       
-      max_Health = 50;
+      max_Health = 15;
       health = max_Health;
       speed = 0.5;
       target_Distance_From_Player = 120;
       range = 200;
       fire_Rate = 180;
+      score_Value = 10;
    }
    
    void attackSound()

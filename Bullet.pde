@@ -2,6 +2,7 @@ class Bullet extends GameObject
 {
   color active_Colour;
   int ammo_Type;
+  float damage;
   
   Bullet(){}
   
@@ -34,7 +35,7 @@ class LMGBullet extends Bullet
       {
          w = 1;
          h = 2;
-         bullet_Damage = 2;
+         damage = 2;
          speed = 4;
       }
       
@@ -43,7 +44,7 @@ class LMGBullet extends Bullet
       {
          w = 2;
          h = 4;
-         bullet_Damage = 10;
+         damage = 3;
          speed = 10;
       }
       half_W = w / 2;
@@ -78,7 +79,7 @@ class CannonBall extends Bullet
       {
          w = 4;
          h = w;
-         bullet_Damage = 50;
+         damage = 10;
          speed = 5;
       }
       
@@ -87,7 +88,7 @@ class CannonBall extends Bullet
       {
          w = 10;
          h = w;
-         bullet_Damage = 50;
+         damage = 15;
          speed = 5;
       }
       half_W = w / 2;

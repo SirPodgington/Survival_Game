@@ -1,6 +1,6 @@
 // This is the player's character
 
-class Tank extends GameObject
+class Player extends GameObject
 {
    float turret_Theta = 0.0f;
    float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
@@ -9,7 +9,7 @@ class Tank extends GameObject
    AudioPlayer speed_Sound, cannon_Sound;
    
    
-   Tank()
+   Player()
    {
       super(view_Width*0.5f, view_Height*0.5f);
       cannon_Sound = minim.loadFile("cannon_sound.mp3");
@@ -41,7 +41,7 @@ class Tank extends GameObject
       right = 'D';
    }
    
-   Tank(float startX, float startY, char move, char reverse, char left, char right)
+   Player(float startX, float startY, char move, char reverse, char left, char right)
    {
       super(startX, startY);
       cannon_Sound = minim.loadFile("cannon_sound.mp3");
@@ -75,7 +75,7 @@ class Tank extends GameObject
    
    
    /*****************/
-   //  TANK SOUNDS   \ -----------------------------------------------------------------------------------
+   //  PLAYER SOUNDS   \ -----------------------------------------------------------------------------------
    /*****************/
    
    void cannonSound()
@@ -132,7 +132,7 @@ class Tank extends GameObject
       if (mouseY < view_Bottom_Boundry)
          turret_Theta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
       
-      // Tank movement
+      // Player movement
       if (keys[move])
       {
          pos.add(forward);
@@ -178,7 +178,7 @@ class Tank extends GameObject
          game_Objects.add(cannon_Ball);
       }
       
-      // Keep tank within screen boundary
+      // Keep Player within screen boundary
       if (pos.x < view_Left_Boundry + half_W)
             pos.x = view_Left_Boundry + half_W;
       if (pos.x > view_Right_Boundry - half_W)

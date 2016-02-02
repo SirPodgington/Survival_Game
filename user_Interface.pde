@@ -24,7 +24,7 @@ PImage cdBar_Icon_Cannon;
 
 void user_Interface()
 {
-   Tank player = (Tank) game_Objects.get(0);
+   Player player = (Player) game_Objects.get(0);
    
    fill(ui_Background);
    stroke(255);
