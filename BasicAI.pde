@@ -68,11 +68,11 @@ class BasicAI extends AI
       translate(pos.x, pos.y);
       
       // Health bar
-      fill(255,0,0);
+      fill(healthBar_Background);
       noStroke();
       rect(-half_W, -25, w, 5); // background
       float hp_Mapped = map(health, 0, max_Health, 0, w);
-      fill(0,255,0);
+      fill(healthBar_Colour);
       rect(-half_W, -25, hp_Mapped, 5);
 
       

@@ -3,6 +3,7 @@
 /*
 TO BE FIXED:
 
+- Score system (basic temp version in use)
 - Change player turret to basic model (until cannon CD is unlocked)
 - Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
 - Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)
@@ -10,15 +11,12 @@ TO BE FIXED:
 
 TO BE ADDED (IDEAS):
 
+- Turret Upgrade CD + Explosive Round UPGR | Duration UPGR (speedboost) | Defense Shield CD + Duration UPGR | RateOfFire UPGR (lmg speed) | Passive Speed Upgrade CD (tank)
 - Player loses health when touches AI (3 sec internal cd)
 - More AI (Flying, Medium, Boss)
 - Add AI spawning system (waves or continuous?)
-- RoF passive perk on player LMG
-- Score system
 - Heat cooldown on player LMG
 - Airstrike cooldown (one for enemy & player?)
-- Defense Shield cooldown
-- Change CDs to unlockable (unlock after score stages?)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
 - Slower turning AI (rotates until aligned with player)
 */
@@ -34,6 +32,7 @@ color ui_Background;
 float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
 float cd_Bar_Gap, cd_Bar_X_Cannon, cd_Bar_X_Speed, cd_Icon_Y;
 color cd_Bar_Background, cd_Bar_Colour;
+color healthBar_Colour, healthBar_Background;
 float player_HealthBar_Height, player_HealthBar_Width, player_HealthBar_Bottom, player_HealthBar_Left;
 PImage cannon_Icon, speed_Icon;
 
@@ -74,6 +73,8 @@ void setup()
    player_HealthBar_Width = ui_Width / 3;
    player_HealthBar_Bottom = height - 10;
    player_HealthBar_Left = ui_Left_Boundry + player_HealthBar_Width;
+   healthBar_Colour = color(127,255,0);
+   healthBar_Background = color(200,0,0);
    
    cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
    speed_Icon = loadImage("speed_cd_icon.png");
@@ -195,7 +196,8 @@ void draw()
   checkCollisions();
   
   // Draw kill counter & score
-  stroke(255);
-  textAlign(CENTER,CENTER);
-  text("Kills: " + kill_Counter + "  |  Score: " + score, 500,350);
+  fill(ui_Background);
+  textAlign(RIGHT,TOP);
+  textSize(14);
+  text("Kills: " + kill_Counter + "  |  Score: " + score, width-20,20);
 }

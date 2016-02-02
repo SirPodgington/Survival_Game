@@ -5,6 +5,7 @@ class Tank extends GameObject
    float turret_Theta = 0.0f;
    float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
    char move, reverse, left, right;
+   boolean cannon_Upgrade, speed_Upgrade, speedBoost_Upgrade, explosive_Upgrade;
    AudioPlayer cannon_Sound, speed_Sound;
    
    
@@ -162,12 +163,12 @@ class Tank extends GameObject
       }
       
       // Fire Cannon balls
-      if (mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Length)
+      if (cannon_Upgrade && mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Length)
       {
          cd1_Elapsed = 0;
          cannonSound();
          
-         Bullet cannon_Ball = new CannonBall(2, false);
+         Bullet cannon_Ball = new CannonBall(2, explosive_Upgrade);
          cannon_Ball.pos.x = pos.x;
          cannon_Ball.pos.y = pos.y;
          cannon_Ball.colour = colour;

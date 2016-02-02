@@ -68,10 +68,9 @@ class LMGBullet extends Bullet
 
 // Cannon Ball ----------------
 class CannonBall extends Bullet
-{
-   boolean explosive_Upgrade;
-   int passed_Milliseconds;
-   
+{  
+   boolean explosive;
+  
    CannonBall(int ammo_Type, boolean explosive)
    {
       // Small cannon ball
@@ -95,7 +94,7 @@ class CannonBall extends Bullet
       half_H = h / 2; 
       
       // Store upgrade status
-      explosive_Upgrade = explosive;
+      this.explosive = explosive;
    }
    
    void render()
@@ -103,12 +102,11 @@ class CannonBall extends Bullet
       pushMatrix();
       translate(pos.x, pos.y);
       rotate(theta);
-      
       active_Colour = colour;
       
-      if (explosive_Upgrade)
+      if (explosive)
       {
-         passed_Milliseconds = millis() - time;
+         int passed_Milliseconds = millis() - time;
          if (passed_Milliseconds >= 100)          // Cannon flashes white every 100 ms
          {
             time = millis();
