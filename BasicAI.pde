@@ -1,8 +1,6 @@
 
 class BasicAI extends AI
 {
-   
-   
    BasicAI()
    {
       super(50, 50);
@@ -51,13 +49,13 @@ class BasicAI extends AI
          fire_Rate_Elapsed = 0;
          gunSound();
          
-         Bullet bullet = new Bullet(3);
-         bullet.pos.x = pos.x;
-         bullet.pos.y = pos.y;
-         bullet.colour = colour;
-         bullet.theta = theta;
-         bullet.enemy_Bullet = true;
-         game_Objects.add(bullet);
+         Bullet lmg = new LMGBullet(1);
+         lmg.pos.x = pos.x;
+         lmg.pos.y = pos.y;
+         lmg.colour = colour;
+         lmg.theta = theta;
+         lmg.enemy_Bullet = true;
+         game_Objects.add(lmg);
       }
 
       if (fire_Rate_Elapsed < fire_Rate)

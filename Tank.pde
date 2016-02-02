@@ -104,6 +104,7 @@ class Tank extends GameObject
    
    void update()
    {
+      // Check for Speed Boost cooldown
       if (millis() < cd_Start_Time + cd2_Length && millis() > cd2_Length)
       {
          speed = upgraded_Speed;
@@ -146,32 +147,32 @@ class Tank extends GameObject
          theta += 0.02f;
       }
       
-      // Fire bullets
+      // Fire LMG bullets
       if (mousePressed && mouseButton == LEFT && fire_Rate_Elapsed >= fire_Rate)
       {
          fire_Rate_Elapsed = 0;
          lmgSound();
          
-         Bullet bullet = new Bullet(1);
-         bullet.pos.x = pos.x;
-         bullet.pos.y = pos.y;
-         bullet.colour = colour;
-         bullet.theta = turret_Theta;
-         game_Objects.add(bullet);
+         Bullet lmg = new LMGBullet(2);
+         lmg.pos.x = pos.x;
+         lmg.pos.y = pos.y;
+         lmg.colour = colour;
+         lmg.theta = turret_Theta;
+         game_Objects.add(lmg);
       }
       
-      // Fire cannon shells
+      // Fire Cannon balls
       if (mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Length)
       {
          cd1_Elapsed = 0;
          cannonSound();
          
-         Bullet shell = new Bullet(2);
-         shell.pos.x = pos.x;
-         shell.pos.y = pos.y;
-         shell.colour = colour;
-         shell.theta = turret_Theta;
-         game_Objects.add(shell);
+         Bullet cannon_Ball = new CannonBall(2, false);
+         cannon_Ball.pos.x = pos.x;
+         cannon_Ball.pos.y = pos.y;
+         cannon_Ball.colour = colour;
+         cannon_Ball.theta = turret_Theta;
+         game_Objects.add(cannon_Ball);
       }
       
       

@@ -12,7 +12,6 @@ class GameObject
    int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
    int cd1_Length, cd2_Length, cd3_Length;
    int fire_Rate, fire_Rate_Elapsed;
-   int passed_Milliseconds;
    int time;
    int health, max_Health;
    int bullet_Damage;
