@@ -1,20 +1,72 @@
 
-void cooldownBar(float cd_Position)
+// UI Variables
+color ui_Background;
+float ui_Width, ui_Height;
+float ui_Left, ui_Top;
+
+// Health Bar Variables
+color healthBar_Colour, healthBar_Background;
+float healthBar_Height, healthBar_Width;
+float healthBar_Bottom, healthBar_Left;
+int healthBar_Outline;
+
+// Speed Bar Variables
+color speedBar_Colour, speedBar_Background;
+float speedBar_Width, speedBar_Height;
+float speedBar_Bottom, speedBar_Left;
+int speedBar_Outline;
+
+// Cooldown Bar Variables
+color cdBar_Background, cdBar_Colour;
+float cdBar_Height, cdBar_Width;
+float cdBar_Bottom, cdBar_Left_Cannon, cdBar_Left_Speed;
+float cdBar_Gap;
+int cdBar_Outline;
+float cdBar_Icon_Y;
+PImage cdBar_Icon_Cannon;
+
+void user_Interface()
 {
-   float x = cd_Position - (cd_Bar_Width / 2);
+   Tank player = (Tank) game_Objects.get(0);
+   
+   fill(ui_Background);
+   stroke(255);
+   strokeWeight(2);
+   rect(ui_Left, ui_Top, ui_Width, ui_Height); // UI BackgroundS
+   
+   // Health Bar
+   horizontalProgressBar(player.health, player.max_Health, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background, healthBar_Outline);
+   
+   // Speed Boost Bar
+   horizontalProgressBar(player.cd2_Elapsed, player.cd2_Duration, cdBar_Left_Speed, cdBar_Bottom, cdBar_Width, cdBar_Height, speedBar_Colour, speedBar_Background, cdBar_Outline);
+   
+   // Cannon cooldown bar
+   if (player.cannon_Upgrade)
+   {
+      //remaining = player.cd1_Elapsed;
+      //total = player.cd1_Duration;
+      //mapped_Value = map(remaining, 0, total, 0, cdBar_Height);
+      cdBar(cdBar_Left_Cannon);  // CD Bar
+      //cooldownTimer(cdBar_Left_Cannon, mapped_Value, cdBar_Icon_Cannon);
+   }
+}
+
+void cdBar(float cd_Position)
+{
+   float x = cd_Position - (cdBar_Width / 2);
    stroke(0);
    strokeWeight(2);
-   fill(cd_Bar_Background);
-   rect(x, cd_Bar_Top, cd_Bar_Width, cd_Bar_Height);
+   fill(cdBar_Background);
+   rect(x, cdBar_Bottom, cdBar_Width, -cdBar_Height);
 }
 
 void cooldownTimer(float cd_Position, float time, PImage icon)
 {
-   float bar_X = cd_Position - (cd_Bar_Width / 2);
+   float bar_X = cd_Position - (cdBar_Width / 2);
    float icon_X = cd_Position - (icon.width / 2);
-   fill(cd_Bar_Colour);
-   rect(bar_X, cd_Bar_Bottom, cd_Bar_Width, -time);   // Bar remaining
-   image(icon, icon_X, cd_Icon_Y);
+   fill(cdBar_Colour);
+   rect(bar_X, cdBar_Bottom, cdBar_Width, -time);   // Bar remaining
+   image(icon, icon_X, cdBar_Icon_Y);
 }
 
 void healthBar(float hp)
@@ -23,51 +75,24 @@ void healthBar(float hp)
    strokeWeight(1);
    stroke(255);
    fill(healthBar_Background);
-   rect(player_HealthBar_Left, player_HealthBar_Bottom, player_HealthBar_Width, -player_HealthBar_Height);
+   rect(healthBar_Left, healthBar_Bottom, healthBar_Width, -healthBar_Height);
    
    // Current Health
    float health = hp;
    fill(healthBar_Colour);
-   rect(player_HealthBar_Left, player_HealthBar_Bottom, health, -player_HealthBar_Height);
+   rect(healthBar_Left, healthBar_Bottom, health, -healthBar_Height);
 }
 
-
-
-void user_Interface()
+void horizontalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour, int outline)
 {
-   int remaining, total;
-   float mapped_Value;
-   Tank player = (Tank) game_Objects.get(0);
-   
-   fill(ui_Background);
+   // Background
+   strokeWeight(outline);
    stroke(255);
-   strokeWeight(2);
-   rect(ui_Left_Boundry, ui_Top_Boundry, ui_Width, ui_Height); // UI BackgroundS
+   fill(background_Colour);
+   rect(start_X, start_Y, bar_Width, -bar_Height);
    
-   // Player Health Bar
-   remaining = player.health;
-   total = player.max_Health;
-   mapped_Value = map(remaining, 0, total, 0, player_HealthBar_Width);
-   healthBar(mapped_Value);
-   
-   // Cannon cooldown bar
-   if (player.cannon_Upgrade)
-   {
-      remaining = player.cd1_Elapsed;
-      total = player.cd1_Length;
-      mapped_Value = map(remaining, 0, total, 0, cd_Bar_Height);
-      cooldownBar(cd_Bar_X_Cannon);  // CD Bar
-      cooldownTimer(cd_Bar_X_Cannon, mapped_Value, cannon_Icon);
-   }
-   
-   // Speedboost cooldown bar
-   if (player.speedBoost_Upgrade)
-   {
-      remaining = player.cd2_Elapsed;
-      total = player.cd2_Length;
-      mapped_Value = map(remaining, 0, total, 0, cd_Bar_Height);
-      cooldownBar(cd_Bar_X_Speed);
-      cooldownTimer(cd_Bar_X_Speed, mapped_Value, speed_Icon);
-   }
-   
+   // Progress
+   float mapped_Value = map(progress, 0, total, 0, bar_Width);
+   fill(progress_Colour);
+   rect(start_X, start_Y, mapped_Value, -bar_Height);
 }

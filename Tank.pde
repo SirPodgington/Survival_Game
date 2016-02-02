@@ -5,7 +5,7 @@ class Tank extends GameObject
    float turret_Theta = 0.0f;
    float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
    char move, reverse, left, right;
-   boolean cannon_Upgrade, speed_Upgrade, speedBoost_Upgrade, explosive_Upgrade;
+   boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
    AudioPlayer cannon_Sound, speed_Sound;
    
    
@@ -30,11 +30,10 @@ class Tank extends GameObject
       upgraded_Speed = default_Speed * 4;
       fire_Rate = 15;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
-      cd1_Length = 300;   // cannon cooldown (milliseconds)
-      cd1_Elapsed = cd1_Length;
-      cd2_Length = 1800;   // Speedboost cooldown (ms)
-      cd2_Elapsed = cd2_Length;
-   
+      cd1_Duration = 300;   // cannon cooldown (milliseconds)
+      cd1_Elapsed = cd1_Duration;
+      cd2_Duration = 1800;   // Speedboost cooldown (ms)
+      cd2_Elapsed = cd2_Duration;
    }
    
    Tank(float startX, float startY, char move, char reverse, char left, char right)
@@ -58,10 +57,10 @@ class Tank extends GameObject
       upgraded_Speed = default_Speed * 4;
       fire_Rate = 15;   // lmg fire-rate
       fire_Rate_Elapsed = fire_Rate;
-      cd1_Length = 300;   // cannon cooldown (milliseconds)
-      cd1_Elapsed = cd1_Length;
-      cd2_Length = 1800;   // Speedboost cooldown (ms)
-      cd2_Elapsed = cd2_Length;
+      cd1_Duration = 300;   // cannon cooldown (milliseconds)
+      cd1_Elapsed = cd1_Duration;
+      cd2_Duration = 1800;   // Speedboost cooldown (ms)
+      cd2_Elapsed = cd2_Duration;
       
       this.move = move;
       this.reverse = reverse;
@@ -106,22 +105,21 @@ class Tank extends GameObject
    void update()
    {
       // Check for Speed Boost cooldown
-      if (millis() < cd_Start_Time + cd2_Length && millis() > cd2_Length)
+      if (time_Played < cd_Activation_Time + cd2_Duration  &&  time_Played > cd2_Duration)
       {
          speed = upgraded_Speed;
       }
       else
          speed = default_Speed;
       
-      // Speed Boost CD
-      if (keyPressed && key == ' ' && cd2_Elapsed >= cd2_Length)
+      // Activate Speed Boost
+      if (keyPressed  &&  key == ' '  &&  cd2_Elapsed >= cd2_Duration)
       {
          cd2_Elapsed = 0;
          speedSound();
-         cd_Start_Time = millis();
+         cd_Activation_Time = millis();
       }
       
-      // Calculate tank direction & apply speed factor
       forward.x = sin(theta);
       forward.y = - cos(theta);
       forward.mult(speed);
@@ -163,7 +161,7 @@ class Tank extends GameObject
       }
       
       // Fire Cannon balls
-      if (cannon_Upgrade && mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Length)
+      if (cannon_Upgrade && mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Duration)
       {
          cd1_Elapsed = 0;
          cannonSound();
@@ -192,9 +190,9 @@ class Tank extends GameObject
       // Increment the cooldowns each frame
       if (fire_Rate_Elapsed < fire_Rate)
          fire_Rate_Elapsed++;
-      if (cd1_Elapsed < cd1_Length)
+      if (cd1_Elapsed < cd1_Duration)
          cd1_Elapsed++;
-      if (cd2_Elapsed < cd2_Length)
+      if (cd2_Elapsed < cd2_Duration)
          cd2_Elapsed++;
    }
    

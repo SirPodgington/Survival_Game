@@ -8,9 +8,9 @@ class GameObject
    float speed, default_Speed, upgraded_Speed;
    float theta = 0.0f;
    color colour;
-   int cd_Start_Time;
+   int cd_Activation_Time;
    int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
-   int cd1_Length, cd2_Length, cd3_Length;
+   int cd1_Duration, cd2_Duration, cd3_Duration;
    int fire_Rate, fire_Rate_Elapsed;
    int time;
    int health, max_Health;

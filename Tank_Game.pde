@@ -24,17 +24,9 @@ TO BE ADDED (IDEAS):
 import ddf.minim.*;
 Minim minim;
 
-// Background, View (the game screen, exempt from the UI), World, User Interface variables
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
 float view_Width, view_Height;
-float ui_Left_Boundry, ui_Top_Boundry, ui_Width, ui_Height;
-color ui_Background;
-float cd_Bar_Height, cd_Bar_Width, cd_Bar_Top, cd_Bar_Bottom;
-float cd_Bar_Gap, cd_Bar_X_Cannon, cd_Bar_X_Speed, cd_Icon_Y;
-color cd_Bar_Background, cd_Bar_Colour;
-color healthBar_Colour, healthBar_Background;
-float player_HealthBar_Height, player_HealthBar_Width, player_HealthBar_Bottom, player_HealthBar_Left;
-PImage cannon_Icon, speed_Icon;
+int time_Played;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
@@ -47,37 +39,41 @@ void setup()
    fullScreen();
    //size(1000, 700);
    
-   // Background, View (the game screen, exempt from the UI), World, User Interface variables
+   // Game view properties (Game screen excluding UI)
    view_Left_Boundry = 0;
    view_Right_Boundry = width;
    view_Top_Boundry = 0;
    view_Bottom_Boundry = height - 100;
    view_Width = view_Right_Boundry - view_Left_Boundry;
    view_Height = view_Bottom_Boundry - view_Top_Boundry;
-   ui_Left_Boundry = view_Left_Boundry;
-   ui_Top_Boundry = view_Bottom_Boundry;
+   
+   ui_Left = view_Left_Boundry;
+   ui_Top = view_Bottom_Boundry;
    ui_Height = height - view_Bottom_Boundry;
    ui_Width = view_Right_Boundry - view_Left_Boundry;
    ui_Background = color(255,207,37);
-   cd_Bar_Height = 50;
-   cd_Bar_Width = 20;
-   cd_Bar_Top = view_Bottom_Boundry + 10;
-   cd_Bar_Bottom = cd_Bar_Top + cd_Bar_Height;
-   cd_Bar_Background = color(200,0,0);
-   cd_Bar_Colour = color(127,255,0);
-   cd_Bar_Gap = 30;
-   cd_Bar_X_Cannon = 20;
-   cd_Bar_X_Speed = cd_Bar_X_Cannon + 30;
-   cd_Icon_Y = height - ((height - cd_Bar_Bottom) / 2);
-   player_HealthBar_Height = ui_Height / 2;
-   player_HealthBar_Width = ui_Width / 3;
-   player_HealthBar_Bottom = height - 10;
-   player_HealthBar_Left = ui_Left_Boundry + player_HealthBar_Width;
+   cdBar_Height = 50;
+   cdBar_Width = 20;
+   cdBar_Bottom = height - 10;
+   cdBar_Background = color(200,0,0);
+   cdBar_Outline = 2;
+   cdBar_Colour = color(127,255,0);
+   cdBar_Gap = 30;
+   cdBar_Left_Cannon = 20;
+   cdBar_Left_Speed = cdBar_Left_Cannon + 30;
+   cdBar_Icon_Y = height - ((height - cdBar_Bottom) / 2);
+   healthBar_Height = ui_Height / 2;
+   healthBar_Width = ui_Width / 3;
+   healthBar_Bottom = height - 10;
+   healthBar_Left = ui_Left + healthBar_Width;
+   healthBar_Outline = 1;
    healthBar_Colour = color(127,255,0);
    healthBar_Background = color(200,0,0);
+   speedBar_Colour = color(255,165,0);
+   speedBar_Background = color(127);
+   speedBar_Outline = 1;
    
-   cannon_Icon = loadImage("cannon_cd_icon.png");   // UI Icon for cannon cooldown
-   speed_Icon = loadImage("speed_cd_icon.png");
+   cdBar_Icon_Cannon = loadImage("cannon_cdBar_Icon_Y.png");   // UI Icon for cannon cooldown
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
@@ -174,6 +170,7 @@ void checkCollisions()
 
 void draw()
 {
+   time_Played = millis();
    background(0);
    
    // Hide mouse cursor when over the active view
