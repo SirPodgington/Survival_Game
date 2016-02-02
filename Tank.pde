@@ -106,9 +106,7 @@ class Tank extends GameObject
    {
       // Check for Speed Boost cooldown
       if (time_Played < cd_Activation_Time + cd2_Duration  &&  time_Played > cd2_Duration)
-      {
          speed = upgraded_Speed;
-      }
       else
          speed = default_Speed;
       
@@ -120,6 +118,7 @@ class Tank extends GameObject
          cd_Activation_Time = millis();
       }
       
+      // Calculate direction co-ords
       forward.x = sin(theta);
       forward.y = - cos(theta);
       forward.mult(speed);
@@ -174,9 +173,6 @@ class Tank extends GameObject
          game_Objects.add(cannon_Ball);
       }
       
-      
-      
-      
       // Keep tank within screen boundary
       if (pos.x < view_Left_Boundry + half_W)
             pos.x = view_Left_Boundry + half_W;
@@ -215,18 +211,23 @@ class Tank extends GameObject
        popMatrix();
        
        
-       // Turret Base & Barrel
+       // Turret
        pushMatrix();
        translate(pos.x, pos.y);
        rotate(turret_Theta);
        strokeWeight(1);
-       stroke(colour);
        fill(colour);
        
-       // Base
-       ellipse(0, 0, turret_Width, turret_Width);
-       // Barrel
-       rect(-turret_Half_Width, 0, turret_Width, -turret_Length);
+       if (cannon_Upgrade)
+       {
+          ellipse(0, 0, turret_Width, turret_Width);
+          rect(-turret_Half_Width, 0, turret_Width, -turret_Length);
+       }
+       else
+       {
+          strokeWeight(3);
+          line(0, 0, 0, -turret_Length);
+       }
        
        popMatrix();
        

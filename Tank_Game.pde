@@ -3,8 +3,7 @@
 /*
 TO BE FIXED:
 
-- Score system (basic temp version in use)
-- Change player turret to basic model (until cannon CD is unlocked)
+- Score system (basic temp version in use, change to unlocking CDs/perks from score)
 - Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
 - Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)
 
@@ -25,7 +24,8 @@ import ddf.minim.*;
 Minim minim;
 
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
-float view_Width, view_Height;
+float view_Width, view_Height, view_Half_Width, view_Half_Height;
+float view_Center_X, view_Center_Y;
 int time_Played;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
@@ -37,46 +37,58 @@ void setup()
 {
    minim = new Minim(this);
    fullScreen();
-   //size(1000, 700);
    
-   // Game view properties (Game screen excluding UI)
-   view_Left_Boundry = 0;
-   view_Right_Boundry = width;
-   view_Top_Boundry = 0;
-   view_Bottom_Boundry = height - 100;
-   view_Width = view_Right_Boundry - view_Left_Boundry;
-   view_Height = view_Bottom_Boundry - view_Top_Boundry;
+   // View properties (Game screen excluding UI)
+   ui_Height = 100;
+   view_Width = width;
+   view_Height = height - ui_Height;
+   view_Half_Width = view_Width / 2;
+   view_Half_Height = view_Height / 2;
+   view_Center_X = width / 2;
+   view_Center_Y = view_Height / 2;
+   view_Left_Boundry = view_Center_X - view_Half_Width;
+   view_Right_Boundry = view_Center_X + view_Half_Width;
+   view_Top_Boundry = view_Center_Y - view_Half_Height;
+   view_Bottom_Boundry = view_Center_Y + view_Half_Height;
    
+   ui_Width = view_Width;
    ui_Left = view_Left_Boundry;
+   ui_Right = ui_Left + ui_Width;
    ui_Top = view_Bottom_Boundry;
-   ui_Height = height - view_Bottom_Boundry;
-   ui_Width = view_Right_Boundry - view_Left_Boundry;
+   ui_Bottom = ui_Top + ui_Height;
    ui_Background = color(255,207,37);
-   cdBar_Height = 50;
-   cdBar_Width = 20;
-   cdBar_Bottom = height - 10;
-   cdBar_Background = color(200,0,0);
-   cdBar_Outline = 2;
-   cdBar_Colour = color(127,255,0);
-   cdBar_Gap = 30;
-   cdBar_Left_Cannon = 20;
-   cdBar_Left_Speed = cdBar_Left_Cannon + 30;
-   cdBar_Icon_Y = height - ((height - cdBar_Bottom) / 2);
+   
    healthBar_Height = ui_Height / 2;
    healthBar_Width = ui_Width / 3;
-   healthBar_Bottom = height - 10;
+   healthBar_Bottom = height - 15;
    healthBar_Left = ui_Left + healthBar_Width;
-   healthBar_Outline = 1;
    healthBar_Colour = color(127,255,0);
    healthBar_Background = color(200,0,0);
+   
+   speedBar_Width = healthBar_Width;
+   speedBar_Height = healthBar_Height / 3;
+   speedBar_Left = healthBar_Left;
+   speedBar_Bottom = healthBar_Bottom - healthBar_Height;
    speedBar_Colour = color(255,165,0);
    speedBar_Background = color(127);
-   speedBar_Outline = 1;
    
-   cdBar_Icon_Cannon = loadImage("cannon_cdBar_Icon_Y.png");   // UI Icon for cannon cooldown
+   cdBar_Gap = 30;
+   cdBar_Offset_X = 20;
+   cdBar_Offset_Y = 10;
+   cdBar_Height = ui_Height / 2;
+   cdBar_Width = cdBar_Height / 2;
+   cdBar_Bottom = cdBar_Height + (ui_Top + cdBar_Offset_Y);
+   cdBar_Left_Cannon = cdBar_Offset_X;
+   cdBar_Left_Speed = cdBar_Left_Cannon + cdBar_Gap;
+   cdBar_Background = color(200,0,0);
+   cdBar_Colour = color(127,255,0);
+   cdBar_Icon_Y = ui_Bottom - (cdBar_Offset_Y / 2);
+   cdBar_Icon_Cannon = loadImage("cannon_cd_icon.png");
    
    Tank player = new Tank(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
+   
+   // Basic AI for testing
    BasicAI basicAI = new BasicAI();
    game_Objects.add(basicAI);
 }
