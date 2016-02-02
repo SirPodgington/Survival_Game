@@ -10,14 +10,23 @@ TO BE FIXED:
 
 TO BE ADDED (IDEAS):
 
-- Turret Upgrade CD + Explosive Round UPGR | Duration UPGR (speedboost) | Defense Shield CD + Duration UPGR | RateOfFire UPGR (lmg speed) | Passive Speed Upgrade CD (tank)
-- Player loses health when touches AI (3 sec internal cd)
-- More AI (Flying, Medium, Boss)
+HIGH PRIORITY
+- Enemy AI (Melee, Heavy)
 - Add AI spawning system (waves or continuous?)
-- Heat cooldown on player LMG
-- Airstrike cooldown (one for enemy & player?)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
 - Slower turning AI (rotates until aligned with player)
+
+LOW PRIORITY
+- Explosive Round UPGR (Turret)
+- Duration UPGR (speedboost)
+- Defense Shield CD + Duration UPGR
+- RateOfFire UPGR (lmg speed)
+- Passive Speed Upgrade CD (tank)
+- Protector AI CD, 
+- Airstrike CD, Radius UPGR
+- Overheating System for LMG (player)
+- Enemy AI (Flying)
+
 */
 
 import ddf.minim.*;
@@ -29,7 +38,7 @@ float view_Center_X, view_Center_Y;
 int time_Played;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
-boolean[] keys = new boolean[512];   // Array to store true/false values for all possile keys to detect keypresses
+boolean[] keys = new boolean[512];   // Array to store keyPressed status for all keys
 
 int kill_Counter, score;
 
@@ -169,7 +178,7 @@ void checkCollisions()
                {
                   if (object1.pos.dist(object2.pos) < object1.half_W + object2.half_W)
                   {
-                     // Damage player (play sound) 2 second internal cooldown
+                     
                   }
                }
             }
