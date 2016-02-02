@@ -17,4 +17,8 @@ class AI extends GameObject
    void update()
    {
    }
+   
+   void attackSound()
+   {
+   }
 }

@@ -16,7 +16,7 @@ class GameObject
    int health, max_Health;
    int bullet_Damage;
    boolean enemy_Bullet;
-   AudioPlayer gun_Sound;
+   AudioPlayer attack_Sound;
    
    GameObject()
    {

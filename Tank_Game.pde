@@ -11,7 +11,7 @@ TO BE FIXED:
 TO BE ADDED (IDEAS):
 
 HIGH PRIORITY
-- Enemy AI (Melee, Heavy)
+- Enemy AI (Heavy)
 - Add AI spawning system (waves or continuous?)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
 - Slower turning AI (rotates until aligned with player)
@@ -100,6 +100,9 @@ void setup()
    // Basic AI for testing
    BasicAI basicAI = new BasicAI();
    game_Objects.add(basicAI);
+   
+   HeavyAI heavyAI = new HeavyAI();
+   game_Objects.add(heavyAI);
 }
 
 

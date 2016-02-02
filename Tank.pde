@@ -6,15 +6,15 @@ class Tank extends GameObject
    float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
    char move, reverse, left, right;
    boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
-   AudioPlayer cannon_Sound, speed_Sound;
+   AudioPlayer speed_Sound, cannon_Sound;
    
    
    Tank()
    {
       super(view_Width*0.5f, view_Height*0.5f);
-      cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
-      gun_Sound = minim.loadFile("tank_lmg_sound.wav");
-      speed_Sound = minim.loadFile("tank_speed_sound.mp3");
+      cannon_Sound = minim.loadFile("cannon_sound.mp3");
+      attack_Sound = minim.loadFile("lmg_sound.wav");
+      speed_Sound = minim.loadFile("speed_sound.mp3");
       
       w = 50;
       half_W = w / 2;
@@ -34,14 +34,19 @@ class Tank extends GameObject
       cd1_Elapsed = cd1_Duration;
       cd2_Duration = 1800;   // Speedboost cooldown (ms)
       cd2_Elapsed = cd2_Duration;
+      
+      move = 'W';
+      reverse = 'S';
+      left = 'A';
+      right = 'D';
    }
    
    Tank(float startX, float startY, char move, char reverse, char left, char right)
    {
       super(startX, startY);
-      cannon_Sound = minim.loadFile("tank_cannon_sound.mp3");
-      gun_Sound = minim.loadFile("tank_lmg_sound.wav");
-      speed_Sound = minim.loadFile("tank_speed_sound.mp3");
+      cannon_Sound = minim.loadFile("cannon_sound.mp3");
+      attack_Sound = minim.loadFile("lmg_sound.wav");
+      speed_Sound = minim.loadFile("speed_sound.mp3");
       
       w = 50;
       half_W = w / 2;
@@ -83,10 +88,10 @@ class Tank extends GameObject
    
    void lmgSound()
    {
-      if (gun_Sound.position() != 0)
-         gun_Sound.rewind();
+      if (attack_Sound.position() != 0)
+         attack_Sound.rewind();
          
-      gun_Sound.play();
+      attack_Sound.play();
    }
    
    void speedSound()

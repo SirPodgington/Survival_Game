@@ -1,19 +1,20 @@
 
-class BasicAI extends AI
+
+class HeavyAI extends AI
 {
-   BasicAI()
+   HeavyAI()
    {
-      super(150, 150);
-      w = 20;
+      super(100, 500);
+      w = 40;
       half_W = w * 0.5f;
       colour = color(255,0,50);
-      attack_Sound = minim.loadFile("basic_ai_attack.mp3");
+      attack_Sound = minim.loadFile("cannon_sound.mp3");
       
-      max_Health = 50;
+      max_Health = 100;
       health = max_Health;
       speed = 0.5;
-      target_Distance_From_Player = 120;
-      range = 200;
+      target_Distance_From_Player = 200;
+      range = 300;
       fire_Rate = 180;
    }
    
