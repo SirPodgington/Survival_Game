@@ -3,14 +3,13 @@
 /*
 TO BE FIXED:
 
-- Score system (basic temp version in use, change to unlocking CDs/perks from score)
+- Upgrades bar
 
 
 TO BE ADDED (IDEAS):
 
 HIGH PRIORITY
 - Statistics (temp or permanent? perm requires write to notepad to save info)
-- Slower turning AI (rotates until aligned with player)
 
 LOW PRIORITY
 - Explosive Round UPGR (Turret)
@@ -67,6 +66,7 @@ void setup()
    healthBar_Width = ui_Width / 3;
    healthBar_Bottom = height - 15;
    healthBar_Left = ui_Left + healthBar_Width;
+   healthBar_Right = healthBar_Left + healthBar_Width;
    healthBar_Colour = color(127,255,0);
    healthBar_Background = color(200,0,0);
    

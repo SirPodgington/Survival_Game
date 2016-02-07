@@ -7,7 +7,7 @@ float ui_Left, ui_Top, ui_Bottom, ui_Right;
 // Health Bar Variables
 color healthBar_Colour, healthBar_Background;
 float healthBar_Height, healthBar_Width;
-float healthBar_Bottom, healthBar_Left;
+float healthBar_Bottom, healthBar_Left, healthBar_Right;
 
 // Speed Bar Variables
 color speedBar_Colour, speedBar_Background;
@@ -24,6 +24,17 @@ PImage cdBar_Icon_Cannon;
 
 
 
+// Upgrades Bar
+void upgradesBar(float centreX, float centreY, float w, float h)
+{
+   float barX = centreX - (w/2);
+   float barY = centreY - (h/2);
+   stroke(0);
+   fill(255);
+   rect(barX, barY, w, h);
+}
+
+
 // Vertical Progress Bar
 void verticalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
 {
@@ -38,7 +49,6 @@ void verticalProgressBar(float progress, float total, float start_X, float start
    fill(progress_Colour);
    rect(start_X, start_Y, bar_Width, -mapped_Value);
 }
-
 
 
 // Horizontal Progress Bar
@@ -74,8 +84,19 @@ void user_Interface()
    horizontalProgressBar(player.speedBoost_CD_Elapsed, player.speedBoost_CD_Length, speedBar_Left, speedBar_Bottom, speedBar_Width, speedBar_Height, speedBar_Colour, speedBar_Background);
    
    // Cannon cooldown bar
-   if (!player.cannon_Upgrade)
+   if (player.cannon_Upgrade)
    {
       verticalProgressBar(player.cannon_CD_Elapsed, player.cannon_CD_Elapsed, cdBar_Left_Cannon, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background);
    }
+   
+   // Upgrades bar
+   color scoreBar_Background = color(127);
+   color scoreBar_Colour = color(200,0,0);
+   float scoreBar_Left = healthBar_Right + 50;
+   float scoreBar_Bottom = ui_Bottom - 15;
+   float scoreBar_Width = 450;
+   float scoreBar_Height = ui_Height * 0.33f;
+   stroke(0);
+   fill(scoreBar_Background);
+   rect(scoreBar_Left, scoreBar_Bottom, scoreBar_Width, -scoreBar_Height);
 }
