@@ -5,16 +5,16 @@ class BasicAI extends AI
    {
       super(150, 150);
       w = 20;
-      half_W = w * 0.5f;
+      halfW = w * 0.5f;
       colour = color(255,0,50);
       attack_Sound = minim.loadFile("basic_ai_attack.mp3");
       
-      max_Health = 15;
-      health = max_Health;
+      maxHealth = 15;
+      currentHealth = maxHealth;
       speed = 0.5;
       target_Distance_From_Player = 120;
       range = 200;
-      fire_Rate = 180;
+      fireRate = 180;
       score_Value = 10;
    }
    
@@ -45,9 +45,9 @@ class BasicAI extends AI
       }
       
       // Shoot the player when within range
-      if (distance_To_Player <= range && fire_Rate_Elapsed >= fire_Rate)
+      if (distance_To_Player <= range && fireRate_Elapsed >= fireRate)
       {
-         fire_Rate_Elapsed = 0;
+         fireRate_Elapsed = 0;
          attackSound();
          
          Bullet lmg = new LMGBullet(1);
@@ -59,8 +59,8 @@ class BasicAI extends AI
          game_Objects.add(lmg);
       }
 
-      if (fire_Rate_Elapsed < fire_Rate)
-         fire_Rate_Elapsed++;
+      if (fireRate_Elapsed < fireRate)
+         fireRate_Elapsed++;
    }
    
    void render()
@@ -71,10 +71,10 @@ class BasicAI extends AI
       // Health bar
       fill(healthBar_Background);
       noStroke();
-      rect(-half_W, -25, w, 5); // background
-      float hp_Mapped = map(health, 0, max_Health, 0, w);
+      rect(-halfW, -25, w, 5); // background
+      float hp_Mapped = map(currentHealth, 0, maxHealth, 0, w);
       fill(healthBar_Colour);
-      rect(-half_W, -25, hp_Mapped, 5);
+      rect(-halfW, -25, hp_Mapped, 5);
 
       
       fill(0);

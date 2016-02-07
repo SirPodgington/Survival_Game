@@ -5,17 +5,22 @@ class HeavyAI extends AI
    HeavyAI()
    {
       super(100, 500);
-      w = 40;
-      half_W = w * 0.5f;
-      colour = color(255,0,50);
       attack_Sound = minim.loadFile("cannon_sound.mp3");
       
-      max_Health = 50;
-      health = max_Health;
+      w = 40;
+      halfW = w * 0.5f;
+      turret_Width = w * 0.15f;
+      turret_Length = halfW;
+      turret_HalfWidth = turret_Width / 2;
+      turret_HalfLength = turret_Length / 2;
+      colour = color(255,0,50);
+      
+      maxHealth = 50;
+      currentHealth = maxHealth;
       speed = 0.5;
       target_Distance_From_Player = 200;
       range = 300;
-      fire_Rate = 300;
+      fireRate = 300;
       score_Value = 50;
    }
    
@@ -46,9 +51,9 @@ class HeavyAI extends AI
       }
       
       // Shoot the player when within range
-      if (distance_To_Player <= range  &&  fire_Rate_Elapsed >= fire_Rate)
+      if (distance_To_Player <= range  &&  fireRate_Elapsed >= fireRate)
       {
-         fire_Rate_Elapsed = 0;
+         fireRate_Elapsed = 0;
          attackSound();
          
          Bullet cannon = new CannonBall(1, false);
@@ -60,8 +65,8 @@ class HeavyAI extends AI
          game_Objects.add(cannon);
       }
 
-      if (fire_Rate_Elapsed < fire_Rate)
-         fire_Rate_Elapsed++;
+      if (fireRate_Elapsed < fireRate)
+         fireRate_Elapsed++;
    }
    
    void render()
@@ -72,19 +77,21 @@ class HeavyAI extends AI
       // Health bar
       fill(healthBar_Background);
       noStroke();
-      rect(-half_W, -25, w, 5); // background
-      float hp_Mapped = map(health, 0, max_Health, 0, w);
+      rect(-halfW, -25, w, 5); // background
+      float hp_Mapped = map(currentHealth, 0, maxHealth, 0, w);
       fill(healthBar_Colour);
-      rect(-half_W, -25, hp_Mapped, 5);
+      rect(-halfW, -25, hp_Mapped, 5);
 
       
+      rotate(theta);
       fill(0);
       stroke(colour);
       strokeWeight(2);
+      ellipse(0, 0, w, w);   // The body
       
-      rotate(theta);
-      ellipse(0, 0, w, w);
-      line(0, -10, 0, 0);
+      fill(colour);
+      ellipse(0, 0, turret_Width, turret_Width);   // The turret base
+      rect(-turret_HalfWidth, 0, turret_Width, -turret_Length);   // The turret
       popMatrix();
    }
 }

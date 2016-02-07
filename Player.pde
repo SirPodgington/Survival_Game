@@ -3,7 +3,6 @@
 class Player extends GameObject
 {
    float turret_Theta = 0.0f;
-   float turret_Width, turret_Length, turret_Half_Width, turret_Half_Length;
    char move, reverse, left, right;
    boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
    AudioPlayer speed_Sound, cannon_Sound;
@@ -17,19 +16,19 @@ class Player extends GameObject
       speed_Sound = minim.loadFile("speed_sound.mp3");
       
       w = 50;
-      half_W = w / 2;
-      turret_Width = w * 0.2f;
-      turret_Length = half_W;
-      turret_Half_Width = turret_Width / 2;
-      turret_Half_Length = turret_Length / 2;
+      halfW = w / 2;
+      turret_Width = w * 0.15f;
+      turret_Length = halfW;
+      turret_HalfWidth = turret_Width / 2;
+      turret_HalfLength = turret_Length / 2;
       colour = color(255,0,0);
       
-      max_Health = 100;
-      health = max_Health;
+      maxHealth = 100;
+      currentHealth = maxHealth;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
-      fire_Rate = 15;   // lmg fire-rate
-      fire_Rate_Elapsed = fire_Rate;
+      fireRate = 15;   // lmg fire-rate
+      fireRate_Elapsed = fireRate;
       cd1_Duration = 300;   // cannon cooldown (milliseconds)
       cd1_Elapsed = cd1_Duration;
       cd2_Duration = 1800;   // Speedboost cooldown (ms)
@@ -49,19 +48,19 @@ class Player extends GameObject
       speed_Sound = minim.loadFile("speed_sound.mp3");
       
       w = 50;
-      half_W = w / 2;
-      turret_Width = 10;
-      turret_Length = half_W;
-      turret_Half_Width = turret_Width / 2;
-      turret_Half_Length = turret_Length / 2;
+      halfW = w / 2;
+      turret_Width = w * 0.15;
+      turret_Length = halfW;
+      turret_HalfWidth = turret_Width / 2;
+      turret_HalfLength = turret_Length / 2;
       colour = color(255,155,0);
       
-      max_Health = 100;
-      health = max_Health;
+      maxHealth = 100;
+      currentHealth = maxHealth;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
-      fire_Rate = 15;   // lmg fire-rate
-      fire_Rate_Elapsed = fire_Rate;
+      fireRate = 15;   // lmg fire-rate
+      fireRate_Elapsed = fireRate;
       cd1_Duration = 300;   // cannon cooldown (milliseconds)
       cd1_Elapsed = cd1_Duration;
       cd2_Duration = 1800;   // Speedboost cooldown (ms)
@@ -110,7 +109,7 @@ class Player extends GameObject
    void update()
    {
       // Check for Speed Boost cooldown
-      if (time_Played < cd_Activation_Time + cd2_Duration  &&  time_Played > cd2_Duration)
+      if (time_Played < cd_ActivationTime + cd2_Duration  &&  time_Played > cd2_Duration)
          speed = upgraded_Speed;
       else
          speed = default_Speed;
@@ -120,7 +119,7 @@ class Player extends GameObject
       {
          cd2_Elapsed = 0;
          speedSound();
-         cd_Activation_Time = millis();
+         cd_ActivationTime = millis();
       }
       
       // Calculate direction co-ords
@@ -151,9 +150,9 @@ class Player extends GameObject
       }
       
       // Fire LMG bullets
-      if (mousePressed && mouseButton == LEFT && fire_Rate_Elapsed >= fire_Rate)
+      if (mousePressed && mouseButton == LEFT && fireRate_Elapsed >= fireRate)
       {
-         fire_Rate_Elapsed = 0;
+         fireRate_Elapsed = 0;
          lmgSound();
          
          Bullet lmg = new LMGBullet(2);
@@ -179,18 +178,18 @@ class Player extends GameObject
       }
       
       // Keep Player within screen boundary
-      if (pos.x < view_Left_Boundry + half_W)
-            pos.x = view_Left_Boundry + half_W;
-      if (pos.x > view_Right_Boundry - half_W)
-            pos.x = view_Right_Boundry - half_W;
-      if (pos.y < view_Top_Boundry + half_W)
-            pos.y = view_Top_Boundry + half_W;
-      if (pos.y > view_Bottom_Boundry - half_W)
-            pos.y = view_Bottom_Boundry - half_W;
+      if (pos.x < view_Left_Boundry + halfW)
+            pos.x = view_Left_Boundry + halfW;
+      if (pos.x > view_Right_Boundry - halfW)
+            pos.x = view_Right_Boundry - halfW;
+      if (pos.y < view_Top_Boundry + halfW)
+            pos.y = view_Top_Boundry + halfW;
+      if (pos.y > view_Bottom_Boundry - halfW)
+            pos.y = view_Bottom_Boundry - halfW;
       
       // Increment the cooldowns each frame
-      if (fire_Rate_Elapsed < fire_Rate)
-         fire_Rate_Elapsed++;
+      if (fireRate_Elapsed < fireRate)
+         fireRate_Elapsed++;
       if (cd1_Elapsed < cd1_Duration)
          cd1_Elapsed++;
       if (cd2_Elapsed < cd2_Duration)
@@ -208,8 +207,8 @@ class Player extends GameObject
        strokeWeight(3);
        
        // Direction Indicator
-       line(-8, -half_W, 0, -half_W - 7);
-       line(0, -half_W - 7, 8, -half_W);
+       line(-8, -halfW, 0, -halfW - 7);
+       line(0, -halfW - 7, 8, -halfW);
        // Body
        ellipse(0,0,w,w);
        
@@ -226,7 +225,7 @@ class Player extends GameObject
        if (cannon_Upgrade)
        {
           ellipse(0, 0, turret_Width, turret_Width);
-          rect(-turret_Half_Width, 0, turret_Width, -turret_Length);
+          rect(-turret_HalfWidth, 0, turret_Width, -turret_Length);
        }
        else
        {

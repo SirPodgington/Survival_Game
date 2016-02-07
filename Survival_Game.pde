@@ -3,6 +3,8 @@
 /*
 TO BE FIXED:
 
+- Change CD variables to cd name
+- Parameterise AI healthbar (size & position scaled to unit properties)
 - Score system (basic temp version in use, change to unlocking CDs/perks from score)
 - Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
 - Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)
@@ -33,7 +35,7 @@ import ddf.minim.*;
 Minim minim;
 
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
-float view_Width, view_Height, view_Half_Width, view_Half_Height;
+float view_Width, view_Height, view_HalfWidth, view_Half_Height;
 float view_Center_X, view_Center_Y;
 int time_Played;
 
@@ -51,12 +53,12 @@ void setup()
    ui_Height = 100;
    view_Width = width;
    view_Height = height - ui_Height;
-   view_Half_Width = view_Width / 2;
+   view_HalfWidth = view_Width / 2;
    view_Half_Height = view_Height / 2;
    view_Center_X = width / 2;
    view_Center_Y = view_Height / 2;
-   view_Left_Boundry = view_Center_X - view_Half_Width;
-   view_Right_Boundry = view_Center_X + view_Half_Width;
+   view_Left_Boundry = view_Center_X - view_HalfWidth;
+   view_Right_Boundry = view_Center_X + view_HalfWidth;
    view_Top_Boundry = view_Center_Y - view_Half_Height;
    view_Bottom_Boundry = view_Center_Y + view_Half_Height;
    
@@ -140,9 +142,9 @@ void bulletCollision()
             if (object2 instanceof Player && object1.enemy_Bullet)
             {
                Player user = (Player) object2;
-               if (bullet.pos.dist(user.pos) < bullet.half_H + user.half_W)   // Check for collision
+               if (bullet.pos.dist(user.pos) < bullet.halfH + user.halfW)   // Check for collision
                {
-                  user.health -= bullet.damage;      // apply damage
+                  user.currentHealth -= bullet.damage;      // apply damage
                   game_Objects.remove(bullet);   // remove bullet
                }
             }
@@ -151,9 +153,9 @@ void bulletCollision()
             if (object2 instanceof AI && !object1.enemy_Bullet)
             {
                AI ai = (AI) object2;
-               if (bullet.pos.dist(ai.pos) < bullet.half_H + ai.half_W)   // Check for collision
+               if (bullet.pos.dist(ai.pos) < bullet.halfH + ai.halfW)   // Check for collision
                {
-                  ai.health -= bullet.damage;
+                  ai.currentHealth -= bullet.damage;
                   game_Objects.remove(bullet);
                }
             }
@@ -171,7 +173,7 @@ void removeDead()
       if (unit instanceof Player || unit instanceof AI)
       {
          // Remove if dies
-         if (unit.health <= 0)
+         if (unit.currentHealth <= 0)
          {
             if (unit instanceof AI)
             {

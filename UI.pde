@@ -22,6 +22,42 @@ float cdBar_Gap, cdBar_Offset_X, cdBar_Offset_Y;
 float cdBar_Icon_Y;
 PImage cdBar_Icon_Cannon;
 
+
+
+// Vertical Progress Bar
+void verticalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
+{
+   // Background
+   strokeWeight(1);
+   stroke(127);
+   fill(background_Colour);
+   rect(start_X, start_Y, bar_Width, -bar_Height);
+   
+   // Progress
+   float mapped_Value = map(progress, 0, total, 0, bar_Height);
+   fill(progress_Colour);
+   rect(start_X, start_Y, bar_Width, -mapped_Value);
+}
+
+
+
+// Horizontal Progress Bar
+void horizontalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
+{
+   // Background
+   strokeWeight(1);
+   stroke(127);
+   fill(background_Colour);
+   rect(start_X, start_Y, bar_Width, -bar_Height);
+   
+   // Progress
+   float mapped_Value = map(progress, 0, total, 0, bar_Width);
+   fill(progress_Colour);
+   rect(start_X, start_Y, mapped_Value, -bar_Height);
+}
+
+
+// User Interface
 void user_Interface()
 {
    Player player = (Player) game_Objects.get(0);
@@ -32,7 +68,7 @@ void user_Interface()
    rect(ui_Left, ui_Top, ui_Width, ui_Height); // UI BackgroundS
    
    // Health Bar
-   horizontalProgressBar(player.health, player.max_Health, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background);
+   horizontalProgressBar(player.currentHealth, player.maxHealth, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background);
    
    // Speed Boost Bar
    horizontalProgressBar(player.cd2_Elapsed, player.cd2_Duration, speedBar_Left, speedBar_Bottom, speedBar_Width, speedBar_Height, speedBar_Colour, speedBar_Background);

@@ -3,17 +3,18 @@ class GameObject
    
    PVector pos;
    PVector forward;
-   float w, half_W;
-   float h, half_H;
+   float w, halfW;
+   float h, halfH;
+   float turret_Width, turret_Length, turret_HalfWidth, turret_HalfLength;
    float speed, default_Speed, upgraded_Speed;
    float theta = 0.0f;
    color colour;
-   int cd_Activation_Time;
+   int cd_ActivationTime;
    int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
    int cd1_Duration, cd2_Duration, cd3_Duration;
-   int fire_Rate, fire_Rate_Elapsed;
+   int fireRate, fireRate_Elapsed;
    int time;
-   int health, max_Health;
+   int currentHealth, maxHealth;
    boolean enemy_Bullet;
    AudioPlayer attack_Sound;
    

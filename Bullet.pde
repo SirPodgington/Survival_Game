@@ -47,13 +47,14 @@ class LMGBullet extends Bullet
          damage = 3;
          speed = 10;
       }
-      half_W = w / 2;
-      half_H = h / 2; 
+      halfW = w / 2;
+      halfH = h / 2; 
    }
    
    void render()
    {
       pushMatrix();
+      
       translate(pos.x, pos.y);
       rotate(theta);
       
@@ -91,8 +92,8 @@ class CannonBall extends Bullet
          damage = 15;
          speed = 5;
       }
-      half_W = w / 2;
-      half_H = h / 2; 
+      halfW = w / 2;
+      halfH = h / 2; 
       
       // Store upgrade status
       this.explosive = explosive;
