@@ -3,18 +3,12 @@
 /*
 TO BE FIXED:
 
-- Change CD variables to cd name
-- Parameterise AI healthbar (size & position scaled to unit properties)
 - Score system (basic temp version in use, change to unlocking CDs/perks from score)
-- Move speedboost to above health bar, have it as passive boost instead of unlockable cd?
-- Tidy up code (some things can be moved into function and drawn from a template (ie rectangles)
 
 
 TO BE ADDED (IDEAS):
 
 HIGH PRIORITY
-- Enemy AI (Heavy)
-- Add AI spawning system (waves or continuous?)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
 - Slower turning AI (rotates until aligned with player)
 
@@ -98,13 +92,6 @@ void setup()
    
    Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
    game_Objects.add(player);
-   
-   // Basic AI for testing
-   BasicAI basicAI = new BasicAI();
-   game_Objects.add(basicAI);
-   
-   HeavyAI heavyAI = new HeavyAI();
-   game_Objects.add(heavyAI);
 }
 
 
@@ -122,7 +109,7 @@ void keyReleased()
 }
 
 
-// Check Collisions
+// Check Bullet Collisions ------------------------------------------------------------------------------------
 void bulletCollision()
 {
    for(int i = game_Objects.size() - 1; i >= 0; i --)
@@ -134,28 +121,24 @@ void bulletCollision()
       {
          Bullet bullet = (Bullet) object1;
          
+         // Enemy Bullet / Player
+         if (bullet.enemy && bullet.pos.dist(current_Player_Stats.pos) < bullet.halfH + current_Player_Stats.halfW)   // Check for collision
+         {
+            current_Player_Stats.remainingHealth -= bullet.damage;      // apply damage
+            game_Objects.remove(bullet);   // remove bullet
+         }
+         
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
             GameObject object2 = game_Objects.get(j);
             
-            // Enemy Bullet & Player
-            if (object2 instanceof Player && object1.enemy_Bullet)
-            {
-               Player user = (Player) object2;
-               if (bullet.pos.dist(user.pos) < bullet.halfH + user.halfW)   // Check for collision
-               {
-                  user.currentHealth -= bullet.damage;      // apply damage
-                  game_Objects.remove(bullet);   // remove bullet
-               }
-            }
-            
-            // Friendly Bullet & AI
-            if (object2 instanceof AI && !object1.enemy_Bullet)
+            // Friendly Bullet / AI
+            if (object2 instanceof AI && !bullet.enemy)
             {
                AI ai = (AI) object2;
-               if (bullet.pos.dist(ai.pos) < bullet.halfH + ai.halfW)   // Check for collision
+               if (bullet.pos.dist(ai.pos) < bullet.halfH + ai.halfW)
                {
-                  ai.currentHealth -= bullet.damage;
+                  ai.remainingHealth -= bullet.damage;
                   game_Objects.remove(bullet);
                }
             }
@@ -164,6 +147,8 @@ void bulletCollision()
    }
 }
 
+
+// Remove Dead & Add Score / Increment Kill Counter -------------------------------------------------------
 void removeDead()
 {
    for(int i = game_Objects.size() - 1; i >= 0; i --)
@@ -173,7 +158,7 @@ void removeDead()
       if (unit instanceof Player || unit instanceof AI)
       {
          // Remove if dies
-         if (unit.currentHealth <= 0)
+         if (unit.remainingHealth <= 0)
          {
             if (unit instanceof AI)
             {
@@ -187,33 +172,35 @@ void removeDead()
    }
 }
 
+
+// DRAW METHOD ------------------------------------------------------------
+Player current_Player_Stats = null;
 void draw()
 {
-   time_Played = millis();
    background(0);
+   time_Played = millis();
+   current_Player_Stats = (Player) game_Objects.get(0);
    
-   // Hide mouse cursor when over the active view
-   // Display cursor when over UI
-   if (mouseY < view_Bottom_Boundry)
-      noCursor();
-   else
-      cursor(ARROW);
-  
-  // Render & update all game objects
-  for(int i = game_Objects.size() - 1;  i >= 0;  i --)
-  {
-     GameObject object = game_Objects.get(i);
-     object.update();
-     object.render();
-  }
-  
-  user_Interface();   // Draw the user interface
-  bulletCollision();   // Check for bullet collision with player & ai
-  removeDead();   // Remove dead units, add score if necessary
-  
-  // Draw kill counter & score
-  fill(ui_Background);
-  textAlign(RIGHT,TOP);
-  textSize(14);
-  text("Kills: " + kill_Counter + "  |  Score: " + score, width-20,20);
+   // If Player is alive...
+   if (current_Player_Stats.alive)
+   {
+      if (mouseY < view_Bottom_Boundry)
+         noCursor();
+      else
+         cursor(ARROW);
+     
+      // Render & update all game objects
+      for(int i = game_Objects.size() - 1;  i >= 0;  i --)
+      {
+         GameObject object = game_Objects.get(i);
+         object.update();
+         object.render();
+      }
+     
+      removeDead();   // Remove dead units, add score if necessary
+      bulletCollision();   // Check for bullet collision with player & ai
+      spawnEnemies();   // Spawn enemy AI units on a timer
+      user_Interface();   // Draw the user interface
+      draw_Scoreboard();   // Display player score & kills
+   }
 }

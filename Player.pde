@@ -1,10 +1,21 @@
-// This is the player's character
+// The scoreboard. Displays the player's kills and score
+void draw_Scoreboard()
+{
+   fill(ui_Background);
+   textAlign(RIGHT,TOP);
+   textSize(14);
+   text("Kills: " + kill_Counter + "  |  Score: " + score, width-20,20);
+}
 
+// The Player class
 class Player extends GameObject
 {
+   boolean alive;
    float turret_Theta = 0.0f;
    char move, reverse, left, right;
    boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
+   int speedBoost_CD_Length, speedBoost_CD_Elapsed;
+   int cannon_CD_Length, cannon_CD_Elapsed;
    AudioPlayer speed_Sound, cannon_Sound;
    
    
@@ -23,16 +34,17 @@ class Player extends GameObject
       turret_HalfLength = turret_Length / 2;
       colour = color(255,0,0);
       
+      alive = true;
       maxHealth = 100;
-      currentHealth = maxHealth;
+      remainingHealth = maxHealth;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
       fireRate = 15;   // lmg fire-rate
       fireRate_Elapsed = fireRate;
-      cd1_Duration = 300;   // cannon cooldown (milliseconds)
-      cd1_Elapsed = cd1_Duration;
-      cd2_Duration = 1800;   // Speedboost cooldown (ms)
-      cd2_Elapsed = cd2_Duration;
+      cannon_CD_Length = 300;   // cannon cooldown (milliseconds)
+      cannon_CD_Elapsed = cannon_CD_Length;
+      speedBoost_CD_Length = 1800;   // Speedboost cooldown (ms)
+      speedBoost_CD_Elapsed = speedBoost_CD_Length;
       
       move = 'W';
       reverse = 'S';
@@ -55,16 +67,17 @@ class Player extends GameObject
       turret_HalfLength = turret_Length / 2;
       colour = color(255,155,0);
       
+      alive = true;
       maxHealth = 100;
-      currentHealth = maxHealth;
+      remainingHealth = maxHealth;
       default_Speed = 0.8;
       upgraded_Speed = default_Speed * 4;
       fireRate = 15;   // lmg fire-rate
       fireRate_Elapsed = fireRate;
-      cd1_Duration = 300;   // cannon cooldown (milliseconds)
-      cd1_Elapsed = cd1_Duration;
-      cd2_Duration = 1800;   // Speedboost cooldown (ms)
-      cd2_Elapsed = cd2_Duration;
+      cannon_CD_Length = 300;   // cannon cooldown (milliseconds)
+      cannon_CD_Elapsed = cannon_CD_Length;
+      speedBoost_CD_Length = 1800;   // Speedboost cooldown (ms)
+      speedBoost_CD_Elapsed = speedBoost_CD_Length;
       
       this.move = move;
       this.reverse = reverse;
@@ -109,15 +122,15 @@ class Player extends GameObject
    void update()
    {
       // Check for Speed Boost cooldown
-      if (time_Played < cd_ActivationTime + cd2_Duration  &&  time_Played > cd2_Duration)
+      if (time_Played < cd_ActivationTime + speedBoost_CD_Length  &&  time_Played > speedBoost_CD_Length)
          speed = upgraded_Speed;
       else
          speed = default_Speed;
       
       // Activate Speed Boost
-      if (keyPressed  &&  key == ' '  &&  cd2_Elapsed >= cd2_Duration)
+      if (keyPressed  &&  key == ' '  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
       {
-         cd2_Elapsed = 0;
+         speedBoost_CD_Elapsed = 0;
          speedSound();
          cd_ActivationTime = millis();
       }
@@ -164,9 +177,9 @@ class Player extends GameObject
       }
       
       // Fire Cannon balls
-      if (cannon_Upgrade && mousePressed && mouseButton == RIGHT && cd1_Elapsed >= cd1_Duration)
+      if (cannon_Upgrade && mousePressed && mouseButton == RIGHT && cannon_CD_Elapsed >= cannon_CD_Length)
       {
-         cd1_Elapsed = 0;
+         cannon_CD_Elapsed = 0;
          cannonSound();
          
          Bullet cannon_Ball = new CannonBall(2, explosive_Upgrade);
@@ -190,10 +203,10 @@ class Player extends GameObject
       // Increment the cooldowns each frame
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
-      if (cd1_Elapsed < cd1_Duration)
-         cd1_Elapsed++;
-      if (cd2_Elapsed < cd2_Duration)
-         cd2_Elapsed++;
+      if (speedBoost_CD_Elapsed < speedBoost_CD_Elapsed)
+         speedBoost_CD_Elapsed++;
+      if (cannon_CD_Elapsed < cannon_CD_Elapsed)
+         cannon_CD_Elapsed++;
    }
    
    void render()

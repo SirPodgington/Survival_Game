@@ -3,14 +3,16 @@ class BasicAI extends AI
 {
    BasicAI()
    {
-      super(150, 150);
-      w = 20;
-      halfW = w * 0.5f;
-      colour = color(255,0,50);
+      super(random(0, view_Width), -100);
       attack_Sound = minim.loadFile("basic_ai_attack.mp3");
       
+      w = 20;
+      halfW = w * 0.5f;
+      h = w;
+      halfH = h * 0.5f;
+      colour = color(255,0,50);
       maxHealth = 15;
-      currentHealth = maxHealth;
+      remainingHealth = maxHealth;
       speed = 0.5;
       target_Distance_From_Player = 120;
       range = 200;
@@ -55,7 +57,7 @@ class BasicAI extends AI
          lmg.pos.y = pos.y;
          lmg.colour = colour;
          lmg.theta = theta;
-         lmg.enemy_Bullet = true;
+         lmg.enemy = true;
          game_Objects.add(lmg);
       }
 
@@ -69,21 +71,16 @@ class BasicAI extends AI
       translate(pos.x, pos.y);
       
       // Health bar
-      fill(healthBar_Background);
-      noStroke();
-      rect(-halfW, -25, w, 5); // background
-      float hp_Mapped = map(currentHealth, 0, maxHealth, 0, w);
-      fill(healthBar_Colour);
-      rect(-halfW, -25, hp_Mapped, 5);
-
+      ai_HealthBar(remainingHealth, maxHealth, w, halfW, halfH);
       
+      // Unit
+      rotate(theta);
       fill(0);
       stroke(colour);
       strokeWeight(2);
+      ellipse(0, 0, w, w);   // Body
+      line(0, -10, 0, 0);   // Turret
       
-      rotate(theta);
-      ellipse(0, 0, w, w);
-      line(0, -10, 0, 0);
       popMatrix();
    }
 }

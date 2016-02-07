@@ -3,6 +3,8 @@ class Bullet extends GameObject
   color active_Colour;
   int ammo_Type;
   float damage;
+  int time;
+  boolean enemy;
   
   Bullet(){}
   
@@ -78,7 +80,7 @@ class CannonBall extends Bullet
       // Small cannon ball
       if (ammo_Type == 1)
       {
-         w = 4;
+         w = 6;
          h = w;
          damage = 10;
          speed = 5;

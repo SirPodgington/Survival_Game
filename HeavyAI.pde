@@ -4,11 +4,13 @@ class HeavyAI extends AI
 {
    HeavyAI()
    {
-      super(100, 500);
+      super(random(0, view_Width), -100);
       attack_Sound = minim.loadFile("cannon_sound.mp3");
       
       w = 40;
       halfW = w * 0.5f;
+      h = w;
+      halfH = h * 0.5f;
       turret_Width = w * 0.15f;
       turret_Length = halfW;
       turret_HalfWidth = turret_Width / 2;
@@ -16,7 +18,7 @@ class HeavyAI extends AI
       colour = color(255,0,50);
       
       maxHealth = 50;
-      currentHealth = maxHealth;
+      remainingHealth = maxHealth;
       speed = 0.5;
       target_Distance_From_Player = 200;
       range = 300;
@@ -61,7 +63,7 @@ class HeavyAI extends AI
          cannon.pos.y = pos.y;
          cannon.colour = colour;
          cannon.theta = theta;
-         cannon.enemy_Bullet = true;
+         cannon.enemy = true;
          game_Objects.add(cannon);
       }
 
@@ -75,23 +77,17 @@ class HeavyAI extends AI
       translate(pos.x, pos.y);
       
       // Health bar
-      fill(healthBar_Background);
-      noStroke();
-      rect(-halfW, -25, w, 5); // background
-      float hp_Mapped = map(currentHealth, 0, maxHealth, 0, w);
-      fill(healthBar_Colour);
-      rect(-halfW, -25, hp_Mapped, 5);
+      ai_HealthBar(remainingHealth, maxHealth, w, halfW, halfH);
 
-      
+      // Unit
       rotate(theta);
       fill(0);
       stroke(colour);
       strokeWeight(2);
       ellipse(0, 0, w, w);   // The body
-      
       fill(colour);
-      ellipse(0, 0, turret_Width, turret_Width);   // The turret base
       rect(-turret_HalfWidth, 0, turret_Width, -turret_Length);   // The turret
+      ellipse(0, 0, turret_Width, turret_Width);   // The turret base
       popMatrix();
    }
 }

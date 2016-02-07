@@ -10,12 +10,8 @@ class GameObject
    float theta = 0.0f;
    color colour;
    int cd_ActivationTime;
-   int cd1_Elapsed, cd2_Elapsed, cd3_Elapsed;
-   int cd1_Duration, cd2_Duration, cd3_Duration;
    int fireRate, fireRate_Elapsed;
-   int time;
-   int currentHealth, maxHealth;
-   boolean enemy_Bullet;
+   int remainingHealth, maxHealth;
    AudioPlayer attack_Sound;
    
    GameObject()
