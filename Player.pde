@@ -4,8 +4,19 @@ void draw_Scoreboard()
    fill(ui_Background);
    textAlign(RIGHT,TOP);
    textSize(14);
-   text("Kills: " + kill_Counter + "  |  Score: " + score, width-20,20);
+   text("Kills: " + player_Stats.kills + "  |  Score: " + player_Stats.score, width-20,20);
 }
+
+
+void update_Upgrades()
+{
+   if (player_Stats.score >= player_Stats.cannon_Unlock_Score)   // Cannon Upgrade
+      player_Stats.cannon_Upgrade = true;
+      
+   //if (player_Stats.score >= player_Stats.cannon_Unlock_Score)   // Cannon Upgrade
+      //player_Stats.cannon_Upgrade = true;
+}
+
 
 // The Player class
 class Player extends GameObject
@@ -16,6 +27,9 @@ class Player extends GameObject
    boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
    int speedBoost_CD_Length, speedBoost_CD_Elapsed;
    int cannon_CD_Length, cannon_CD_Elapsed;
+   int cannon_Unlock_Score;
+   int kills, score;
+   float default_Speed, speedBoost_Speed;
    AudioPlayer speed_Sound, cannon_Sound;
    
    
@@ -38,11 +52,12 @@ class Player extends GameObject
       maxHealth = 100;
       remainingHealth = maxHealth;
       default_Speed = 0.8;
-      upgraded_Speed = default_Speed * 4;
+      speedBoost_Speed = default_Speed * 4;
       fireRate = 15;   // lmg fire-rate
       fireRate_Elapsed = fireRate;
       cannon_CD_Length = 300;   // cannon cooldown (milliseconds)
       cannon_CD_Elapsed = cannon_CD_Length;
+      cannon_Unlock_Score = 500;
       speedBoost_CD_Length = 1800;   // Speedboost cooldown (ms)
       speedBoost_CD_Elapsed = speedBoost_CD_Length;
       
@@ -71,11 +86,12 @@ class Player extends GameObject
       maxHealth = 100;
       remainingHealth = maxHealth;
       default_Speed = 0.8;
-      upgraded_Speed = default_Speed * 4;
+      speedBoost_Speed = default_Speed * 4;
       fireRate = 15;   // lmg fire-rate
       fireRate_Elapsed = fireRate;
       cannon_CD_Length = 300;   // cannon cooldown (milliseconds)
       cannon_CD_Elapsed = cannon_CD_Length;
+      cannon_Unlock_Score = 10;
       speedBoost_CD_Length = 1800;   // Speedboost cooldown (ms)
       speedBoost_CD_Elapsed = speedBoost_CD_Length;
       
@@ -121,30 +137,28 @@ class Player extends GameObject
    
    void update()
    {
-      // Check for Speed Boost cooldown
-      if (time_Played < cd_ActivationTime + speedBoost_CD_Length  &&  time_Played > speedBoost_CD_Length)
-         speed = upgraded_Speed;
-      else
-         speed = default_Speed;
+      update_Upgrades();
       
-      // Activate Speed Boost
+      // Activate Speedboost
       if (keyPressed  &&  key == ' '  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
       {
-         speedBoost_CD_Elapsed = 0;
-         speedSound();
-         cd_ActivationTime = millis();
+         speedBoost_CD_Elapsed = 0;      // Reset elapsed timer
+         speedSound();                   // Play sound effect
+         cd_ActivationTime = millis();   // Store the activation time
       }
       
-      // Calculate direction co-ords
+      // Apply Speedboost Effect
+      if (time_Played < cd_ActivationTime + speedBoost_CD_Length  &&  time_Played > speedBoost_CD_Length)
+         speed = speedBoost_Speed;
+      else
+         speed = default_Speed;
+
+      // Calculate the X,Y values necessary for the tank to move forward in the direction of theta
       forward.x = sin(theta);
       forward.y = - cos(theta);
-      forward.mult(speed);
+      forward.mult(speed);         // Apply speed multiplier
       
-      // Turret points towards mouse position if mouse is within boundry
-      if (mouseY < view_Bottom_Boundry)
-         turret_Theta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
-      
-      // Player movement
+      // Movement (Moving & Turning)
       if (keys[move])
       {
          pos.add(forward);
@@ -161,7 +175,11 @@ class Player extends GameObject
       {
          theta += 0.02f;
       }
-      
+
+      // Turret points towards mouse position if mouse is within boundry
+      if (mouseY < view_Bottom_Boundry)
+         turret_Theta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
+         
       // Fire LMG bullets
       if (mousePressed && mouseButton == LEFT && fireRate_Elapsed >= fireRate)
       {
@@ -211,44 +229,40 @@ class Player extends GameObject
    
    void render()
    {
-       // Player body & direction indicator
+       // --Player--
        pushMatrix();
        translate(pos.x, pos.y);
-       rotate(theta); 
-       fill(0);
-       stroke(colour);
-       strokeWeight(3);
+       rotate(theta);   // Rotate sketch to the direction the player is facing
        
-       // Direction Indicator
-       line(-8, -halfW, 0, -halfW - 7);
+       fill(0);   // Player body colour
+       stroke(colour);   // Player outline colour
+       strokeWeight(3);   // Player outline thickness
+       
+       line(-8, -halfW, 0, -halfW - 7);   // Direction Indicator
        line(0, -halfW - 7, 8, -halfW);
-       // Body
-       ellipse(0,0,w,w);
-       
+       ellipse(0,0,w,w);   // Body
        popMatrix();
        
-       
-       // Turret
+       // --Turret--
        pushMatrix();
        translate(pos.x, pos.y);
        rotate(turret_Theta);
        strokeWeight(1);
        fill(colour);
        
-       if (cannon_Upgrade)
+       if (cannon_Upgrade)   // Upgraded cannon
        {
           ellipse(0, 0, turret_Width, turret_Width);
           rect(-turret_HalfWidth, 0, turret_Width, -turret_Length);
        }
-       else
+       else   // Default cannon
        {
           strokeWeight(3);
           line(0, 0, 0, -turret_Length);
        }
-       
        popMatrix();
        
-       // Crosshair
+       // Crosshair (Mouse Position)
        stroke(colour);
        strokeWeight(1);
        line(mouseX-10, mouseY, mouseX-4, mouseY);    // Left line

@@ -4,23 +4,24 @@
 TO BE FIXED:
 
 - Upgrades bar
+- Something for when player dies (game over)
 
 
 TO BE ADDED (IDEAS):
 
 HIGH PRIORITY
-- Statistics (temp or permanent? perm requires write to notepad to save info)
-
-LOW PRIORITY
+- Airstrike CD, Radius UPGR
+- Passive Speed Upgrade CD (Player)
+- RateOfFire UPGR (lmg speed)
 - Explosive Round UPGR (Turret)
 - Duration UPGR (speedboost)
 - Defense Shield CD + Duration UPGR
-- RateOfFire UPGR (lmg speed)
-- Passive Speed Upgrade CD (Player)
-- Protector AI CD, 
-- Airstrike CD, Radius UPGR
+
+LOW PRIORITY
+- Protector AI CD
 - Overheating System for LMG (player)
 - Enemy AI (Flying)
+- Statistics (temp or permanent? perm requires write to notepad to save info)
 
 */
 
@@ -35,7 +36,6 @@ int time_Played;
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store keyPressed status for all keys
 
-int kill_Counter, score;
 
 void setup()
 {
@@ -122,9 +122,9 @@ void bulletCollision()
          Bullet bullet = (Bullet) object1;
          
          // Enemy Bullet / Player
-         if (bullet.enemy && bullet.pos.dist(current_Player_Stats.pos) < bullet.halfH + current_Player_Stats.halfW)   // Check for collision
+         if (bullet.enemy && bullet.pos.dist(player_Stats.pos) < bullet.halfH + player_Stats.halfW)   // Check for collision
          {
-            current_Player_Stats.remainingHealth -= bullet.damage;      // apply damage
+            player_Stats.remainingHealth -= bullet.damage;      // apply damage
             game_Objects.remove(bullet);   // remove bullet
          }
          
@@ -155,34 +155,34 @@ void removeDead()
    {
       GameObject unit = game_Objects.get(i);
       
-      if (unit instanceof Player || unit instanceof AI)
+      if (unit.remainingHealth <= 0 && (unit instanceof AI || unit instanceof Player))
       {
-         // Remove if dies
-         if (unit.remainingHealth <= 0)
+         if (unit instanceof AI)
          {
-            if (unit instanceof AI)
-            {
-               AI ai = (AI) unit;
-               score += ai.score_Value;
-               kill_Counter++;
-            }
-            game_Objects.remove(unit);
+            AI ai = (AI) unit;
+            player_Stats.score += ai.score_Value;
+            player_Stats.kills++;
          }
+         else
+         {
+            // Game over code
+         }
+         game_Objects.remove(unit);   // Remove unit from game
       }
    }
 }
 
 
 // DRAW METHOD ------------------------------------------------------------
-Player current_Player_Stats = null;
+Player player_Stats = null;
 void draw()
 {
    background(0);
    time_Played = millis();
-   current_Player_Stats = (Player) game_Objects.get(0);
+   player_Stats = (Player) game_Objects.get(0);
    
    // If Player is alive...
-   if (current_Player_Stats.alive)
+   if (player_Stats.alive)
    {
       if (mouseY < view_Bottom_Boundry)
          noCursor();

@@ -6,7 +6,7 @@ class GameObject
    float w, halfW;
    float h, halfH;
    float turret_Width, turret_Length, turret_HalfWidth, turret_HalfLength;
-   float speed, default_Speed, upgraded_Speed;
+   float speed;
    float theta = 0.0f;
    color colour;
    int cd_ActivationTime;
