@@ -11,7 +11,7 @@ class BasicAI extends AI
       h = w;
       halfH = h * 0.5f;
       colour = color(255,0,50);
-      maxHealth = 15;
+      maxHealth = 20;
       remainingHealth = maxHealth;
       speed = 0.5;
       target_Distance_From_Player = 120;

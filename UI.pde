@@ -42,8 +42,8 @@ void horizontalProgressBar(float progress, float total, float start_X, float sta
 // Upgrades Progress Bar
 void upgrades_ProgressBar(float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
 {
-   horizontalProgressBar(player.score, 1000, start_X, start_Y, bar_Width, bar_Height, progress_Colour, background_Colour);
-   int unlockables_Count = 10;
+   horizontalProgressBar(player.score, player.airstrike_Upgrade_Score, start_X, start_Y, bar_Width, bar_Height, progress_Colour, background_Colour);
+   int unlockables_Count = 8;
    float gap = bar_Width / unlockables_Count;
    for (int i = 1; i <= unlockables_Count; i++)
    {
@@ -116,7 +116,7 @@ void user_Interface()
    // Cannon cooldown bar
    PImage cdBar_Icon_Cannon = loadImage("cannon_cd_icon.png");
    float cdBar_Left_Cannon = cdBar_Offset_X;
-   if (!player.cannon_Upgrade)
+   if (player.cannon_Unlocked)
    {
       verticalProgressBar(player.cannon_CD_Elapsed, player.cannon_CD_Length, cdBar_Left_Cannon, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Cannon, cdBar_Icon_Y);
    }

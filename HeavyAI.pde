@@ -17,11 +17,11 @@ class HeavyAI extends AI
       turret_HalfLength = turret_Length / 2;
       colour = color(255,0,50);
       
-      maxHealth = 50;
+      maxHealth = 75;
       remainingHealth = maxHealth;
-      speed = 0.5;
+      speed = 0.4;
       target_Distance_From_Player = 200;
-      range = 300;
+      range = 400;
       fireRate = 300;
       score_Value = 50;
    }

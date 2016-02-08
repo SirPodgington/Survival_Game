@@ -30,7 +30,6 @@ Minim minim;
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
 float view_Width, view_Height, view_HalfWidth, view_Half_Height;
 float view_Center_X, view_Center_Y;
-int time_Played;
 color theme_Colour;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
@@ -140,6 +139,7 @@ void removeDead()
 
 // DRAW METHOD ------------------------------------------------------------
 Player player = null;
+
 void draw()
 {
    background(0);
@@ -148,8 +148,6 @@ void draw()
    // If Player is alive...
    if (player.alive)
    {
-      time_Played = millis();
-      
       if (mouseY < view_Bottom_Boundry)
          noCursor();
       else

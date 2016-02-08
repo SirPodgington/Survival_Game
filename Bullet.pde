@@ -91,7 +91,7 @@ class CannonBall extends Bullet
       {
          w = 10;
          h = w;
-         damage = 15;
+         damage = 25;
          speed = 5;
       }
       halfW = w / 2;
