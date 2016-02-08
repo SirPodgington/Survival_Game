@@ -15,7 +15,7 @@ void draw_Scoreboard()
 class Player extends GameObject
 {
    int kills, score;
-   char move, reverse, left, right;
+   char move, reverse, left, right, speedboost, shield, airstrike;
    boolean alive;
    boolean cannon_Unlocked, shield_Unlocked, airstrike_Unlocked;
    boolean cannon_Upgraded, shield_Upgraded, airstrike_Upgraded, speed_Upgraded, speedBoost_Upgraded;
@@ -49,7 +49,8 @@ class Player extends GameObject
       attack_Sound = minim.loadFile("lmg_sound.wav");
       attack_Sound.setGain(-10);
       speed_Sound = minim.loadFile("speed_sound.mp3");
-      shield_Sound = minim.loadFile("shield_sound.mp3");
+      shield_Sound = minim.loadFile("defshield_sound.mp3");
+      shield_Sound.setGain(10);
       airstrike_Sound = minim.loadFile("airstrike_sound.mp3");
       
       // Player Stats
@@ -69,6 +70,7 @@ class Player extends GameObject
       cannon_CD_Elapsed = cannon_CD_Length;
       shield_CD_Length = 1800;
       shield_CD_Elapsed = shield_CD_Length;
+      shield_CD_Duration = 300;
       airstrike_CD_Length = 2700;
       airstrike_CD_Elapsed = airstrike_CD_Length;
       
@@ -87,9 +89,12 @@ class Player extends GameObject
       reverse = 'S';
       left = 'A';
       right = 'D';
+      speedboost = ' ';
+      shield = 'F';
+      airstrike = 'R';
    }
    
-   Player(float startX, float startY, char move, char reverse, char left, char right)
+   Player(float startX, float startY, char move, char reverse, char left, char right, char speedboost, char shield, char airstrike)
    {
       // Player Properties
       super(startX, startY);
@@ -108,7 +113,7 @@ class Player extends GameObject
       attack_Sound = minim.loadFile("lmg_sound.wav");
       attack_Sound.setGain(-10);
       speed_Sound = minim.loadFile("speed_sound.mp3");
-      shield_Sound = minim.loadFile("shield_sound.mp3");
+      shield_Sound = minim.loadFile("defshield_sound.mp3");
       airstrike_Sound = minim.loadFile("airstrike_sound.mp3");
       
       // Player Stats
@@ -128,13 +133,14 @@ class Player extends GameObject
       cannon_CD_Elapsed = cannon_CD_Length;
       shield_CD_Length = 1800;
       shield_CD_Elapsed = shield_CD_Length;
+      shield_CD_Duration = 300;
       airstrike_CD_Length = 2700;
       airstrike_CD_Elapsed = airstrike_CD_Length;
       
       // Unlockables Score Requirement
       speedBoost_Upgrade_Score = 100;
       cannon_Unlock_Score = 200;
-      shield_Unlock_Score = 300;
+      shield_Unlock_Score = 50;
       airstrike_Unlock_Score = 400;
       speed_Upgrade_Score = 500;
       cannon_Upgrade_Score = 700;
@@ -146,6 +152,9 @@ class Player extends GameObject
       this.reverse = reverse;
       this.left = left;
       this.right = right;
+      this.speedboost = speedboost;
+      this.shield = shield;
+      this.airstrike = airstrike;
    }
    
    
@@ -208,18 +217,20 @@ class Player extends GameObject
    void update()
    {
       update_Upgrades();
-      
+
       // Activate Defense Shield
-      if (keyPressed && key == 'F' && shield_CD_Elapsed >= shield_CD_Length)
+      if (keys[shield] && shield_Unlocked && shield_CD_Elapsed >= shield_CD_Length)
       {
          shield_CD_ActivationTime = frameCount;
-         // sound here
+         shieldSound();
          shield_Active = true;
          shield_CD_Elapsed = 0;
       }
+      if (frameCount > shield_CD_ActivationTime  + shield_CD_Duration && shield_Active)
+         shield_Active = false;
       
       // Activate Speedboost
-      if (keyPressed  &&  key == ' '  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
+      if (keys[speedboost]  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
       {
          speedBoost_CD_ActivationTime = frameCount;   // Store the activation time
          speedSound();                   // Play sound effect
@@ -227,7 +238,7 @@ class Player extends GameObject
          speedBoost_CD_Elapsed = 0;      // Reset elapsed timer
       }
       // Apply Speedboost Effect
-      if (frameCount < cd_ActivationTime + speedBoost_CD_Duration && speedBoost_Active)
+      if (frameCount < speedBoost_CD_ActivationTime + speedBoost_CD_Duration && speedBoost_Active)
          speed = speedBoost_Speed;
       else
       {
@@ -313,7 +324,7 @@ class Player extends GameObject
        rotate(theta);   // Rotate sketch to the direction the player is facing
        
        // Defense Shield
-       if (shield_Unlocked)
+       if (shield_Active)
        {
           noFill();
           stroke(162,80,0);

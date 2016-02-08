@@ -10,6 +10,7 @@ TO BE FIXED:
 TO BE ADDED (IDEAS):
 
 HIGH PRIORITY
+- Every 30secs spawnrate increases by 10%
 - Airstrike CD, Radius UPGR
 - Passive Speed Upgrade CD (Player)
 - Explosive Round UPGR (Turret)
@@ -54,7 +55,7 @@ void setup()
    view_Bottom_Boundry = view_Center_Y + view_Half_Height;
    theme_Colour = color(255,207,37);
    
-   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D');
+   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D', ' ', 'F', 'R');
    game_Objects.add(player);
 }
 

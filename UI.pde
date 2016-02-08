@@ -120,4 +120,12 @@ void user_Interface()
    {
       verticalProgressBar(player.cannon_CD_Elapsed, player.cannon_CD_Length, cdBar_Left_Cannon, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Cannon, cdBar_Icon_Y);
    }
+   
+   // Defense Shield cooldown bar
+   PImage cdBar_Icon_Shield;
+   float cdBar_Left_Shield = cdBar_Left_Cannon + cdBar_Gap;
+   if (player.shield_Unlocked)
+   {
+      verticalProgressBar(player.shield_CD_Elapsed, player.shield_CD_Length, cdBar_Left_Shield, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Cannon, cdBar_Icon_Y);
+   }
 }
