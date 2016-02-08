@@ -1,41 +1,47 @@
 // The scoreboard. Displays the player's kills and score
 void draw_Scoreboard()
 {
-   fill(ui_Background);
+   color scoreBoard_Colour = theme_Colour;
+   float x = width - 20;
+   float y = 20;
+   fill(scoreBoard_Colour);
    textAlign(RIGHT,TOP);
    textSize(14);
-   text("Kills: " + player_Stats.kills + "  |  Score: " + player_Stats.score, width-20,20);
+   text("Kills: " + player.kills + "  |  Score: " + player.score, x, y);
 }
 
 
 void update_Upgrades()
 {
-   if (player_Stats.score >= player_Stats.cannon_Unlock_Score)   // Cannon Upgrade
-      player_Stats.cannon_Upgrade = true;
-      
-   //if (player_Stats.score >= player_Stats.cannon_Unlock_Score)   // Cannon Upgrade
-      //player_Stats.cannon_Upgrade = true;
+   if (player.score >= player.cannon_Unlock_Score && player.cannon_Upgrade == false)   // Cannon Upgrade
+   {
+      player.upgradeSound();
+      player.cannon_Upgrade = true;
+   }
+   
+   //if (player.score >= player.cannon_Unlock_Score)   // Cannon Upgrade
+      //player.cannon_Upgrade = true;
 }
 
 
 // The Player class
 class Player extends GameObject
 {
-   boolean alive;
-   float turret_Theta = 0.0f;
    char move, reverse, left, right;
-   boolean cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
-   int speedBoost_CD_Length, speedBoost_CD_Elapsed;
-   int cannon_CD_Length, cannon_CD_Elapsed;
-   int cannon_Unlock_Score;
+   boolean alive, cannon_Upgrade, speed_Upgrade, explosive_Upgrade;
+   int speedBoost_CD_Length, cannon_CD_Length, defShield_CD_Length, airstrike_CD_Length;
+   int speedBoost_CD_Elapsed, cannon_CD_Elapsed, defShield_CD_Elapsed, airstrike_CD_Elapsed;
+   int cannon_Unlock_Score, defShield_Unlock_Score, airstrike_Unlock_Score;
+   int cannon_Upgrade_Score, defShield_Upgrade_Score, airstrike_Upgrade_Score, speed_Upgrade_Score, speedBoost_Upgrade_Score;
    int kills, score;
    float default_Speed, speedBoost_Speed;
-   AudioPlayer speed_Sound, cannon_Sound;
-   
+   float turret_Theta;
+   AudioPlayer speed_Sound, cannon_Sound, upgrade_Sound;
    
    Player()
    {
       super(view_Width*0.5f, view_Height*0.5f);
+      upgrade_Sound = minim.loadFile("upgrade_sound.mp3");
       cannon_Sound = minim.loadFile("cannon_sound.mp3");
       attack_Sound = minim.loadFile("lmg_sound.wav");
       speed_Sound = minim.loadFile("speed_sound.mp3");
@@ -70,8 +76,10 @@ class Player extends GameObject
    Player(float startX, float startY, char move, char reverse, char left, char right)
    {
       super(startX, startY);
+      upgrade_Sound = minim.loadFile("upgrade_sound.mp3");
       cannon_Sound = minim.loadFile("cannon_sound.mp3");
       attack_Sound = minim.loadFile("lmg_sound.wav");
+      attack_Sound.setGain(-10);
       speed_Sound = minim.loadFile("speed_sound.mp3");
       
       w = 50;
@@ -130,6 +138,13 @@ class Player extends GameObject
       speed_Sound.play();
    }
    
+   void upgradeSound()
+   {
+      if (upgrade_Sound.position() != 0)
+         upgrade_Sound.rewind();
+         
+      upgrade_Sound.play();
+   }
    
    /*****************/
    //     UPDATE     \ -----------------------------------------------------------------------------------
@@ -218,12 +233,12 @@ class Player extends GameObject
       if (pos.y > view_Bottom_Boundry - halfW)
             pos.y = view_Bottom_Boundry - halfW;
       
-      // Increment the cooldowns each frame
+      // Increment the cooldown timers each frame
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
-      if (speedBoost_CD_Elapsed < speedBoost_CD_Elapsed)
+      if (speedBoost_CD_Elapsed < speedBoost_CD_Length)
          speedBoost_CD_Elapsed++;
-      if (cannon_CD_Elapsed < cannon_CD_Elapsed)
+      if (cannon_CD_Elapsed < cannon_CD_Length)
          cannon_CD_Elapsed++;
    }
    

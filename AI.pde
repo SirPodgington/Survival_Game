@@ -20,13 +20,16 @@ class AI extends GameObject
 // Draws health bar above the AI -----------------------------------------------------
 void ai_HealthBar(float hp, float maxHP, float w, float halfW, float halfH)
 {
+   color healthBar_Background = color(127);
    float offset = halfH + 15;
    fill(healthBar_Background);
    noStroke();
    rect(-halfW, -offset, w, 5);   // Background
+
+   color healthBar_Colour = color(0,255,0);
    float hp_Mapped = map(hp, 0, maxHP, 0, w);
    fill(healthBar_Colour);
-   rect(-halfW, -offset, hp_Mapped, 5);
+   rect(-halfW, -offset, hp_Mapped, 5);   // Progress
 }
 
 // Controls AI Spawning -------------------------------------------------------------
