@@ -24,9 +24,10 @@ class Player extends GameObject
    int speedBoost_CD_Elapsed, cannon_CD_Elapsed, shield_CD_Elapsed, airstrike_CD_Elapsed;
    int cannon_Unlock_Score, shield_Unlock_Score, airstrike_Unlock_Score;
    int cannon_Upgrade_Score, shield_Upgrade_Score, airstrike_Upgrade_Score, speed_Upgrade_Score, speedBoost_Upgrade_Score;
-   int shield_CD_Duration, shield_CD_ActivationTime, speedBoost_CD_Duration, speedBoost_CD_ActivationTime;
+   int shield_CD_Duration, shield_Default_Duration, shield_Upgraded_Duration, shield_CD_ActivationTime;
+   int speedBoost_CD_Duration, speedBoost_CD_ActivationTime;
    float shield_Width;
-   float default_Speed, speedBoost_Speed;
+   float default_Speed, original_Speed, upgraded_Speed, speedBoost_Speed;
    float turret_Theta;
    AudioPlayer speed_Sound, cannon_Sound, shield_Sound, airstrike_Sound, upgrade_Sound;
    
@@ -57,7 +58,9 @@ class Player extends GameObject
       alive = true;
       maxHealth = 100;
       remainingHealth = maxHealth;
-      default_Speed = 0.8;
+      original_Speed = 0.8;
+      upgraded_Speed = 1;
+      default_Speed = original_Speed;
       speedBoost_Speed = default_Speed * 4;
       
       // Cooldown Frame Timers
@@ -70,7 +73,8 @@ class Player extends GameObject
       cannon_CD_Elapsed = cannon_CD_Length;
       shield_CD_Length = 1800;
       shield_CD_Elapsed = shield_CD_Length;
-      shield_CD_Duration = 300;
+      shield_Default_Duration = 300;
+      shield_Upgraded_Duration = 420;
       airstrike_CD_Length = 2700;
       airstrike_CD_Elapsed = airstrike_CD_Length;
       
@@ -133,17 +137,18 @@ class Player extends GameObject
       cannon_CD_Elapsed = cannon_CD_Length;
       shield_CD_Length = 1800;
       shield_CD_Elapsed = shield_CD_Length;
-      shield_CD_Duration = 300;
+      shield_Default_Duration = 300;
+      shield_Upgraded_Duration = 420;
       airstrike_CD_Length = 2700;
       airstrike_CD_Elapsed = airstrike_CD_Length;
       
       // Unlockables Score Requirement
       speedBoost_Upgrade_Score = 100;
       cannon_Unlock_Score = 200;
-      shield_Unlock_Score = 50;
+      shield_Unlock_Score = 300;
       airstrike_Unlock_Score = 400;
       speed_Upgrade_Score = 500;
-      cannon_Upgrade_Score = 700;
+      cannon_Upgrade_Score = 600;
       shield_Upgrade_Score = 700;
       airstrike_Upgrade_Score = 800;
       
@@ -217,7 +222,8 @@ class Player extends GameObject
    void update()
    {
       update_Upgrades();
-
+      
+      // DEFENSE SHIELD ------------------------------------------------------------
       // Activate Defense Shield
       if (keys[shield] && shield_Unlocked && shield_CD_Elapsed >= shield_CD_Length)
       {
@@ -228,7 +234,15 @@ class Player extends GameObject
       }
       if (frameCount > shield_CD_ActivationTime  + shield_CD_Duration && shield_Active)
          shield_Active = false;
+         
+      // Apply Upgraded Shield Time
+      if (shield_Upgraded)
+         shield_CD_Duration = shield_Upgraded_Duration;
+      else
+         shield_CD_Duration = shield_Default_Duration;
+      // --------------------------------------------------------------------------
       
+      // SPEED BOOST --------------------------------------------------------------
       // Activate Speedboost
       if (keys[speedboost]  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
       {
@@ -245,7 +259,13 @@ class Player extends GameObject
          speed = default_Speed;
          speedBoost_Active = false;
       }
-         
+      // Apply Passive Speed Upgrade
+      if (speed_Upgraded)
+         default_Speed = upgraded_Speed;
+      else
+         default_Speed = original_Speed;
+      // --------------------------------------------------------------------------
+      
       // Calculate the X,Y values necessary for the tank to move forward in the direction of theta
       forward.x = sin(theta);
       forward.y = - cos(theta);

@@ -3,8 +3,9 @@
 /*
 TO BE FIXED:
 
-- Upgrades bar
+- Upgrades bar (icons indicating whats unlocked at each marker)
 - Something for when player dies (game over)
+- Test if passive speed upgrade works
 
 
 TO BE ADDED (IDEAS):
@@ -12,20 +13,15 @@ TO BE ADDED (IDEAS):
 HIGH PRIORITY
 - Every 30secs spawnrate increases by 10%
 - Airstrike CD, Radius UPGR
-- Passive Speed Upgrade CD (Player)
 - Explosive Round UPGR (Turret)
-- Duration UPGR (speedboost)
-- Defense Shield CD + Duration UPGR
 
 LOW PRIORITY
-- Protector AI CD
-- Overheating System for LMG (player)
 - Enemy AI (Flying)
 - Statistics (temp or permanent? perm requires write to notepad to save info)
 
 */
 
-import ddf.minim.*;
+import ddf.minim.*;   // Minim library to handle audio files
 Minim minim;
 
 float view_Left_Boundry, view_Right_Boundry, view_Top_Boundry, view_Bottom_Boundry;
@@ -63,14 +59,13 @@ void setup()
 // Key is true when pressed
 void keyPressed()
 {
-  keys[keyCode] = true;
+   keys[keyCode] = true;
 }
 
 // Key is false when released
 void keyReleased()
 {
-  keys[keyCode] = false;
-  
+   keys[keyCode] = false;
 }
 
 
@@ -87,12 +82,19 @@ void bulletCollision()
          Bullet bullet = (Bullet) object1;
          
          // Enemy Bullet / Player
-         if (bullet.enemy && bullet.pos.dist(player.pos) < bullet.halfH + player.halfW)   // Check for collision
+         if (bullet.enemy)
          {
-            player.remainingHealth -= bullet.damage;      // apply damage
-            game_Objects.remove(bullet);   // remove bullet
+            // If shield is active remove bullet if touches shield
+            if (player.shield_Active && bullet.pos.dist(player.pos) < bullet.halfH + (player.shield_Width / 2))
+               game_Objects.remove(bullet);
+            
+            // Otherwise remove bullet if touches player & apply damage
+            else if (bullet.pos.dist(player.pos) < bullet.halfH + player.halfW)
+            {
+               player.remainingHealth -= bullet.damage;      // apply damage
+               game_Objects.remove(bullet);   // remove bullet
+            }
          }
-         
          for(int j = game_Objects.size() - 1; j >= 0 ; j --)
          {
             GameObject object2 = game_Objects.get(j);

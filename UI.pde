@@ -114,18 +114,26 @@ void user_Interface()
    color cdBar_Colour = color(127,255,0);
    
    // Cannon cooldown bar
-   PImage cdBar_Icon_Cannon = loadImage("cannon_cd_icon.png");
+   PImage cdBar_Icon_Cannon = loadImage("cannon_icon.png");
    float cdBar_Left_Cannon = cdBar_Offset_X;
-   if (player.cannon_Unlocked)
+   if (!player.cannon_Unlocked)
    {
       verticalProgressBar(player.cannon_CD_Elapsed, player.cannon_CD_Length, cdBar_Left_Cannon, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Cannon, cdBar_Icon_Y);
    }
    
    // Defense Shield cooldown bar
-   PImage cdBar_Icon_Shield;
+   PImage cdBar_Icon_Shield = loadImage("shield_icon.png");
    float cdBar_Left_Shield = cdBar_Left_Cannon + cdBar_Gap;
-   if (player.shield_Unlocked)
+   if (!player.shield_Unlocked)
    {
-      verticalProgressBar(player.shield_CD_Elapsed, player.shield_CD_Length, cdBar_Left_Shield, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Cannon, cdBar_Icon_Y);
+      verticalProgressBar(player.shield_CD_Elapsed, player.shield_CD_Length, cdBar_Left_Shield, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Shield, cdBar_Icon_Y);
+   }
+   
+   // Airstrike cooldown bar
+   PImage airstrike_Icon = loadImage("airstrike_icon.png");
+   float cdBar_Left_Airstrike = cdBar_Left_Shield + cdBar_Gap;
+   if (!player.airstrike_Unlocked)
+   {
+      verticalProgressBar(player.airstrike_CD_Elapsed, player.airstrike_CD_Length, cdBar_Left_Airstrike, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, airstrike_Icon, cdBar_Icon_Y);
    }
 }
