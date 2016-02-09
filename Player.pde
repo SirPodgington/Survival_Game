@@ -61,7 +61,7 @@ class Player extends GameObject
       original_Speed = 0.8;
       upgraded_Speed = 1;
       default_Speed = original_Speed;
-      speedBoost_Speed = default_Speed * 4;
+      speedBoost_Speed = original_Speed * 4;
       
       // Cooldown Frame Timers
       fireRate = 15;
@@ -124,8 +124,10 @@ class Player extends GameObject
       alive = true;
       maxHealth = 100;
       remainingHealth = maxHealth;
-      default_Speed = 0.8;
-      speedBoost_Speed = default_Speed * 4;
+      original_Speed = 0.8;
+      upgraded_Speed = 1;
+      default_Speed = original_Speed;
+      speedBoost_Speed = original_Speed * 4;
       
       // Cooldown Frame Timers
       fireRate = 15;
@@ -144,11 +146,11 @@ class Player extends GameObject
       
       // Unlockables Score Requirement
       speedBoost_Upgrade_Score = 100;
-      cannon_Unlock_Score = 200;
+      cannon_Unlock_Score = 10;
       shield_Unlock_Score = 300;
       airstrike_Unlock_Score = 400;
       speed_Upgrade_Score = 500;
-      cannon_Upgrade_Score = 600;
+      cannon_Upgrade_Score = 20;
       shield_Upgrade_Score = 700;
       airstrike_Upgrade_Score = 800;
       

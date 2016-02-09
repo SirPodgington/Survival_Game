@@ -63,6 +63,8 @@ class BasicAI extends AI
 
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
+      
+      check_Burning_Status();
    }
    
    void render()
@@ -70,10 +72,8 @@ class BasicAI extends AI
       pushMatrix();
       translate(pos.x, pos.y);
       
-      // Health bar
-      ai_HealthBar(remainingHealth, maxHealth, w, halfW, halfH);
+      ai_HealthBar();   // Health bar
       
-      // Unit
       rotate(theta);
       fill(0);
       stroke(colour);

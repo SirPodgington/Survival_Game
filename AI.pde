@@ -5,6 +5,7 @@ class AI extends GameObject
    float distance_To_Player;
    float range;
    int score_Value;
+   boolean burning;
    
    AI(float startX, float startY)
    {
@@ -14,41 +15,37 @@ class AI extends GameObject
    void render(){}
    void update(){}
    void attackSound(){}
-}
-
-
-// Draws health bar above the AI -----------------------------------------------------
-void ai_HealthBar(float hp, float maxHP, float w, float halfW, float halfH)
-{
-   color healthBar_Background = color(127);
-   float offset = halfH + 15;
-   fill(healthBar_Background);
-   noStroke();
-   rect(-halfW, -offset, w, 5);   // Background
-
-   color healthBar_Colour = color(0,255,0);
-   float hp_Mapped = map(hp, 0, maxHP, 0, w);
-   fill(healthBar_Colour);
-   rect(-halfW, -offset, hp_Mapped, 5);   // Progress
-}
-
-// Controls AI Spawning -------------------------------------------------------------
-int basic_SpawnTime = 4;
-int heavy_SpawnTime = 15;
-
-void spawnEnemies()
-{
-   // Basic AI
-   if (frameCount % (60*basic_SpawnTime) == 0)
+   
+   // AI Healthbar
+   void ai_HealthBar()
    {
-      BasicAI unit = new BasicAI();
-      game_Objects.add(unit);
+      color healthBar_Background = color(127);
+      float offset = halfH + 15;
+      fill(healthBar_Background);
+      noStroke();
+      rect(-halfW, -offset, w, 5);   // Total Health
+   
+      color healthBar_Colour = color(0,255,0);
+      float hp_Mapped = map(remainingHealth, 0, maxHealth, 0, w);
+      fill(healthBar_Colour);
+      rect(-halfW, -offset, hp_Mapped, 5);   // Remaining Health
    }
    
-   // Heavy AI
-   if (frameCount % (60*heavy_SpawnTime) == 0)
+   void check_Burning_Status()
    {
-      HeavyAI unit = new HeavyAI();
-      game_Objects.add(unit);
+      if (this.burning == true)
+      {
+         println("Burn active");
+         int start_Time = frameCount;
+         CannonBall cannonBall = new CannonBall(0, false);
+         int damage = cannonBall.burn_Damage;
+         int duration = cannonBall.burn_Duration;
+         int tick = cannonBall.burn_Tick;
+         
+         if (frameCount < start_Time + duration && frameCount % tick == 0)
+         {
+            this.remainingHealth -= damage;
+         }
+      }
    }
 }

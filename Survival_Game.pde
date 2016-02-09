@@ -1,15 +1,9 @@
-// OOP Assignment 2: 1st attempt
-
 /*
 TO BE FIXED:
-
 - Upgrades bar (icons indicating whats unlocked at each marker)
 - Something for when player dies (game over)
-- Test if passive speed upgrade works
 
-
-TO BE ADDED (IDEAS):
-
+TO BE ADDED:
 HIGH PRIORITY
 - Every 30secs spawnrate increases by 10%
 - Airstrike CD, Radius UPGR
@@ -31,7 +25,6 @@ color theme_Colour;
 
 ArrayList<GameObject> game_Objects = new ArrayList<GameObject>();   // Arraylist to store all game objects
 boolean[] keys = new boolean[512];   // Array to store keyPressed status for all keys
-
 
 void setup()
 {
@@ -72,7 +65,7 @@ void keyReleased()
 // Check Bullet Collisions ------------------------------------------------------------------------------------
 void bulletCollision()
 {
-   for(int i = game_Objects.size() - 1; i >= 0; i --)
+   for (int i = game_Objects.size() - 1; i >= 0; i--)
    {
       GameObject object1 = game_Objects.get(i);
       
@@ -81,8 +74,7 @@ void bulletCollision()
       {
          Bullet bullet = (Bullet) object1;
          
-         // Enemy Bullet / Player
-         if (bullet.enemy)
+         if (bullet.enemy)   // Enemy Bullets
          {
             // If shield is active remove bullet if touches shield
             if (player.shield_Active && bullet.pos.dist(player.pos) < bullet.halfH + (player.shield_Width / 2))
@@ -91,29 +83,40 @@ void bulletCollision()
             // Otherwise remove bullet if touches player & apply damage
             else if (bullet.pos.dist(player.pos) < bullet.halfH + player.halfW)
             {
-               player.remainingHealth -= bullet.damage;      // apply damage
-               game_Objects.remove(bullet);   // remove bullet
+               player.remainingHealth -= bullet.damage;      // Apply Damage
+               game_Objects.remove(bullet);   // Remove Bullet
             }
          }
-         for(int j = game_Objects.size() - 1; j >= 0 ; j --)
+         else   // Player Bullets
          {
-            GameObject object2 = game_Objects.get(j);
-            
-            // Friendly Bullet / AI
-            if (object2 instanceof AI && !bullet.enemy)
+            for (int j = game_Objects.size() - 1; j >= 0; j--)
             {
-               AI ai = (AI) object2;
-               if (bullet.pos.dist(ai.pos) < bullet.halfH + ai.halfW)
+               GameObject object2 = game_Objects.get(j);
+               
+               // Friendly Bullet / AI
+               if (object2 instanceof AI && !bullet.enemy)
                {
-                  ai.remainingHealth -= bullet.damage;
-                  game_Objects.remove(bullet);
+                  AI ai = (AI) object2;
+                  
+                  // Bullet / AI Collision
+                  if (bullet.pos.dist(ai.pos) < bullet.halfH + ai.halfW)
+                  {
+                     if (bullet instanceof CannonBall)
+                     {
+                        // If upgraded cannonball set the AI on fire
+                        CannonBall cannonBall = (CannonBall) bullet;
+                        if (cannonBall.onFire)   // Apply burn effect to ai unit
+                              ai.burning = true;
+                     }
+                     ai.remainingHealth -= bullet.damage;   // Apply bullet damage
+                     game_Objects.remove(bullet);   // Remove Bullet
+                  }
                }
             }
          }
       }
    }
 }
-
 
 // Remove Dead & Add Score / Increment Kill Counter -------------------------------------------------------
 void removeDead()
@@ -139,6 +142,26 @@ void removeDead()
    }
 }
 
+// Controls AI Spawning -------------------------------------------------------------
+void spawnEnemies()
+{
+   int basic_SpawnTime = 240;
+   int heavy_SpawnTime = 900;
+
+   // Basic AI
+   if (frameCount % basic_SpawnTime == 0)
+   {
+      BasicAI unit = new BasicAI();
+      game_Objects.add(unit);
+   }
+   
+   // Heavy AI
+   if (frameCount % heavy_SpawnTime == 0)
+   {
+      HeavyAI unit = new HeavyAI();
+      game_Objects.add(unit);
+   }
+}
 
 // DRAW METHOD ------------------------------------------------------------
 Player player = null;

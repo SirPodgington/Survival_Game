@@ -73,9 +73,10 @@ class LMGBullet extends Bullet
 // Cannon Ball ----------------
 class CannonBall extends Bullet
 {  
-   boolean explosive;
-  
-   CannonBall(int ammo_Type, boolean explosive)
+   boolean onFire;
+   int burn_Damage, burn_Duration, burn_Frequency, burn_Tick;
+   
+   CannonBall(int ammo_Type, boolean upgrade_Status)
    {
       // Small cannon ball
       if (ammo_Type == 1)
@@ -98,7 +99,11 @@ class CannonBall extends Bullet
       halfH = h / 2; 
       
       // Store upgrade status
-      this.explosive = explosive;
+      this.onFire = upgrade_Status;
+      burn_Damage = 5;
+      burn_Frequency = 5;
+      burn_Duration = 600;
+      burn_Tick = burn_Duration / burn_Frequency;
    }
    
    void render()
@@ -108,7 +113,7 @@ class CannonBall extends Bullet
       rotate(theta);
       active_Colour = colour;
       
-      if (explosive)
+      if (onFire)
       {
          int passed_Milliseconds = millis() - time;
          if (passed_Milliseconds >= 100)          // Cannon flashes white every 100 ms

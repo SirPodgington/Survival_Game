@@ -69,6 +69,8 @@ class HeavyAI extends AI
 
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
+         
+      check_Burning_Status();
    }
    
    void render()
@@ -76,8 +78,7 @@ class HeavyAI extends AI
       pushMatrix();
       translate(pos.x, pos.y);
       
-      // Health bar
-      ai_HealthBar(remainingHealth, maxHealth, w, halfW, halfH);
+      ai_HealthBar();   // Health bar
 
       // Unit
       rotate(theta);
