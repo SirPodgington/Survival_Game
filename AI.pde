@@ -17,7 +17,7 @@ class AI extends GameObject
    void attackSound(){}
    
    // AI Healthbar
-   void ai_HealthBar()
+   void healthBar()
    {
       color healthBar_Background = color(127);
       float offset = halfH + 15;
@@ -31,7 +31,7 @@ class AI extends GameObject
       rect(-halfW, -offset, hp_Mapped, 5);   // Remaining Health
    }
    
-   void check_Burning_Status()
+   void getBurnStatus()
    {
       if (this.burning == true)
       {

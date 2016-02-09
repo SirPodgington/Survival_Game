@@ -1,23 +1,30 @@
-
+// Create player & add to game objects
+void loadPlayer()
+{
+   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D', ' ', 'F');
+   game_Objects.add(player);
+}
+   
 // The Player class
 class Player extends GameObject
 {
-   int kills, score;
-   char move, reverse, left, right, speedboost, shield, airstrike;
-   boolean alive;
-   boolean cannon_Unlocked, shield_Unlocked;
-   boolean cannon_Upgraded, shield_Upgraded, speed_Upgraded, speedBoost_Upgraded;
+   int kills, score, bullets_Fired, bullets_Landed;   // Variables to store statistical information on player's performance
+   char move, reverse, left, right, speedboost, shield;   // Keys for movement & abilities
+   boolean alive;   
+   float default_Speed, original_Speed, upgraded_Speed, speedBoost_Speed;
+   float turret_Theta;
+   AudioPlayer speed_Sound, cannon_Sound, shield_Sound, upgrade_Sound;
+   
    boolean shield_Active, speedBoost_Active;
-   int speedBoost_CD_Length, cannon_CD_Length, shield_CD_Length;
-   int speedBoost_CD_Elapsed, cannon_CD_Elapsed, shield_CD_Elapsed;
+   boolean cannon_Unlocked, shield_Unlocked;   
+   boolean cannon_Upgraded, shield_Upgraded, speed_Upgraded, speedBoost_Upgraded;
+   int speedboost_CD_Length, cannon_CD_Length, shield_CD_Length;
+   int speedboost_CD_Elapsed, cannon_CD_Elapsed, shield_CD_Elapsed;
    int cannon_Unlock_Score, shield_Unlock_Score;
    int cannon_Upgrade_Score, shield_Upgrade_Score, speed_Upgrade_Score, speedBoost_Upgrade_Score;
    int shield_CD_Duration, shield_Default_Duration, shield_Upgraded_Duration, shield_CD_ActivationTime;
    int speedBoost_CD_Duration, speedBoost_CD_ActivationTime;
    float shield_Width;
-   float default_Speed, original_Speed, upgraded_Speed, speedBoost_Speed;
-   float turret_Theta;
-   AudioPlayer speed_Sound, cannon_Sound, shield_Sound, upgrade_Sound;
    
    Player()
    {
@@ -53,8 +60,8 @@ class Player extends GameObject
       // Cooldown Frame Timers
       fireRate = 15;
       fireRate_Elapsed = fireRate;
-      speedBoost_CD_Length = 1800;
-      speedBoost_CD_Elapsed = speedBoost_CD_Length;
+      speedboost_CD_Length = 1800;
+      speedboost_CD_Elapsed = speedboost_CD_Length;
       speedBoost_CD_Duration = 90;
       cannon_CD_Length = 540;
       cannon_CD_Elapsed = cannon_CD_Length;
@@ -114,8 +121,8 @@ class Player extends GameObject
       // Cooldown Frame Timers
       fireRate = 15;
       fireRate_Elapsed = fireRate;
-      speedBoost_CD_Length = 1800;
-      speedBoost_CD_Elapsed = speedBoost_CD_Length;
+      speedboost_CD_Length = 1800;
+      speedboost_CD_Elapsed = speedboost_CD_Length;
       speedBoost_CD_Duration = 90;
       cannon_CD_Length = 540;
       cannon_CD_Elapsed = cannon_CD_Length;
@@ -192,50 +199,9 @@ class Player extends GameObject
    
    void update()
    {
-      update_Upgrades();
-      
-      // DEFENSE SHIELD ------------------------------------------------------------
-      // Activate Defense Shield
-      if (keys[shield] && shield_Unlocked && shield_CD_Elapsed >= shield_CD_Length)
-      {
-         shield_CD_ActivationTime = frameCount;
-         shieldSound();
-         shield_Active = true;
-         shield_CD_Elapsed = 0;
-      }
-      if (frameCount > shield_CD_ActivationTime  + shield_CD_Duration && shield_Active)
-         shield_Active = false;
-         
-      // Apply Upgraded Shield Time
-      if (shield_Upgraded)
-         shield_CD_Duration = shield_Upgraded_Duration;
-      else
-         shield_CD_Duration = shield_Default_Duration;
-      // --------------------------------------------------------------------------
-      
-      // SPEED BOOST --------------------------------------------------------------
-      // Activate Speedboost
-      if (keys[speedboost]  &&  speedBoost_CD_Elapsed >= speedBoost_CD_Length)
-      {
-         speedBoost_CD_ActivationTime = frameCount;   // Store the activation time
-         speedSound();                   // Play sound effect
-         speedBoost_Active = true;      // Set Speed Boost to active
-         speedBoost_CD_Elapsed = 0;      // Reset elapsed timer
-      }
-      // Apply Speedboost Effect
-      if (frameCount < speedBoost_CD_ActivationTime + speedBoost_CD_Duration && speedBoost_Active)
-         speed = speedBoost_Speed;
-      else
-      {
-         speed = default_Speed;
-         speedBoost_Active = false;
-      }
-      // Apply Passive Speed Upgrade
-      if (speed_Upgraded)
-         default_Speed = upgraded_Speed;
-      else
-         default_Speed = original_Speed;
-      // --------------------------------------------------------------------------
+      applyUpgrades();
+      shieldCD();
+      speedboostCD();
       
       // Calculate the X,Y values necessary for the tank to move forward in the direction of theta
       forward.x = sin(theta);
@@ -245,9 +211,9 @@ class Player extends GameObject
       
       // Movement (Moving & Turning)
       if (keys[move])
-         pos.add(forward);
+         position.add(forward);
       if (keys[reverse])
-         pos.sub(forward.div(2));
+         position.sub(forward.div(2));
       if (keys[left])
          theta -= 0.02f;
       if (keys[right])
@@ -255,7 +221,7 @@ class Player extends GameObject
 
       // Turret points towards mouse position if mouse is within boundry
       if (mouseY < view_Bottom_Boundry)
-         turret_Theta = atan2(mouseY - pos.y, mouseX - pos.x) + HALF_PI;
+         turret_Theta = atan2(mouseY - position.y, mouseX - position.x) + HALF_PI;
          
       // Fire LMG bullets
       if (mousePressed && mouseButton == LEFT && fireRate_Elapsed >= fireRate)
@@ -264,8 +230,8 @@ class Player extends GameObject
          lmgSound();
          
          Bullet lmg = new LMGBullet(2);
-         lmg.pos.x = pos.x;
-         lmg.pos.y = pos.y;
+         lmg.position.x = position.x;
+         lmg.position.y = position.y;
          lmg.colour = colour;
          lmg.theta = turret_Theta;
          game_Objects.add(lmg);
@@ -278,28 +244,28 @@ class Player extends GameObject
          cannonSound();
          
          Bullet cannon_Ball = new CannonBall(2, cannon_Upgraded);
-         cannon_Ball.pos.x = pos.x;
-         cannon_Ball.pos.y = pos.y;
+         cannon_Ball.position.x = position.x;
+         cannon_Ball.position.y = position.y;
          cannon_Ball.colour = colour;
          cannon_Ball.theta = turret_Theta;
          game_Objects.add(cannon_Ball);
       }
          
       // Keep Player within screen boundary
-      if (pos.x < view_Left_Boundry + halfW)
-            pos.x = view_Left_Boundry + halfW;
-      if (pos.x > view_Right_Boundry - halfW)
-            pos.x = view_Right_Boundry - halfW;
-      if (pos.y < view_Top_Boundry + halfW)
-            pos.y = view_Top_Boundry + halfW;
-      if (pos.y > view_Bottom_Boundry - halfW)
-            pos.y = view_Bottom_Boundry - halfW;
+      if (position.x < view_Left_Boundry + halfW)
+            position.x = view_Left_Boundry + halfW;
+      if (position.x > view_Right_Boundry - halfW)
+            position.x = view_Right_Boundry - halfW;
+      if (position.y < view_Top_Boundry + halfW)
+            position.y = view_Top_Boundry + halfW;
+      if (position.y > view_Bottom_Boundry - halfW)
+            position.y = view_Bottom_Boundry - halfW;
       
       // Increment the cooldown timers each frame
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
-      if (speedBoost_CD_Elapsed < speedBoost_CD_Length)
-         speedBoost_CD_Elapsed++;
+      if (speedboost_CD_Elapsed < speedboost_CD_Length)
+         speedboost_CD_Elapsed++;
       if (cannon_CD_Elapsed < cannon_CD_Length)
          cannon_CD_Elapsed++;
       if (shield_CD_Elapsed < shield_CD_Length)
@@ -309,8 +275,8 @@ class Player extends GameObject
    void render()
    {
        pushMatrix();
-       translate(pos.x, pos.y);
-       rotate(theta);   // Rotate sketch to the direction the player is facing
+       translate(position.x, position.y);
+       rotate(theta);
        
        // Defense Shield
        if (shield_Active)
@@ -333,7 +299,7 @@ class Player extends GameObject
        
        // Turret
        pushMatrix();
-       translate(pos.x, pos.y);
+       translate(position.x, position.y);
        rotate(turret_Theta);
        strokeWeight(1);
        fill(colour);
@@ -350,7 +316,7 @@ class Player extends GameObject
        }
        popMatrix();
        
-       // Crosshair (Mouse Position)
+       // Draw crosshair @ mouse position
        stroke(colour);
        strokeWeight(1);
        line(mouseX-10, mouseY, mouseX-4, mouseY);    // Left line
@@ -358,45 +324,94 @@ class Player extends GameObject
        line(mouseX, mouseY-10, mouseX, mouseY-4);    // Top line
        line(mouseX, mouseY+10, mouseX, mouseY+4);    // Bottom line
    }
-}
-
-
-// Check if player has unlocked any upgraded - called in Player update()
-void update_Upgrades()
-{
-   if (player.score >= player.cannon_Unlock_Score && player.cannon_Unlocked == false)   // Cannon Unlock
+   
+   
+   // SPEED BOOST --------------------------------------------------------------
+   void speedboostCD()
    {
-      player.upgradeSound();
-      player.cannon_Unlocked = true;
+      // Activate Speedboost
+      if (keys[speedboost]  &&  speedboost_CD_Elapsed >= speedboost_CD_Length)
+      {
+         speedBoost_CD_ActivationTime = frameCount;   // Store the activation time
+         speedSound();                   // Play sound effect
+         speedBoost_Active = true;      // Set Speed Boost to active
+         speedboost_CD_Elapsed = 0;      // Reset elapsed timer
+      }
+      // Apply Speedboost Effect
+      if (frameCount < speedBoost_CD_ActivationTime + speedBoost_CD_Duration && speedBoost_Active)
+         speed = speedBoost_Speed;
+      else
+      {
+         speed = default_Speed;
+         speedBoost_Active = false;
+      }
+      // Apply Passive Speed Upgrade
+      if (speed_Upgraded)
+         default_Speed = upgraded_Speed;
+      else
+         default_Speed = original_Speed;
+   }
+      
+   // DEFENSE SHIELD -----------------------------------------------------------
+   void shieldCD()
+   {
+      // Activate Defense Shield
+      if (keys[shield] && shield_Unlocked && shield_CD_Elapsed >= shield_CD_Length)
+      {
+         shield_CD_ActivationTime = frameCount;
+         shieldSound();
+         shield_Active = true;
+         shield_CD_Elapsed = 0;
+      }
+      
+      // Remove shield when time runs out
+      if (frameCount > shield_CD_ActivationTime  + shield_CD_Duration && shield_Active)
+         shield_Active = false;
+         
+      // Apply Upgraded Shield Time
+      if (shield_Upgraded)
+         shield_CD_Duration = shield_Upgraded_Duration;
+      else
+         shield_CD_Duration = shield_Default_Duration;
    }
    
-   if (player.score >= player.cannon_Upgrade_Score && player.cannon_Upgraded == false)   // Cannon Upgrade
+   // Activate Newly Unlocked Upgrades
+   void applyUpgrades()
    {
-      player.upgradeSound();
-      player.cannon_Upgraded = true;
-   }
-   
-   if (player.score >= player.shield_Unlock_Score && player.shield_Unlocked == false)   // Defense Shield Unlock
-   {
-      player.upgradeSound();
-      player.shield_Unlocked = true;
-   }
-   
-   if (player.score >= player.shield_Upgrade_Score && player.shield_Upgraded == false)   // Defense Shield Upgrade
-   {
-      player.upgradeSound();
-      player.shield_Upgraded = true;
-   }
-   
-   if (player.score >= player.speed_Upgrade_Score && player.speed_Upgraded == false)   // Passive Speed Upgrade
-   {
-      player.upgradeSound();
-      player.speed_Upgraded = true;
-   }
-   
-   if (player.score >= player.speedBoost_Upgrade_Score && player.speedBoost_Upgraded == false)   // Speed Boost Upgrade
-   {
-      player.upgradeSound();
-      player.speedBoost_Upgraded = true;
+      if (player.score >= player.cannon_Unlock_Score && player.cannon_Unlocked == false)   // Cannon Unlock
+      {
+         player.upgradeSound();
+         player.cannon_Unlocked = true;
+      }
+      
+      if (player.score >= player.cannon_Upgrade_Score && player.cannon_Upgraded == false)   // Cannon Upgrade
+      {
+         player.upgradeSound();
+         player.cannon_Upgraded = true;
+      }
+      
+      if (player.score >= player.shield_Unlock_Score && player.shield_Unlocked == false)   // Defense Shield Unlock
+      {
+         player.upgradeSound();
+         player.shield_Unlocked = true;
+      }
+      
+      if (player.score >= player.shield_Upgrade_Score && player.shield_Upgraded == false)   // Defense Shield Upgrade
+      {
+         player.upgradeSound();
+         player.shield_Upgraded = true;
+      }
+      
+      if (player.score >= player.speed_Upgrade_Score && player.speed_Upgraded == false)   // Passive Speed Upgrade
+      {
+         player.upgradeSound();
+         player.speed_Upgraded = true;
+      }
+      
+      if (player.score >= player.speedBoost_Upgrade_Score && player.speedBoost_Upgraded == false)   // Speed Boost Upgrade
+      {
+         player.upgradeSound();
+         player.speedBoost_Upgraded = true;
+      }
    }
 }

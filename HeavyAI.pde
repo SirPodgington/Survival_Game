@@ -35,9 +35,11 @@ class HeavyAI extends AI
    }
    
    void update()
-   {      
+   {
+      getBurnStatus();
+      
       // Set the AI to always face the player
-      theta = atan2(game_Objects.get(0).pos.y - pos.y, game_Objects.get(0).pos.x - pos.x) + HALF_PI;
+      theta = atan2(game_Objects.get(0).position.y - position.y, game_Objects.get(0).position.x - position.x) + HALF_PI;
       
       // Calculate co-ordinates for moving forward, applying the speed multiplier also
       forward.x = sin(theta);
@@ -46,10 +48,10 @@ class HeavyAI extends AI
       forward.mult(speed);
 
       // Make the AI follow the player, staying within range
-      distance_To_Player = pos.dist(game_Objects.get(0).pos);
+      distance_To_Player = position.dist(game_Objects.get(0).position);
       if (distance_To_Player > target_Distance_From_Player)
       {
-         pos.add(forward);
+         position.add(forward);
       }
       
       // Shoot the player when within range
@@ -59,8 +61,8 @@ class HeavyAI extends AI
          attackSound();
          
          Bullet cannon = new CannonBall(1, false);
-         cannon.pos.x = pos.x;
-         cannon.pos.y = pos.y;
+         cannon.position.x = position.x;
+         cannon.position.y = position.y;
          cannon.colour = colour;
          cannon.theta = theta;
          cannon.enemy = true;
@@ -69,16 +71,14 @@ class HeavyAI extends AI
 
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
-         
-      check_Burning_Status();
    }
    
    void render()
    {
       pushMatrix();
-      translate(pos.x, pos.y);
+      translate(position.x, position.y);
       
-      ai_HealthBar();   // Health bar
+      healthBar();
 
       // Unit
       rotate(theta);

@@ -14,10 +14,10 @@ class Bullet extends GameObject
     forward.x = sin(theta);
     forward.y = - cos(theta);
     forward.mult(speed);
-    pos.add(forward);
+    position.add(forward);
     
     // Remove bullet if goes out of bounds
-    if (pos.x < view_Left_Boundry || pos.y < view_Top_Boundry || pos.x > view_Right_Boundry || pos.y > view_Bottom_Boundry)
+    if (position.x < view_Left_Boundry || position.y < view_Top_Boundry || position.x > view_Right_Boundry || position.y > view_Bottom_Boundry)
     {
       game_Objects.remove(this);
     }
@@ -57,7 +57,7 @@ class LMGBullet extends Bullet
    {
       pushMatrix();
       
-      translate(pos.x, pos.y);
+      translate(position.x, position.y);
       rotate(theta);
       
       active_Colour = colour;
@@ -109,7 +109,7 @@ class CannonBall extends Bullet
    void render()
    {
       pushMatrix();
-      translate(pos.x, pos.y);
+      translate(position.x, position.y);
       rotate(theta);
       active_Colour = colour;
       

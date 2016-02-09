@@ -29,9 +29,11 @@ class BasicAI extends AI
    }
    
    void update()
-   {      
+   {
+      getBurnStatus();
+      
       // Set the AI to always face the player
-      theta = atan2(game_Objects.get(0).pos.y - pos.y, game_Objects.get(0).pos.x - pos.x) + HALF_PI;
+      theta = atan2(game_Objects.get(0).position.y - position.y, game_Objects.get(0).position.x - position.x) + HALF_PI;
       
       // Calculate co-ordinates for moving forward, applying the speed multiplier also
       forward.x = sin(theta);
@@ -40,10 +42,10 @@ class BasicAI extends AI
       forward.mult(speed);
 
       // Make the AI follow the player, staying within range
-      distance_To_Player = pos.dist(game_Objects.get(0).pos);
+      distance_To_Player = position.dist(game_Objects.get(0).position);
       if (distance_To_Player > target_Distance_From_Player)
       {
-         pos.add(forward);
+         position.add(forward);
       }
       
       // Shoot the player when within range
@@ -53,8 +55,8 @@ class BasicAI extends AI
          attackSound();
          
          Bullet lmg = new LMGBullet(1);
-         lmg.pos.x = pos.x;
-         lmg.pos.y = pos.y;
+         lmg.position.x = position.x;
+         lmg.position.y = position.y;
          lmg.colour = colour;
          lmg.theta = theta;
          lmg.enemy = true;
@@ -63,16 +65,14 @@ class BasicAI extends AI
 
       if (fireRate_Elapsed < fireRate)
          fireRate_Elapsed++;
-      
-      check_Burning_Status();
    }
    
    void render()
    {
       pushMatrix();
-      translate(pos.x, pos.y);
+      translate(position.x, position.y);
       
-      ai_HealthBar();   // Health bar
+      healthBar();   // Health bar
       
       rotate(theta);
       fill(0);

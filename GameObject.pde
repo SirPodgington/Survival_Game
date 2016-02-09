@@ -1,7 +1,7 @@
 class GameObject
 {
    
-   PVector pos;
+   PVector position;
    PVector forward;
    float w, halfW;
    float h, halfH;
@@ -21,7 +21,7 @@ class GameObject
    
    GameObject(float startX, float startY)
    {
-      pos = new PVector(startX, startY);
+      position = new PVector(startX, startY);
       forward = new PVector(0, -1);
    }
    

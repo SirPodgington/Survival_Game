@@ -1,15 +1,3 @@
-// The scoreboard. Displays the player's kills and score
-void draw_Scoreboard()
-{
-   color scoreBoard_Colour = theme_Colour;
-   float x = width - 20;
-   float y = 20;
-   fill(scoreBoard_Colour);
-   textAlign(RIGHT,TOP);
-   textSize(14);
-   text("Kills: " + player.kills + "  |  Score: " + player.score, x, y);
-}
-
 
 // Vertical Progress Bar
 void verticalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour, PImage icon, float icon_Y)
@@ -55,7 +43,7 @@ void horizontalProgressBar(float progress, float total, float start_X, float sta
 void upgrades_ProgressBar(float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
 {
    horizontalProgressBar(player.score, player.shield_Upgrade_Score, start_X, start_Y, bar_Width, bar_Height, progress_Colour, background_Colour);
-   int unlockables_Count = 8;
+   int unlockables_Count = 6;
    float gap = bar_Width / unlockables_Count;
    for (int i = 1; i <= unlockables_Count; i++)
    {
@@ -69,7 +57,7 @@ void upgrades_ProgressBar(float start_X, float start_Y, float bar_Width, float b
 
 
 // User Interface
-void user_Interface()
+void userInterface()
 {
    // UI Properties & Background
    float ui_Height = height - view_Height;
@@ -86,23 +74,23 @@ void user_Interface()
    rect(ui_Left, ui_Top, ui_Width, ui_Height);   // Background
    
    // Health Bar
-   float healthBar_Height = ui_Height / 2;
+   color healthBar_Colour = color(127,255,0);
+   color healthBar_Background = color(200,0,0);
+   float healthBar_Height = ui_Height / 3;
    float healthBar_Width = ui_Width / 3;
    float healthBar_Bottom = height - 15;
    float healthBar_Left = ui_Left + healthBar_Width;
    float healthBar_Right = healthBar_Left + healthBar_Width;
-   color healthBar_Colour = color(127,255,0);
-   color healthBar_Background = color(200,0,0);
    horizontalProgressBar(player.remainingHealth, player.maxHealth, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background);
    
    // Speedboost Bar
+   color speedBar_Colour = color(255,165,0);
+   color speedBar_Background = color(127);
    float speedBar_Width = healthBar_Width;
    float speedBar_Height = healthBar_Height / 3;
    float speedBar_Left = healthBar_Left;
    float speedBar_Bottom = healthBar_Bottom - healthBar_Height;
-   color speedBar_Colour = color(255,165,0);
-   color speedBar_Background = color(127);
-   horizontalProgressBar(player.speedBoost_CD_Elapsed, player.speedBoost_CD_Length, speedBar_Left, speedBar_Bottom, speedBar_Width, speedBar_Height, speedBar_Colour, speedBar_Background);
+   horizontalProgressBar(player.speedboost_CD_Elapsed, player.speedboost_CD_Length, speedBar_Left, speedBar_Bottom, speedBar_Width, speedBar_Height, speedBar_Colour, speedBar_Background);
    
    // Upgrades progress bar
    color scoreBar_Background = color(50,0,0);
