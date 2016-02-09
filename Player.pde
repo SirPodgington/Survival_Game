@@ -1,15 +1,3 @@
-// The scoreboard. Displays the player's kills and score
-void draw_Scoreboard()
-{
-   color scoreBoard_Colour = theme_Colour;
-   float x = width - 20;
-   float y = 20;
-   fill(scoreBoard_Colour);
-   textAlign(RIGHT,TOP);
-   textSize(14);
-   text("Kills: " + player.kills + "  |  Score: " + player.score, x, y);
-}
-
 
 // The Player class
 class Player extends GameObject
@@ -17,19 +5,19 @@ class Player extends GameObject
    int kills, score;
    char move, reverse, left, right, speedboost, shield, airstrike;
    boolean alive;
-   boolean cannon_Unlocked, shield_Unlocked, airstrike_Unlocked;
-   boolean cannon_Upgraded, shield_Upgraded, airstrike_Upgraded, speed_Upgraded, speedBoost_Upgraded;
+   boolean cannon_Unlocked, shield_Unlocked;
+   boolean cannon_Upgraded, shield_Upgraded, speed_Upgraded, speedBoost_Upgraded;
    boolean shield_Active, speedBoost_Active;
-   int speedBoost_CD_Length, cannon_CD_Length, shield_CD_Length, airstrike_CD_Length;
-   int speedBoost_CD_Elapsed, cannon_CD_Elapsed, shield_CD_Elapsed, airstrike_CD_Elapsed;
-   int cannon_Unlock_Score, shield_Unlock_Score, airstrike_Unlock_Score;
-   int cannon_Upgrade_Score, shield_Upgrade_Score, airstrike_Upgrade_Score, speed_Upgrade_Score, speedBoost_Upgrade_Score;
+   int speedBoost_CD_Length, cannon_CD_Length, shield_CD_Length;
+   int speedBoost_CD_Elapsed, cannon_CD_Elapsed, shield_CD_Elapsed;
+   int cannon_Unlock_Score, shield_Unlock_Score;
+   int cannon_Upgrade_Score, shield_Upgrade_Score, speed_Upgrade_Score, speedBoost_Upgrade_Score;
    int shield_CD_Duration, shield_Default_Duration, shield_Upgraded_Duration, shield_CD_ActivationTime;
    int speedBoost_CD_Duration, speedBoost_CD_ActivationTime;
    float shield_Width;
    float default_Speed, original_Speed, upgraded_Speed, speedBoost_Speed;
    float turret_Theta;
-   AudioPlayer speed_Sound, cannon_Sound, shield_Sound, airstrike_Sound, upgrade_Sound;
+   AudioPlayer speed_Sound, cannon_Sound, shield_Sound, upgrade_Sound;
    
    Player()
    {
@@ -52,7 +40,6 @@ class Player extends GameObject
       speed_Sound = minim.loadFile("speed_sound.mp3");
       shield_Sound = minim.loadFile("defshield_sound.mp3");
       shield_Sound.setGain(10);
-      airstrike_Sound = minim.loadFile("airstrike_sound.mp3");
       
       // Player Stats
       alive = true;
@@ -75,18 +62,14 @@ class Player extends GameObject
       shield_CD_Elapsed = shield_CD_Length;
       shield_Default_Duration = 300;
       shield_Upgraded_Duration = 420;
-      airstrike_CD_Length = 2700;
-      airstrike_CD_Elapsed = airstrike_CD_Length;
       
       // Unlockables Score Requirement
       speedBoost_Upgrade_Score = 100;
       cannon_Unlock_Score = 200;
       shield_Unlock_Score = 300;
-      airstrike_Unlock_Score = 400;
-      speed_Upgrade_Score = 500;
-      cannon_Upgrade_Score = 700;
-      shield_Upgrade_Score = 700;
-      airstrike_Upgrade_Score = 800;
+      speed_Upgrade_Score = 400;
+      cannon_Upgrade_Score = 500;
+      shield_Upgrade_Score = 600;
       
       // Movement Keys
       move = 'W';
@@ -95,10 +78,9 @@ class Player extends GameObject
       right = 'D';
       speedboost = ' ';
       shield = 'F';
-      airstrike = 'R';
    }
    
-   Player(float startX, float startY, char move, char reverse, char left, char right, char speedboost, char shield, char airstrike)
+   Player(float startX, float startY, char move, char reverse, char left, char right, char speedboost, char shield)
    {
       // Player Properties
       super(startX, startY);
@@ -118,7 +100,7 @@ class Player extends GameObject
       attack_Sound.setGain(-10);
       speed_Sound = minim.loadFile("speed_sound.mp3");
       shield_Sound = minim.loadFile("defshield_sound.mp3");
-      airstrike_Sound = minim.loadFile("airstrike_sound.mp3");
+      shield_Sound.setGain(10);
       
       // Player Stats
       alive = true;
@@ -141,18 +123,14 @@ class Player extends GameObject
       shield_CD_Elapsed = shield_CD_Length;
       shield_Default_Duration = 300;
       shield_Upgraded_Duration = 420;
-      airstrike_CD_Length = 2700;
-      airstrike_CD_Elapsed = airstrike_CD_Length;
       
       // Unlockables Score Requirement
       speedBoost_Upgrade_Score = 100;
-      cannon_Unlock_Score = 10;
+      cannon_Unlock_Score = 200;
       shield_Unlock_Score = 300;
-      airstrike_Unlock_Score = 400;
-      speed_Upgrade_Score = 500;
-      cannon_Upgrade_Score = 20;
-      shield_Upgrade_Score = 700;
-      airstrike_Upgrade_Score = 800;
+      speed_Upgrade_Score = 400;
+      cannon_Upgrade_Score = 500;
+      shield_Upgrade_Score = 600;
       
       // Movement Keys
       this.move = move;
@@ -161,7 +139,6 @@ class Player extends GameObject
       this.right = right;
       this.speedboost = speedboost;
       this.shield = shield;
-      this.airstrike = airstrike;
    }
    
    
@@ -199,14 +176,6 @@ class Player extends GameObject
          shield_Sound.rewind();
          
       shield_Sound.play();
-   }
-   
-   void airstrikeSound()
-   {
-      if (airstrike_Sound.position() != 0)
-         airstrike_Sound.rewind();
-         
-      airstrike_Sound.play();
    }
    
    void upgradeSound()
@@ -335,8 +304,6 @@ class Player extends GameObject
          cannon_CD_Elapsed++;
       if (shield_CD_Elapsed < shield_CD_Length)
          shield_CD_Elapsed++;
-      if (airstrike_CD_Elapsed < airstrike_CD_Length)
-         airstrike_CD_Elapsed++;
    }
    
    void render()
@@ -419,18 +386,6 @@ void update_Upgrades()
    {
       player.upgradeSound();
       player.shield_Upgraded = true;
-   }
-   
-   if (player.score >= player.airstrike_Unlock_Score && player.airstrike_Unlocked == false)   // Airstrike Unlock
-   {
-      player.upgradeSound();
-      player.airstrike_Unlocked = true;
-   }
-   
-   if (player.score >= player.airstrike_Upgrade_Score && player.airstrike_Upgraded == false)   // Airstrike Upgrade
-   {
-      player.upgradeSound();
-      player.airstrike_Upgraded = true;
    }
    
    if (player.score >= player.speed_Upgrade_Score && player.speed_Upgraded == false)   // Passive Speed Upgrade

@@ -1,3 +1,15 @@
+// The scoreboard. Displays the player's kills and score
+void draw_Scoreboard()
+{
+   color scoreBoard_Colour = theme_Colour;
+   float x = width - 20;
+   float y = 20;
+   fill(scoreBoard_Colour);
+   textAlign(RIGHT,TOP);
+   textSize(14);
+   text("Kills: " + player.kills + "  |  Score: " + player.score, x, y);
+}
+
 
 // Vertical Progress Bar
 void verticalProgressBar(float progress, float total, float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour, PImage icon, float icon_Y)
@@ -42,7 +54,7 @@ void horizontalProgressBar(float progress, float total, float start_X, float sta
 // Upgrades Progress Bar
 void upgrades_ProgressBar(float start_X, float start_Y, float bar_Width, float bar_Height, color progress_Colour, color background_Colour)
 {
-   horizontalProgressBar(player.score, player.airstrike_Upgrade_Score, start_X, start_Y, bar_Width, bar_Height, progress_Colour, background_Colour);
+   horizontalProgressBar(player.score, player.shield_Upgrade_Score, start_X, start_Y, bar_Width, bar_Height, progress_Colour, background_Colour);
    int unlockables_Count = 8;
    float gap = bar_Width / unlockables_Count;
    for (int i = 1; i <= unlockables_Count; i++)
@@ -83,7 +95,7 @@ void user_Interface()
    color healthBar_Background = color(200,0,0);
    horizontalProgressBar(player.remainingHealth, player.maxHealth, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background);
    
-   // Speed Boost Bar
+   // Speedboost Bar
    float speedBar_Width = healthBar_Width;
    float speedBar_Height = healthBar_Height / 3;
    float speedBar_Left = healthBar_Left;
@@ -127,13 +139,5 @@ void user_Interface()
    if (player.shield_Unlocked)
    {
       verticalProgressBar(player.shield_CD_Elapsed, player.shield_CD_Length, cdBar_Left_Shield, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, cdBar_Icon_Shield, cdBar_Icon_Y);
-   }
-   
-   // Airstrike cooldown bar
-   PImage airstrike_Icon = loadImage("airstrike_icon.png");
-   float cdBar_Left_Airstrike = cdBar_Left_Shield + cdBar_Gap;
-   if (player.airstrike_Unlocked)
-   {
-      verticalProgressBar(player.airstrike_CD_Elapsed, player.airstrike_CD_Length, cdBar_Left_Airstrike, cdBar_Bottom, cdBar_Width, cdBar_Height, cdBar_Colour, cdBar_Background, airstrike_Icon, cdBar_Icon_Y);
    }
 }

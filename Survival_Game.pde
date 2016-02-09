@@ -44,7 +44,7 @@ void setup()
    view_Bottom_Boundry = view_Center_Y + view_Half_Height;
    theme_Colour = color(255,207,37);
    
-   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D', ' ', 'F', 'R');
+   Player player = new Player(width/2, view_Bottom_Boundry*0.9f, 'W', 'S', 'A', 'D', ' ', 'F');
    game_Objects.add(player);
 }
 
@@ -123,16 +123,16 @@ void removeDead()
 {
    for(int i = game_Objects.size() - 1; i >= 0; i --)
    {
-      GameObject unit = game_Objects.get(i);
+      GameObject object = game_Objects.get(i);
       
-      if (unit.remainingHealth <= 0 && (unit instanceof AI || unit instanceof Player))
+      if ((object instanceof AI || object instanceof Player) && object.remainingHealth <= 0)
       {
-         if (unit instanceof AI)
+         if (object instanceof AI)
          {
-            AI ai = (AI) unit;
+            AI ai = (AI) object;
             player.score += ai.score_Value;   // Add score to player
             player.kills++;   // Increment player kills
-            game_Objects.remove(unit);   // Remove unit from game
+            game_Objects.remove(ai);   // Remove unit from game
          }
          else
          {
