@@ -72,7 +72,6 @@ void draw()
       bulletCollision();   // Check for bullet collision with player & ai
       spawnAI();   // Spawn enemy AI units on a timer
       userInterface();   // Draw the user interface
-      scoreboard();   // Display player score & kills
    }
    else
       gameOver();

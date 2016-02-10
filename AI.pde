@@ -13,12 +13,12 @@ void spawnAI()
    else if (frameCount < 3600)
    {
       basic_SpawnTime = 240;
-      heavy_SpawnTime = 750;
+      heavy_SpawnTime = 780;
    }
    else
    {
-      basic_SpawnTime = 180;
-      heavy_SpawnTime = 600;
+      basic_SpawnTime = 240;
+      heavy_SpawnTime = 700;
    }
    
    // Spawn basic AI
@@ -73,7 +73,6 @@ class AI extends GameObject
    {
       if (this.burning == true)
       {
-         println("Burn active");
          int start_Time = frameCount;
          CannonBall cannonBall = new CannonBall(0, false);
          int damage = cannonBall.burn_Damage;
