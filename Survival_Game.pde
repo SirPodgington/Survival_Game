@@ -1,9 +1,4 @@
-/*
-TO BE FIXED:
-- Upgrades bar (icons indicating whats unlocked at each marker)
-- Redesign UI
 
-*/
 
 import ddf.minim.*;   // Minim library to handle audio files
 Minim minim;
