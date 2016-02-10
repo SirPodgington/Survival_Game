@@ -7,12 +7,12 @@ class BasicAI extends AI
       attack_Sound = minim.loadFile("basic_ai_attack.mp3");
       
       w = 20;
-      halfW = w * 0.5f;
+      half_Width = w * 0.5f;
       h = w;
-      halfH = h * 0.5f;
+      half_Height = h * 0.5f;
       colour = color(255,0,50);
-      maxHealth = 20;
-      remainingHealth = maxHealth;
+      max_Health = 20;
+      remaining_Health = max_Health;
       speed = 0.5;
       target_Distance_From_Player = 120;
       range = 200;
@@ -72,7 +72,7 @@ class BasicAI extends AI
       pushMatrix();
       translate(position.x, position.y);
       
-      healthBar();   // Health bar
+      healthbar();   // Health bar
       
       rotate(theta);
       fill(0);

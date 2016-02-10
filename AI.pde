@@ -1,4 +1,42 @@
+// Controls AI Spawning -------------------------------------------------------------
+void spawnAI()
+{
+   float basic_SpawnTime;
+   float heavy_SpawnTime;
 
+   // Control spawn rate of the AI, increasing as time passes
+   if (frameCount < 1800)
+   {
+      basic_SpawnTime = 300;
+      heavy_SpawnTime = 900;
+   }
+   else if (frameCount < 3600)
+   {
+      basic_SpawnTime = 240;
+      heavy_SpawnTime = 750;
+   }
+   else
+   {
+      basic_SpawnTime = 180;
+      heavy_SpawnTime = 600;
+   }
+   
+   // Spawn basic AI
+   if (frameCount % basic_SpawnTime == 0)
+   {
+      BasicAI unit = new BasicAI();
+      game_Objects.add(unit);
+   }
+   
+   // Spawn heavy AI
+   if (frameCount % heavy_SpawnTime == 0)
+   {
+      HeavyAI unit = new HeavyAI();
+      game_Objects.add(unit);
+   }
+}
+
+// The Class -----------------------------------------------
 class AI extends GameObject
 {
    float target_Distance_From_Player;
@@ -7,9 +45,9 @@ class AI extends GameObject
    int score_Value;
    boolean burning;
    
-   AI(float startX, float startY)
+   AI(float start_X, float start_Y)
    {
-      super(startX, startY);
+      super(start_X, start_Y);
    }
    
    void render(){}
@@ -17,18 +55,18 @@ class AI extends GameObject
    void attackSound(){}
    
    // AI Healthbar
-   void healthBar()
+   void healthbar()
    {
-      color healthBar_Background = color(127);
-      float offset = halfH + 15;
-      fill(healthBar_Background);
+      color healthbar_Background = color(127);
+      float offset = half_Height + 15;
+      fill(healthbar_Background);
       noStroke();
-      rect(-halfW, -offset, w, 5);   // Total Health
+      rect(-half_Width, -offset, w, 5);   // Total Health
    
-      color healthBar_Colour = color(0,255,0);
-      float hp_Mapped = map(remainingHealth, 0, maxHealth, 0, w);
-      fill(healthBar_Colour);
-      rect(-halfW, -offset, hp_Mapped, 5);   // Remaining Health
+      color healthbar_Colour = color(0,255,0);
+      float hp_Mapped = map(remaining_Health, 0, max_Health, 0, w);
+      fill(healthbar_Colour);
+      rect(-half_Width, -offset, hp_Mapped, 5);   // Remaining Health
    }
    
    void getBurnStatus()
@@ -44,7 +82,7 @@ class AI extends GameObject
          
          if (frameCount < start_Time + duration && frameCount % tick == 0)
          {
-            this.remainingHealth -= damage;
+            this.remaining_Health -= damage;
          }
       }
    }

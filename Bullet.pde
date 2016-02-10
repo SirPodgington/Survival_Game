@@ -8,7 +8,6 @@ class Bullet extends GameObject
   
   Bullet(){}
   
-  // UPDATE BULLET
   void update()
   {    
     forward.x = sin(theta);
@@ -24,8 +23,6 @@ class Bullet extends GameObject
   }
 }
 
-
-// ***************************
 
 // LMG -----------------
 class LMGBullet extends Bullet
@@ -49,8 +46,8 @@ class LMGBullet extends Bullet
          damage = 3;
          speed = 10;
       }
-      halfW = w / 2;
-      halfH = h / 2; 
+      half_Width = w / 2;
+      half_Height = h / 2; 
    }
    
    void render()
@@ -95,8 +92,8 @@ class CannonBall extends Bullet
          damage = 25;
          speed = 5;
       }
-      halfW = w / 2;
-      halfH = h / 2; 
+      half_Width = w / 2;
+      half_Height = h / 2; 
       
       // Store upgrade status
       this.onFire = upgrade_Status;

@@ -8,17 +8,17 @@ class HeavyAI extends AI
       attack_Sound = minim.loadFile("cannon_sound.mp3");
       
       w = 40;
-      halfW = w * 0.5f;
+      half_Width = w * 0.5f;
       h = w;
-      halfH = h * 0.5f;
+      half_Height = h * 0.5f;
       turret_Width = w * 0.15f;
-      turret_Length = halfW;
+      turret_Length = half_Width;
       turret_HalfWidth = turret_Width / 2;
       turret_HalfLength = turret_Length / 2;
       colour = color(255,0,50);
       
-      maxHealth = 75;
-      remainingHealth = maxHealth;
+      max_Health = 75;
+      remaining_Health = max_Health;
       speed = 0.4;
       target_Distance_From_Player = 200;
       range = 400;
@@ -78,7 +78,7 @@ class HeavyAI extends AI
       pushMatrix();
       translate(position.x, position.y);
       
-      healthBar();
+      healthbar();
 
       // Unit
       rotate(theta);

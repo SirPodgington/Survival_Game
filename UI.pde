@@ -74,33 +74,33 @@ void userInterface()
    rect(ui_Left, ui_Top, ui_Width, ui_Height);   // Background
    
    // Health Bar
-   color healthBar_Colour = color(127,255,0);
-   color healthBar_Background = color(200,0,0);
-   float healthBar_Height = ui_Height / 3;
-   float healthBar_Width = ui_Width / 3;
-   float healthBar_Bottom = height - 15;
-   float healthBar_Left = ui_Left + healthBar_Width;
-   float healthBar_Right = healthBar_Left + healthBar_Width;
-   horizontalProgressBar(player.remainingHealth, player.maxHealth, healthBar_Left, healthBar_Bottom, healthBar_Width, healthBar_Height, healthBar_Colour, healthBar_Background);
+   color healthbar_Colour = color(127,255,0);
+   color healthbar_Background = color(200,0,0);
+   float healthbar_Height = ui_Height / 3;
+   float healthbar_Width = ui_Width / 3;
+   float healthbar_Bottom = height - 15;
+   float healthbar_Left = ui_Left + healthbar_Width;
+   float healthbar_Right = healthbar_Left + healthbar_Width;
+   horizontalProgressBar(player.remaining_Health, player.max_Health, healthbar_Left, healthbar_Bottom, healthbar_Width, healthbar_Height, healthbar_Colour, healthbar_Background);
    
    // Speedboost Bar
-   color speedBar_Colour = color(255,165,0);
-   color speedBar_Background = color(127);
-   float speedBar_Width = healthBar_Width;
-   float speedBar_Height = healthBar_Height / 3;
-   float speedBar_Left = healthBar_Left;
-   float speedBar_Bottom = healthBar_Bottom - healthBar_Height;
-   horizontalProgressBar(player.speedboost_CD_Elapsed, player.speedboost_CD_Length, speedBar_Left, speedBar_Bottom, speedBar_Width, speedBar_Height, speedBar_Colour, speedBar_Background);
+   color speedbar_Colour = color(255,165,0);
+   color speedbar_Background = color(127);
+   float speedbar_Width = healthbar_Width;
+   float speedbar_Height = healthbar_Height / 3;
+   float speedbar_Left = healthbar_Left;
+   float speedbar_Bottom = healthbar_Bottom - healthbar_Height;
+   horizontalProgressBar(player.speedboost_CD_Elapsed, player.speedboost_CD_Length, speedbar_Left, speedbar_Bottom, speedbar_Width, speedbar_Height, speedbar_Colour, speedbar_Background);
    
    // Upgrades progress bar
-   color scoreBar_Background = color(50,0,0);
-   color scoreBar_Colour = color(200,0,0);
-   float scoreBar_Width = 450;
-   float scoreBar_Height = ui_Height * 0.33f;
-   float scoreBar_Left = healthBar_Right + 55;
-   float scoreBar_Bottom = ui_Bottom - 15;
-   float scoreBar_Top = scoreBar_Bottom - scoreBar_Height;
-   upgrades_ProgressBar(scoreBar_Left, scoreBar_Bottom, scoreBar_Width, scoreBar_Height, scoreBar_Colour, scoreBar_Background);
+   color scorebar_Background = color(50,0,0);
+   color scorebar_Colour = color(200,0,0);
+   float scorebar_Width = 450;
+   float scorebar_Height = ui_Height * 0.33f;
+   float scorebar_Left = healthbar_Right + 55;
+   float scorebar_Bottom = ui_Bottom - 15;
+   float scorebar_Top = scorebar_Bottom - scorebar_Height;
+   upgrades_ProgressBar(scorebar_Left, scorebar_Bottom, scorebar_Width, scorebar_Height, scorebar_Colour, scorebar_Background);
    
    // UPGRADE CD BAR Variables
    float cdBar_Gap = 30;
